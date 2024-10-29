@@ -1,8 +1,10 @@
 const express = require('express');
 const axios = require('axios');
 const router = express.Router();
+const crawl = require('./crawl');
 const { handleError, shuffleArray, parseImage } = require('./utils');
-const { CACHE_DURATION, KOMGA_API, KOMGA_AUTH } = require('./config');
+const { KOMGA_API, KOMGA_AUTH } = require('./config');
+const { CACHE_DURATION } = require('../server/config');
 
 let totalSetCache = { value: null, expiration: 0 };
 
@@ -75,8 +77,9 @@ async function fetchRandomBookId(req) {
 }
 
 // Route for fetching a random book image
-router.get('/book-images', async (req, res) => {
+router.get('/slideshow/random-book', async (req, res) => {
     const { page = 0 } = req.query;
+    const crawled = await crawl();
     try {
         const bookId = await fetchRandomBookId(req);
         const { image, contentType } = await fetchImage(bookId, page);
@@ -84,6 +87,17 @@ router.get('/book-images', async (req, res) => {
         res.json({ image: image, contentType });
     } catch (error) {
         handleError(error, res, "Error fetching random book image");
+    }
+});
+
+// Route for crawling
+router.get('/crawl', async (req, res) => {
+    try {
+        const crawled = await crawl();
+        if (!crawled) return res.status(500).json({ error: "No valid content found" });
+        res.json(crawled);
+    } catch (error) {
+        handleError(error, res, "Error crawling komga");
     }
 });
 

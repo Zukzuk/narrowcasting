@@ -7,7 +7,7 @@ let nextImageDataUrl = null;
 async function fetchImageData() {
     const urlParams = new URLSearchParams(window.location.search);
     const page = urlParams.get('page') || 0;
-    const apiUrl = new URL('/book-images', window.location.origin);
+    const apiUrl = new URL('/slideshow/random-book', window.location.origin);
     apiUrl.searchParams.append('page', page);
 
     try {

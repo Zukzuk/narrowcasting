@@ -3,10 +3,10 @@ const cors = require('cors');
 const session = require('express-session');
 
 // Import main application router
-const appRouter = require('./app');
+const appRouter = require('../komga-app/app');
 const { getLocalIpAddress } = require('./utils');
-const { SERVER_PORT, SESSION_SECRET, KOMGA_ORIGIN } = require('./config');
-const crawl = require('./crawl');
+const { SERVER_PORT, SESSION_SECRET, CACHE_DURATION } = require('./config');
+const { KOMGA_ORIGIN } = require('../komga-app/config');
 
 const app = express();
 const PORT = SERVER_PORT || 3000;
@@ -23,7 +23,7 @@ app.use(session({
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 12 * 60 * 60 * 1000 }
+    cookie: { maxAge: CACHE_DURATION }
 }));
 
 // Apply routes
@@ -32,5 +32,4 @@ app.use(appRouter);
 app.listen(PORT, async () => {
     console.log(`Server is running on http://localhost:${PORT}`);
     console.log(`Making request from IP: ${getLocalIpAddress()}`);
-    const crawled = await crawl();
 });

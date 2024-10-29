@@ -4,7 +4,7 @@
 /dist
 /tmp
 /out-tsc
-/deploy
+.deploy
 
 # Runtime data
 pids
@@ -80,6 +80,7 @@ jspm_packages/
 
 # dotenv environment variables file
 .env
+.dev.env
 
 # next.js build output
 .next
