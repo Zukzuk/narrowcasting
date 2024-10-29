@@ -79,7 +79,6 @@ async function fetchRandomBookId(req) {
 // Route for fetching a random book image
 router.get('/slideshow/random-book', async (req, res) => {
     const { page = 0 } = req.query;
-    const crawled = await crawl();
     try {
         const bookId = await fetchRandomBookId(req);
         const { image, contentType } = await fetchImage(bookId, page);

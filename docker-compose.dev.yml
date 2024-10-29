@@ -2,8 +2,7 @@ version: '3.8'
 
 services:
   komga-narrowcasting-app:
-    image: zukzuk/narrowcasting  # This names your image as zukzuk/narrowcasting
-    build: .
+    image: zukzuk/narrowcasting:${IMAGE_TAG:-latest}, # Use IMAGE_TAG if set, otherwise use "latest"
     ports:
       - "3001:3000"
     env_file:
