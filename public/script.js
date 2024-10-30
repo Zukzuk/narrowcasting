@@ -34,7 +34,7 @@ function setImageSource(inactiveImage, imageDataUrl) {
 function getTimeoutFromQueryParams() {
     const urlParams = new URLSearchParams(window.location.search);
     const timeout = parseInt(urlParams.get('timeout'), 10);
-    return isNaN(timeout) || timeout < 5000 ? 5000 : timeout; // Minimum 5 seconds
+    return isNaN(timeout) || timeout < 3000 ? 3000 : timeout; // Minimum 5 seconds
 }
 
 async function prefetchNextImage() {
