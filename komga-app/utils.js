@@ -43,6 +43,7 @@ async function parseImage(image) {
         const contentType = image.headers['content-type'];
         console.log("contentType", contentType);
         if (contentType === 'image/jp2' || contentType === 'image/jpeg2000') {
+            console.log("==> convertJp2ToPng");
             imageBuffer = await convertJp2ToPng(imageBuffer);
         }
         return { image: imageBuffer.toString('base64'), contentType };
