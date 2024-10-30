@@ -3,6 +3,15 @@
 # Use a minimal Node.js image
 FROM node:20-alpine
 
+# Install required packages for libvips (sharp dependency)
+RUN apk add --no-cache \
+    vips \
+    vips-dev \
+    gcc \
+    g++ \
+    libc6-compat \
+    make
+
 # Set the working directory in the container
 WORKDIR /usr/src/app
 

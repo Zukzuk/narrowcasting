@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# Fetch the latest version from package.json
-LATEST_TAG=$(jq -r '.version' package.json)
+# Navigate to the root directory of the project (assuming the script is in /scripts)
+cd "../"
+
+# Fetch the latest version from package.json using Node.js
+LATEST_TAG=$(node -p "require('./package.json').version")
 
 # Check if the latest tag was found
 if [ -z "$LATEST_TAG" ]; then
@@ -18,6 +21,3 @@ docker build -t $IMAGE_NAME:$LATEST_TAG -t $IMAGE_NAME:latest .
 # Push both tags to the Docker registry
 docker push $IMAGE_NAME:$LATEST_TAG
 docker push $IMAGE_NAME:latest
-
-# Deploy using Docker Compose, setting the IMAGE_TAG environment variable to the specific version
-IMAGE_TAG=$LATEST_TAG docker-compose -f "docker-compose.dev.yml" up -d

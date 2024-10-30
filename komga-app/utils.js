@@ -13,6 +13,7 @@ function shuffleArray(array) {
 async function parseImage(image) {
     const imageBuffer = Buffer.from(image.data, 'binary');
     const contentType = image.headers['content-type'];
+    console.log("contentType", contentType);
     if (contentType === 'image/jp2' || contentType === 'image/jpeg2000') {
         const convertedImageBuffer = await sharp(imageBuffer).jpeg().toBuffer();
         return { image: Buffer.from(convertedImageBuffer, 'binary').toString('base64'), contentType: 'image/jpeg' };
