@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/Zukzuk/narrowcasting/compare/v1.2.0...v1.3.0) (2024-10-30)
+
+
+### Features
+
+* added dockerization ([b62da94](https://github.com/Zukzuk/narrowcasting/commit/b62da94d1a2919370a4b3df1df1c2388c76c49e5))
+* added jp2 decoder ([0a99425](https://github.com/Zukzuk/narrowcasting/commit/0a99425cde5e7536019527eb3ce89e0d1f1ac777))
+
 ## [1.2.0](///compare/v1.1.0...v1.2.0) (2024-10-29)
 
 
