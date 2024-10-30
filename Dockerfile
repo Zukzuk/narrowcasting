@@ -1,10 +1,5 @@
 # Use a Debian-based Node.js image
-FROM node:20-bullseye
-
-# Install OpenJPEG tools and libvips for sharp
-RUN apt-get update && \
-    apt-get install -y libopenjp2-tools libvips && \
-    rm -rf /var/lib/apt/lists/*
+FROM node:20-alpine
 
 # Set up the working directory and install dependencies
 WORKDIR /usr/src/app

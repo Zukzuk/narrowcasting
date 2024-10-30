@@ -3,21 +3,36 @@ import { calculateMainColor, adjustAspectRatio, toggleVisibility, resetLoaderAni
 
 let currentImage = 1;
 let nextImageDataUrl = null;
+let abortController;
 
 async function fetchImageData() {
+    // Cancel the previous request if it exists
+    if (abortController) abortController.abort();
+    abortController = new AbortController();
+    const { signal } = abortController;
+
     const urlParams = new URLSearchParams(window.location.search);
     const page = urlParams.get('page') || 0;
     const apiUrl = new URL('/slideshow/random-book', window.location.origin);
     apiUrl.searchParams.append('page', page);
 
     try {
-        const response = await fetch(apiUrl);
+        const response = await fetch(apiUrl, { signal });
         if (!response.ok) throw new Error(`Error fetching image: ${response.statusText}`);
-        const data = await response.json();
-        return `data:${data.contentType};base64,${data.image}`;
+        // Read the response as a binary Blob
+        const blob = await response.blob();
+        return URL.createObjectURL(blob);
     } catch (error) {
-        console.error("Error fetching image data:", error);
-        throw error;
+        if (error.name === 'AbortError') {
+            console.log("Fetch aborted due to a new request.");
+            throw error;
+        } else {
+            console.error("Error fetching image data:", error);
+            throw error;
+        }
+    } finally {
+        // Clear the abortController after the request completes
+        abortController = null;
     }
 }
 
