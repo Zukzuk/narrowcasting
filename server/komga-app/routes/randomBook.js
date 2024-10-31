@@ -8,8 +8,8 @@ const { CACHE_DURATION } = require('../../config');
 let totalSetCache = { value: null, expiration: 0 };
 
 // Fetch image by book ID and page
-async function fetchImage(bookId, page, interval, cancelToken, startTime, retryCount) {
-    console.log('fetchImage', bookId, page, 'Attempt:', retryCount);
+async function fetchImage(req, bookId, page, interval, cancelToken, startTime, retryCount) {
+    console.log('fetchImage', 'id:', bookId, 'page:', page, 'attempt:', retryCount);
     try {
         const image = await axios.get(`${KOMGA_API}/books/${bookId}/pages/${page}`, {
             params: { zero_based: true, contentNegotiation: true },
@@ -39,7 +39,7 @@ async function fetchImage(bookId, page, interval, cancelToken, startTime, retryC
             if (remainingTime > 5000) {
                 console.log(`Retry attempt ${retryCount} with ${remainingTime}ms remaining`);
                 // Retry fetching the image, increasing retry count
-                return fetchImage(bookId, page, interval, cancelToken, startTime, retryCount + 1);
+                return randomBook(req, page, interval, cancelToken, startTime, retryCount + 1)
             } else {
                 console.log(`No retry attempt because remaining time in interval (${remainingTime}ms) is too short...`);
             }
@@ -111,7 +111,7 @@ async function findRandomUnusedInSet(req) {
 async function randomBook(req, page, interval, cancelToken, startTime = Date.now(), retryCount = 1) {
     const randomInSet = await findRandomUnusedInSet(req);
     const bookId = await fetchBookId(randomInSet, cancelToken);
-    return await fetchImage(bookId, page, interval, cancelToken, startTime, retryCount);
+    return await fetchImage(req, bookId, page, interval, cancelToken, startTime, retryCount);
 }
 
 module.exports = randomBook;
