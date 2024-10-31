@@ -39,7 +39,7 @@ async function fetchImage(bookId, page, interval, cancelToken, startTime, retryC
             if (remainingTime > 5000) {
                 console.log(`Retry attempt ${retryCount} with ${remainingTime}ms remaining`);
                 // Retry fetching the image, increasing retry count
-                return fetchImage(bookId, page, cancelToken, interval, startTime, retryCount + 1);
+                return fetchImage(bookId, page, interval, cancelToken, startTime, retryCount + 1);
             } else {
                 console.log(`No retry attempt because remaining time in interval (${remainingTime}ms) is too short...`);
             }
