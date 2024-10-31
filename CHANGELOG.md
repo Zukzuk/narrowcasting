@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.4](https://github.com/Zukzuk/narrowcasting/compare/v1.8.3...v1.8.4) (2024-10-31)
+
+
+### Bug Fixes
+
+* fixed where interval is 3rd param in fetchImage call ([dd9564f](https://github.com/Zukzuk/narrowcasting/commit/dd9564feaa9d2af5b92ec077cb4bcc1485520a62))
+
 ### [1.8.3](https://github.com/Zukzuk/narrowcasting/compare/v1.8.2...v1.8.3) (2024-10-31)
 
 
