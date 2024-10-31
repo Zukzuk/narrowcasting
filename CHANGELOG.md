@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.1](https://github.com/Zukzuk/narrowcasting/compare/v1.7.0...v1.7.1) (2024-10-31)
+
+
+### Bug Fixes
+
+* stripped image name from semver ([dbc5dd2](https://github.com/Zukzuk/narrowcasting/commit/dbc5dd2c2f88931ee95ab6d8a6cccee78ddd9a7b))
+
 ## [1.7.0](https://github.com/Zukzuk/narrowcasting/compare/v1.6.1...v1.7.0) (2024-10-31)
 
 
