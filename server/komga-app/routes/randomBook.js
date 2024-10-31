@@ -19,9 +19,8 @@ async function fetchImage(bookId, page, interval, cancelToken, startTime, retryC
         });
 
         const contentType = image.headers['content-type'];
-        if (contentType === 'image/jp2' || contentType === 'image/jpeg2000') {
+        if (contentType === 'image/jp2' || contentType === 'image/jpeg2000')
             throw new Error("Unsupported image format");
-        }
 
         // Use sharp to resize and optimize the image for 4K
         const optimizedImage = await sharp(image.data)

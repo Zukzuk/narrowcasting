@@ -92,7 +92,7 @@ function getQueryParams() {
     const pageParam = parseInt(urlParams.get('page'), 10);
     const page = isNaN(pageParam) || pageParam < 0 ? 0 : pageParam;
     const intervalParam = parseInt(urlParams.get('interval'), 10);
-    const interval = isNaN(intervalParam) || intervalParam < 3 ? 3 : intervalParam;
+    const interval = isNaN(intervalParam) ? 10 : intervalParam < 3 ? 3 : intervalParam;
     const showVersionParam = urlParams.get('showVersion');
     const showVersion = showVersionParam === 'true' ? true : false;
     return { interval: interval*1000, showVersion, page };
@@ -101,9 +101,12 @@ function getQueryParams() {
 async function startSlideshow() {
     const { page, interval, showVersion } = getQueryParams();
     displayVersion(showVersion);
-    nextImageDataUrl = await fetchImageData(page, interval); // Prefetch the first image
-    displayNextImage(page, interval); // Display the first fetched image
-    setInterval(() => displayNextImage(page, interval), interval); // Pass params explicitly
+    // Prefetch the first image
+    nextImageDataUrl = await fetchImageData(page, interval); 
+    // Display the first fetched image
+    displayNextImage(page, interval); 
+    // Pass params explicitly
+    setInterval(() => displayNextImage(page, interval), interval);
 }
 startSlideshow();
 
