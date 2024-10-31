@@ -14,7 +14,7 @@ const LATEST_TAG = `${IMAGE_NAME}:latest`;
 
 try {
   // Build the Docker image with the version tag, latest tag, and pass VERSION build argument
-  execSync(`docker build --build-arg VERSION_TAG=${VERSION_TAG} -t ${VERSION_TAG} -t ${LATEST_TAG} .`, { stdio: 'inherit' });
+  execSync(`docker build --build-arg VERSION_TAG=${version} -t ${VERSION_TAG} -t ${LATEST_TAG} .`, { stdio: 'inherit' });
   // Push both tags to the Docker registry
   console.log(`Pushing ${VERSION_TAG} and 'latest' to Docker registry...`);
   execSync(`docker push ${VERSION_TAG}`, { stdio: 'inherit' });
