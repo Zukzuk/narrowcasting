@@ -1,5 +1,5 @@
 
-import { calculateMainColor, adjustAspectRatio, toggleVisibility, resetLoaderAnimation } from './utils.js';
+import { calculateLoaderColor, adjustAspectRatio, toggleVisibility, resetLoaderAnimation } from './utils.js';
 
 let currentImage = 1;
 let nextImageDataUrl = null;
@@ -7,7 +7,7 @@ let abortController;
 
 async function fetchImageData() {
     // Cancel the previous request if it exists
-    if (abortController) abortController.abort();
+    if (abortController) abortController.abort('Pending image load cancelled by new image load.');
     abortController = new AbortController();
     const { signal } = abortController;
 
@@ -18,7 +18,7 @@ async function fetchImageData() {
 
     try {
         const response = await fetch(apiUrl, { signal });
-        if (!response.ok) throw new Error(`Error fetching image: ${response.statusText}`);
+        if (!response.ok) throw new Error(response.statusText);
         // Read the response as a binary Blob
         const blob = await response.blob();
         return URL.createObjectURL(blob);
@@ -49,26 +49,18 @@ function setImageSource(inactiveImage, imageDataUrl) {
 function getTimeoutFromQueryParams() {
     const urlParams = new URLSearchParams(window.location.search);
     const timeout = parseInt(urlParams.get('timeout'), 10);
-    return isNaN(timeout) || timeout < 3000 ? 3000 : timeout; // Minimum 5 seconds
-}
-
-async function prefetchNextImage() {
-    try {
-        nextImageDataUrl = await fetchImageData();
-    } catch (error) {
-        console.error("Error prefetching next image:", error);
-    }
+    return isNaN(timeout) || timeout < 3000 ? 3000 : timeout;
 }
 
 async function displayNextImage() {
     const { activeImage, inactiveImage } = getActiveAndInactiveImages();
     setImageSource(inactiveImage, nextImageDataUrl);
 
-    inactiveImage.onload = () => {
+    inactiveImage.onload = async () => {
         adjustAspectRatio(inactiveImage);
-        const value = calculateMainColor(inactiveImage);
+        const value = calculateLoaderColor(inactiveImage);
         resetLoaderAnimation(value, interval);
-        prefetchNextImage(); // Start prefetching the next image after displaying the current one
+        nextImageDataUrl = await fetchImageData(); // Start prefetching the next image after displaying the current one
     };
 
     toggleVisibility(activeImage, inactiveImage);
@@ -77,7 +69,7 @@ async function displayNextImage() {
 
 const interval = getTimeoutFromQueryParams();
 async function startSlideshow() {
-    await prefetchNextImage(); // Prefetch the first image
+    nextImageDataUrl = await fetchImageData(); // Prefetch the first image
     displayNextImage(); // Display the first prefetched image
     setInterval(displayNextImage, interval);
 }

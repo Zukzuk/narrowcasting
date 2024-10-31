@@ -34,7 +34,7 @@ export function resetLoaderAnimation(value, interval) {
 // imageUtils
 
 // Calculate the main hue of an image
-export function calculateMainColor(imageElement) {
+export function calculateLoaderColor(imageElement) {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
     canvas.width = imageElement.width;
