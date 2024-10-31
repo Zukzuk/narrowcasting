@@ -1,16 +1,19 @@
 const express = require('express');
 const compression = require('compression');
 const cors = require('cors');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./swagger');
 const session = require('express-session');
 
 // Import main application router
-const appRouter = require('./komga-app/app');
+const router = require('./komga-app/router');
 const { getLocalIpAddress } = require('./utils');
 const { SERVER_PORT, SESSION_SECRET, CACHE_DURATION } = require('./config');
 const { KOMGA_ORIGIN } = require('./komga-app/config');
 
 const app = express();
 app.use(compression());
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Middleware
 app.use(express.static('public'));
@@ -28,7 +31,7 @@ app.use(session({
 }));
 
 // Apply routes
-app.use(appRouter);
+app.use('/api', router);
 
 const PORT = SERVER_PORT || 3000;
 app.listen(PORT, async () => {
