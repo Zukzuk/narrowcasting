@@ -76,34 +76,38 @@ body {
     }
 }
 
-/* Version Display Styles */
-.button-label {
-    position: fixed;
-    font-family: monospace;
-    padding: 3px 5px;
-    background-color: rgb(170, 170, 170);
-    color: black;
-    font-size: 12px;
-    border-radius: 3px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-    z-index: 1000;
-}
-
+/* Button Label styles */
 #version-display {
     display: none;
     bottom: 10px;
     right: 6px;
 }
 
-body:hover #fullscreen-button {
-    opacity: 1;
-}
-
 #fullscreen-button {
     cursor: pointer;
-    opacity: 0; /* Hidden by default */
-    transition: opacity 0.3s ease; /* Smooth transition */
-    top: 10px;
+    top: 6px;
     right: 6px;
+}
+
+.button-label {
+    position: fixed;
+    font-family: monospace;
+    padding: 3px 3px 4px 3px;
+    background-color: rgb(170, 170, 170);
+    color: black;
+    font-size: 12px;
+    border-radius: 3px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.button-label:hover {
+    opacity: 1 !important;
+}
+
+body:hover .button-label {
+    opacity: .1;
 }
   
