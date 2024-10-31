@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/Zukzuk/narrowcasting/compare/v1.6.1...v1.7.0) (2024-10-31)
+
+
+### Features
+
+* added version tag to env, added version api endpoint, added client version label ([4a677af](https://github.com/Zukzuk/narrowcasting/commit/4a677af58b6ce4c004f64fe9327da5711f17fc6c))
+
 ### [1.6.1](https://github.com/Zukzuk/narrowcasting/compare/v1.6.0...v1.6.1) (2024-10-31)
 
 ## [1.6.0](https://github.com/Zukzuk/narrowcasting/compare/v1.5.1...v1.6.0) (2024-10-31)
