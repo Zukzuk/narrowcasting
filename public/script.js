@@ -4,17 +4,18 @@ import { calculateLoaderColor, adjustAspectRatio, toggleVisibility, resetLoaderA
 let currentImage = 1;
 let nextImageDataUrl = null;
 let abortController;
+let wakeLock = null;
 
-async function fetchImageData() {
+async function fetchImageData(page, interval) {
     // Cancel the previous request if it exists
     if (abortController) abortController.abort('Pending image load cancelled by new image load.');
     abortController = new AbortController();
     const { signal } = abortController;
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const page = urlParams.get('page') || 0;
+    // Setup API url and params
     const apiUrl = new URL('/api/slideshow/random-book', window.location.origin);
     apiUrl.searchParams.append('page', page);
+    apiUrl.searchParams.append('interval', interval);
 
     try {
         const response = await fetch(apiUrl, { signal });
@@ -36,9 +37,37 @@ async function fetchImageData() {
     }
 }
 
+function setImageSource(inactiveImage, imageDataUrl) {
+    inactiveImage.src = imageDataUrl;
+}
+
+function getActiveAndInactiveImages() {
+    const activeImage = document.getElementById(`image${currentImage}`);
+    const inactiveImage = document.getElementById(`image${currentImage === 1 ? 2 : 1}`);
+    return { activeImage, inactiveImage };
+}
+
+async function displayNextImage(page, interval) {
+    const { activeImage, inactiveImage } = getActiveAndInactiveImages();
+    setImageSource(inactiveImage, nextImageDataUrl);
+
+    // Start prefetching the next image after displaying the current one
+    inactiveImage.onload = async () => {
+        adjustAspectRatio(inactiveImage);
+        const value = calculateLoaderColor(inactiveImage);
+        resetLoaderAnimation(value, interval);
+        nextImageDataUrl = await fetchImageData(page, interval);
+    };
+
+    toggleVisibility(activeImage, inactiveImage);
+    currentImage = currentImage === 1 ? 2 : 1;
+}
+
 async function fetchVersion() {
     try {
-        const response = await fetch('/api/version');
+        // Setup API url and params
+        const apiUrl = new URL('/api/version', window.location.origin);
+        const response = await fetch(apiUrl);
         if (!response.ok)
             throw new Error('Failed to fetch version');
         return await response.text();
@@ -48,42 +77,7 @@ async function fetchVersion() {
     }
 }
 
-function getActiveAndInactiveImages() {
-    const activeImage = document.getElementById(`image${currentImage}`);
-    const inactiveImage = document.getElementById(`image${currentImage === 1 ? 2 : 1}`);
-    return { activeImage, inactiveImage };
-}
-
-function setImageSource(inactiveImage, imageDataUrl) {
-    inactiveImage.src = imageDataUrl;
-}
-
-function getQueryParams() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const timeoutParam = parseInt(urlParams.get('timeout'), 10);
-    const interval = isNaN(timeoutParam) || timeoutParam < 3000 ? 3000 : timeoutParam;
-    const showVersionParam = urlParams.get('showVersion');
-    const showVersion = Boolean(showVersionParam);
-    return { interval, showVersion };
-}
-
-async function displayNextImage() {
-    const { activeImage, inactiveImage } = getActiveAndInactiveImages();
-    setImageSource(inactiveImage, nextImageDataUrl);
-
-    inactiveImage.onload = async () => {
-        adjustAspectRatio(inactiveImage);
-        const value = calculateLoaderColor(inactiveImage);
-        resetLoaderAnimation(value, interval);
-        nextImageDataUrl = await fetchImageData(); // Start prefetching the next image after displaying the current one
-    };
-
-    toggleVisibility(activeImage, inactiveImage);
-    currentImage = currentImage === 1 ? 2 : 1;
-}
-
-// Check if showVersion is set to true in the query string
-function displayVersion() {
+function displayVersion(showVersion) {
     if (showVersion) {
         fetchVersion().then(semver => {
             const versionDisplay = document.getElementById('version-display');
@@ -93,11 +87,61 @@ function displayVersion() {
     }
 }
 
-const { interval, showVersion } = getQueryParams();
+function getQueryParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const pageParam = parseInt(urlParams.get('page'), 10);
+    const page = isNaN(pageParam) || pageParam < 0 ? 0 : pageParam;
+    const intervalParam = parseInt(urlParams.get('interval'), 10);
+    const interval = isNaN(intervalParam) || intervalParam < 3 ? 3 : intervalParam;
+    const showVersionParam = urlParams.get('showVersion');
+    const showVersion = showVersionParam === 'true' ? true : false;
+    return { interval: interval*1000, showVersion, page };
+}
+
 async function startSlideshow() {
-    displayVersion();
-    nextImageDataUrl = await fetchImageData(); // Prefetch the first image
-    displayNextImage(); // Display the first prefetched image
-    setInterval(displayNextImage, interval);
+    const { page, interval, showVersion } = getQueryParams();
+    displayVersion(showVersion);
+    nextImageDataUrl = await fetchImageData(page, interval); // Prefetch the first image
+    displayNextImage(page, interval); // Display the first fetched image
+    setInterval(() => displayNextImage(page, interval), interval); // Pass params explicitly
 }
 startSlideshow();
+
+async function requestWakeLock() {
+    try {
+        wakeLock = await navigator.wakeLock.request('screen');
+        wakeLock.addEventListener('release', () => {
+            console.log('Wake Lock released');
+        });
+        console.log('Wake Lock is active');
+    } catch (err) {
+        console.error(`${err.name}, ${err.message}`);
+    }
+}
+requestWakeLock();
+document.addEventListener('visibilitychange', () => {
+    if (wakeLock !== null && document.visibilityState === 'visible') {
+        requestWakeLock();
+    }
+});
+
+const fullscreenButton = document.getElementById('fullscreen-button');
+fullscreenButton.addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+        // Request fullscreen mode for the document's root element
+        document.documentElement.requestFullscreen().catch((err) => {
+            console.error(`Error attempting to enable fullscreen mode: ${err.message}`);
+        });
+    } else {
+        // Exit fullscreen mode
+        document.exitFullscreen();
+    }
+});
+document.addEventListener('fullscreenchange', () => {
+    if (document.fullscreenElement) {
+        fullscreenButton.textContent = '[x]';
+    } else {
+        fullscreenButton.textContent = '[ ]';
+    }
+});
+
