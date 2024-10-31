@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.3](https://github.com/Zukzuk/narrowcasting/compare/v1.8.2...v1.8.3) (2024-10-31)
+
+
+### Bug Fixes
+
+* fixed where timeout should be interval ([c933600](https://github.com/Zukzuk/narrowcasting/commit/c933600af5a6cf60868e4f6b2f9e486ca65adac9))
+
 ### [1.8.2](https://github.com/Zukzuk/narrowcasting/compare/v1.8.1...v1.8.2) (2024-10-31)
 
 
