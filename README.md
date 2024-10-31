@@ -39,6 +39,19 @@ A Node.js narrowcasting app designed to display images from Komga using a backen
 - Production settings are stored in `.deploy/.env` and `.deploy/docker-compose.yml`.
 - Ensure these files are correctly configured before deploying to production.
 
+### Environment Variables
+
+Environment variables should be defined in an .env file for both development and production environments.
+
+```plaintext
+KOMGA_USERNAME2=          # Username for accessing Komga
+KOMGA_PASSWORD2=          # Password for accessing Komga
+KOMGA_API_KEY=            # API key for Komga (if applicable)
+KOMGA_ORIGIN=             # The origin URL for Komga (e.g., https://komga-instance.com)
+KOMGA_API_LOCATION=       # API endpoint for Komga
+SESSION_SECRET=           # Secret key for session management
+```
+
 ## Docker Setup
 
 ### Development
