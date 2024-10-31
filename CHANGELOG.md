@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/Zukzuk/narrowcasting/compare/v1.5.1...v1.6.0) (2024-10-31)
+
+
+### Features
+
+* **added readme and swagger:** added readme and swagger docs ([3c57754](https://github.com/Zukzuk/narrowcasting/commit/3c577543d863d41e4ecc20f96e7d9676549541f0))
+
 ### [1.5.1](https://github.com/Zukzuk/narrowcasting/compare/v1.5.0...v1.5.1) (2024-10-31)
 
 
