@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.2](https://github.com/Zukzuk/narrowcasting/compare/v1.8.1...v1.8.2) (2024-10-31)
+
+
+### Bug Fixes
+
+* better minimum interval input ([fa83037](https://github.com/Zukzuk/narrowcasting/commit/fa830371572b4fc376c3d02382c42ed63901a6ed))
+
 ### [1.8.1](https://github.com/Zukzuk/narrowcasting/compare/v1.8.0...v1.8.1) (2024-10-31)
 
 
