@@ -13,20 +13,14 @@ const VERSION_TAG = `${IMAGE_NAME}:${version}`;
 const LATEST_TAG = `${IMAGE_NAME}:latest`;
 
 try {
-  // Build Docker image with the version tag only
-  console.log(`Building Docker image with tag ${VERSION_TAG}...`);
-  execSync(`docker build -t ${VERSION_TAG} .`, { stdio: 'inherit' });
-
-  // Push the versioned image tag only
-  console.log(`Pushing ${VERSION_TAG} to Docker registry...`);
+  // Build the Docker image with the version tag, latest tag, and pass VERSION build argument
+  execSync(`docker build --build-arg VERSION_TAG=${VERSION_TAG} -t ${VERSION_TAG} -t ${LATEST_TAG} .`, { stdio: 'inherit' });
+  // Push both tags to the Docker registry
+  console.log(`Pushing ${VERSION_TAG} and 'latest' to Docker registry...`);
   execSync(`docker push ${VERSION_TAG}`, { stdio: 'inherit' });
-
-  // Tag the versioned image as 'latest' remotely
-  console.log(`Tagging ${VERSION_TAG} as 'latest'...`);
-  execSync(`docker tag ${VERSION_TAG} ${LATEST_TAG}`);
   execSync(`docker push ${LATEST_TAG}`, { stdio: 'inherit' });
 
-  console.log("Docker image built and tagged as 'latest' successfully.");
+  console.log("Docker image built and tagged with both version and 'latest' successfully.");
 } catch (error) {
   console.error("Error during Docker build or push:", error.message);
   process.exit(1);

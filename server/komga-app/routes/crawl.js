@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { CRAWL_PAGE_SIZE, KOMGA_API, KOMGA_AUTH } = require('./config');
+const { CRAWL_PAGE_SIZE, KOMGA_API, KOMGA_AUTH } = require('../config');
 
 let cache = {};  // Map of all collections name/id
 

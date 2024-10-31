@@ -1,9 +1,9 @@
 const axios = require('axios');
 const sharp = require('sharp');
 
-const { shuffleArray } = require('./utils');
-const { KOMGA_API, KOMGA_AUTH } = require('./config');
-const { CACHE_DURATION } = require('../config');
+const { shuffleArray } = require('../utils');
+const { KOMGA_API, KOMGA_AUTH } = require('../config');
+const { CACHE_DURATION } = require('../../config');
 
 let totalSetCache = { value: null, expiration: 0 };
 

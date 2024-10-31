@@ -2,8 +2,9 @@ const axios = require('axios');
 const express = require('express');
 const router = express.Router();
 
-const randomBook = require('./randomBook');
-const crawl = require('./crawl');
+const randomBook = require('./routes/randomBook');
+const crawl = require('./routes/crawl');
+const version = require('./routes/version');
 const { handleError } = require('./utils');
 
 /**
@@ -75,6 +76,29 @@ router.get('/crawl', async (req, res) => {
     } catch (error) {
         handleError(error, res, "Error crawling komga");
     }
+});
+
+/**
+ * @openapi
+ * /api/version:
+ *   get:
+ *     summary: Get the application version
+ *     description: Returns the current semantic version of the application as plain text.
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved version
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: "1.2.3"
+ *               description: Semantic version of the application
+ *       500:
+ *         description: Internal server error
+ */
+router.get('/version', async (req, res) => {
+    const semver = await version();
+    res.type('text').send(semver); // Send as plain text
 });
 
 module.exports = router;

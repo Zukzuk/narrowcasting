@@ -1,5 +1,3 @@
-// domUtils
-
 // Adjust the aspect ratio class based on image orientation
 export function adjustAspectRatio(imageElement) {
     if (imageElement.naturalHeight > imageElement.naturalWidth) {
@@ -30,8 +28,6 @@ export function resetLoaderAnimation(value, interval) {
     void fill.offsetWidth; // Trigger reflow to restart the animation
     fill.style.animation = `fillBar ${interval / 1000}s linear forwards`;
 }
-
-// imageUtils
 
 // Calculate the main hue of an image
 export function calculateLoaderColor(imageElement) {

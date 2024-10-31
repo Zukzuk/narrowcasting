@@ -75,3 +75,20 @@ body {
         width: 100%;
     }
 }
+
+/* Version Display Styles */
+#version-display {
+    display: none;
+    position: fixed;
+    font-family: monospace;
+    bottom: 10px;
+    right: 6px;
+    padding: 3px 5px;
+    background-color: rgb(170, 170, 170);
+    color: black;
+    font-size: 12px;
+    border-radius: 3px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+  }
+  

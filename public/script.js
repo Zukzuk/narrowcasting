@@ -36,6 +36,18 @@ async function fetchImageData() {
     }
 }
 
+async function fetchVersion() {
+    try {
+        const response = await fetch('/api/version');
+        if (!response.ok)
+            throw new Error('Failed to fetch version');
+        return await response.text();
+    } catch (error) {
+        console.error('Error fetching version:', error);
+        return 'unknown'; // Default in case of an error
+    }
+}
+
 function getActiveAndInactiveImages() {
     const activeImage = document.getElementById(`image${currentImage}`);
     const inactiveImage = document.getElementById(`image${currentImage === 1 ? 2 : 1}`);
@@ -46,10 +58,13 @@ function setImageSource(inactiveImage, imageDataUrl) {
     inactiveImage.src = imageDataUrl;
 }
 
-function getTimeoutFromQueryParams() {
+function getQueryParams() {
     const urlParams = new URLSearchParams(window.location.search);
-    const timeout = parseInt(urlParams.get('timeout'), 10);
-    return isNaN(timeout) || timeout < 3000 ? 3000 : timeout;
+    const timeoutParam = parseInt(urlParams.get('timeout'), 10);
+    const interval = isNaN(timeoutParam) || timeoutParam < 3000 ? 3000 : timeoutParam;
+    const showVersionParam = urlParams.get('showVersion');
+    const showVersion = Boolean(showVersionParam);
+    return { interval, showVersion };
 }
 
 async function displayNextImage() {
@@ -67,8 +82,20 @@ async function displayNextImage() {
     currentImage = currentImage === 1 ? 2 : 1;
 }
 
-const interval = getTimeoutFromQueryParams();
+// Check if showVersion is set to true in the query string
+function displayVersion() {
+    if (showVersion) {
+        fetchVersion().then(semver => {
+            const versionDisplay = document.getElementById('version-display');
+            versionDisplay.innerText = `v${semver}`;
+            versionDisplay.style.display = 'block';
+        });
+    }
+}
+
+const { interval, showVersion } = getQueryParams();
 async function startSlideshow() {
+    displayVersion();
     nextImageDataUrl = await fetchImageData(); // Prefetch the first image
     displayNextImage(); // Display the first prefetched image
     setInterval(displayNextImage, interval);
