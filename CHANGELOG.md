@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.5](https://github.com/Zukzuk/narrowcasting/compare/v1.8.4...v1.8.5) (2024-10-31)
+
+
+### Bug Fixes
+
+* retry should call randomBook method ([b9a81c7](https://github.com/Zukzuk/narrowcasting/commit/b9a81c71aa476fd2423c2bb31d8f7195a8cf0ca1))
+
 ### [1.8.4](https://github.com/Zukzuk/narrowcasting/compare/v1.8.3...v1.8.4) (2024-10-31)
 
 
