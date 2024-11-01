@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.6](https://github.com/Zukzuk/narrowcasting/compare/v1.8.5...v1.8.6) (2024-11-01)
+
 ### [1.8.5](https://github.com/Zukzuk/narrowcasting/compare/v1.8.4...v1.8.5) (2024-10-31)
 
 
