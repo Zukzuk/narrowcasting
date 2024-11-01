@@ -7,12 +7,12 @@ A Node.js narrowcasting application designed to serve and manage Komga book imag
 1. **Clone the repository:**
    
    ```bash
-   git clone https://github.com/zukzuk/komga-narrowcasting-app.git
+   git clone https://github.com/zukzuk/narrowcasting.git
    ```
 2. **Navigate to the project directory:**
    
    ```bash
-   cd komga-narrowcasting-app
+   cd narrowcasting
    ```
 3. **Install dependencies:**
    
@@ -20,54 +20,12 @@ A Node.js narrowcasting application designed to serve and manage Komga book imag
    npm install
    ```
 
-## Project Structure
+## Development
 
-A Node.js narrowcasting app designed to display images from Komga using a backend Express API and a frontend interface.
-
-## Folder Details
-
-- **server/**: Backend code, Express API setup, routing, and utility modules.
-- **public/**: Frontend assets, including HTML, JS and CSS, for displaying images and interacting with Komga data.
-- **.deploy/**: Production-specific configuration files:
-  - **.env**: Environment variables for production.
-  - **docker-compose.yml**: Docker configuration for production deployment.
-  - **Dockerfile**: Docker image setup for both development and production.
-  - **docker-compose.dev.yml**: Configuration file for local development on `localhost:3001`.
-
-## Production Environment
-
-- Production settings are stored in `.deploy/.env` and `.deploy/docker-compose.yml`.
-- Ensure these files are correctly configured before deploying to production.
-
-### Environment Variables
-
-Environment variables should be defined in an .env file for both development and production environments.
-
-```plaintext
-KOMGA_USERNAME2=          # Username for accessing Komga
-KOMGA_PASSWORD2=          # Password for accessing Komga
-KOMGA_API_KEY=            # API key for Komga (if applicable)
-KOMGA_ORIGIN=             # The origin URL for Komga (e.g., https://komga-instance.com)
-KOMGA_API_LOCATION=       # API endpoint for Komga
-SESSION_SECRET=           # Secret key for session management
-```
-
-## Docker Setup
-
-### Development
-
-- **For local development**, use the `docker-compose.dev.yml` file to run the app in a container on `localhost:3001`.
-  
-  ```bash
-  docker-compose -f docker-compose.dev.yml up
-  ```
-
-## Scripts
-
-1. **Start the Server**
+1. **Run the Application**
    
    ```bash
-   npm start # Start the server.
+   npm run docker:dev # Run the docker dev container.
    ```
 2. **Commit with Commitizen**
    
@@ -84,6 +42,33 @@ SESSION_SECRET=           # Secret key for session management
    ```bash
    npm run docker:release # Builds and releases a Docker image.
    ```
+
+## Project Structure
+
+### Folder Details
+
+- **.dev.env**: Environment variables for development.
+- **Dockerfile**: Docker image setup for both development and production.
+- **docker-compose.dev.yml**: Configuration file for local development on `localhost:3001`.
+- **scripts/**: Script for CI/CD.
+- **server/**: Backend code, Express API setup, routing, and utility modules.
+- **public/**: Frontend assets, including HTML, JS and CSS, for displaying images and interacting with Komga data.
+- **.deploy/**: Production-specific configuration files:
+  - **.env**: Environment variables for production.
+  - **docker-compose.yml**: Docker configuration for production deployment.
+
+### Environment Variables
+
+```plaintext
+KOMGA_USERNAME2=          # Username for accessing Komga
+KOMGA_PASSWORD2=          # Password for accessing Komga
+KOMGA_API_KEY=            # API key for Komga (if applicable)
+KOMGA_ORIGIN=             # The origin URL for Komga
+KOMGA_API_LOCATION=       # API endpoint for Komga
+SESSION_SECRET=           # Secret key for session management
+SERVER_PORT=              # Port to expose
+```
+
 # API Documentation
 
 ## Routes
