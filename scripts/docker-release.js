@@ -3,7 +3,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 const { version } = require('../package.json');
 
-const envFilePath = path.join(__dirname, '../prd/.env.public');
+const envFilePath = path.join(__dirname, '../prd/public.env');
 
 // Main function to orchestrate the script execution
 function main() {
