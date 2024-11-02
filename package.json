@@ -5,7 +5,7 @@
     "main": "server/index.js",
     "scripts": {
         "start": "node server/index.js",
-        "commit": "git add . && cz",
+        "commit": "cz",
         "release": "standard-version && git push --follow-tags origin main",
         "docker:dev": "node scripts/docker-dev.js",
         "docker:release": "node scripts/docker-release.js"

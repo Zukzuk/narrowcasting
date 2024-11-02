@@ -19,7 +19,13 @@ const { handleError } = require('./utils');
  *         schema:
  *           type: integer
  *           default: 0
- *         description: Page number for pagination
+ *         description: Page number of selected page
+ *       - in: query
+ *         name: interval
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Time interval for retrieving a random book image
  *     responses:
  *       200:
  *         description: Returns the image of a random book
@@ -32,7 +38,7 @@ const { handleError } = require('./utils');
  *         description: Internal Server Error or no valid image found
  */
 router.get('/slideshow/random-book', async (req, res) => {
-    const { page = 0, interval } = req.query;
+    const { page = 0, interval = 10 } = req.query;
     const cancelToken = axios.CancelToken.source();
     req.on('close', () => {
         cancelToken.cancel("Client disconnected, request canceled.");
