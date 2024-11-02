@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.9.1](https://github.com/Zukzuk/narrowcasting/compare/v1.9.0...v1.9.1) (2024-11-02)
+
+
+### Bug Fixes
+
+* updated public env reference is script ([e98a692](https://github.com/Zukzuk/narrowcasting/commit/e98a69280f673ab9aa4ec8ca752490d88b8773ee))
+
 ## [1.9.0](https://github.com/Zukzuk/narrowcasting/compare/v1.8.7...v1.9.0) (2024-11-02)
 
 
