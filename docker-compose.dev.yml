@@ -1,12 +1,20 @@
 services:
-  komga-narrowcasting-app:
+  komga-app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
       args:
         VERSION_TAG: ${VERSION_TAG}
     image: zukzuk/narrowcasting
     ports:
       - "3001:3000"
     env_file:
-      - .dev.env
+      - prd/public.env
+      - .secrets/private.env
+      - dev.env
+    volumes:
+      - .:/usr/src/app            # Mounts the current directory to in the container
+      - /usr/src/app/node_modules # Creates an anonymous volume for node_modules to prevent folder collision
+    environment:
+      - VERSION_TAG=${VERSION_TAG}
+

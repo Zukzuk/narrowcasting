@@ -60,40 +60,26 @@ A Node.js narrowcasting application designed to serve and manage Komga book imag
 ### Environment Variables
 
 ```plaintext
+# .secrets/.env.private
 KOMGA_USERNAME2=          # Username for accessing Komga
 KOMGA_PASSWORD2=          # Password for accessing Komga
 KOMGA_API_KEY=            # API key for Komga (if applicable)
-KOMGA_ORIGIN=             # The origin URL for Komga
-KOMGA_API_LOCATION=       # API endpoint for Komga
 SESSION_SECRET=           # Secret key for session management
+
+# prd/.env.public
+KOMGA_ORIGIN=             # The origin URL for Komga
+KOMGA_API_PATH=           # Path to komga API
+DOCKERFILE_PATH=          # Path to dockerfile
 SERVER_PORT=              # Port to expose
+IMAGE_NAME=               # Namespace of docker image
+VERSION_TAG=              # Dynamically overwritten tag
+
+# .env.dev
+# Any var needed, can overwrite all above
 ```
 
 # API Documentation
-
-## Routes
-
-### 1. `/slideshow/random-book`
-**Method:** `GET`  
-**Description:** Fetches a random Komga book image.
-
-**Query Parameters:**
-- `page` (optional): Specifies the page number for retrieving a random image. The default value is `0`.
-
-**Response:**
-- Returns an image with a `Content-Type` header appropriate for the image type.
-- Returns a `500` error if no valid image is found.
-
-### 2. `/crawl`
-**Method:** `GET`  
-**Description:** Initiates a crawl to retrieve Komga book data.
-
-**Response:**
-- Returns `JSON` data with the crawled content.
-- Returns a `500` error if no content is found.
-
-## Error Handling
-Errors are managed using the `handleError` function from the `utils` module to provide consistent API error responses.
+[localhost]/api-docs
 
 ## License
 This project is licensed under the **MIT License**.

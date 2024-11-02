@@ -1,7 +1,7 @@
 # Use a Debian-based Node.js image
 FROM node:20-alpine
 
-# Accept VERSION as a build argument
+# Accept args as build arguments
 ARG VERSION_TAG
 ENV VERSION_TAG=$VERSION_TAG
 

@@ -2,7 +2,7 @@ require('dotenv').config();
 const path = require('path');
 
 const KOMGA_ORIGIN = process.env.KOMGA_ORIGIN;
-const KOMGA_API = KOMGA_ORIGIN+process.env.KOMGA_API_LOCATION;
+const KOMGA_API = KOMGA_ORIGIN+process.env.KOMGA_API_PATH;
 const KOMGA_AUTH = {
     username: process.env.KOMGA_USERNAME2,
     password: process.env.KOMGA_PASSWORD2

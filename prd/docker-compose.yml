@@ -1,0 +1,17 @@
+services:
+  komga-app:
+    image: zukzuk/narrowcasting:${VERSION_TAG}
+    ports:
+      - "3001:3000"
+    env_file:
+      - .env.public
+      - .env.private
+    restart: always
+    networks:
+      - shared
+    environment:
+      - VERSION_TAG=${VERSION_TAG}
+
+networks:
+  shared:
+    external: true
