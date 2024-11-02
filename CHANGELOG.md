@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.0](https://github.com/Zukzuk/narrowcasting/compare/v1.8.7...v1.9.0) (2024-11-02)
+
+
+### Features
+
+* added better docker scripting, server hot reloading ([d6ce860](https://github.com/Zukzuk/narrowcasting/commit/d6ce860245d21f0cc7910ca05b04f7dd60341de7))
+
 ### [1.8.7](https://github.com/Zukzuk/narrowcasting/compare/v1.8.6...v1.8.7) (2024-11-02)
 
 
