@@ -47,7 +47,7 @@ function updateVersionTag(filePath, version) {
     }
     fs.writeFileSync(filePath, envContent);
   } catch (error) {
-    console.error("Error updating .env.public file:", error.message);
+    console.error("Error updating public.env file:", error.message);
     process.exit(1);
   }
 }
@@ -57,15 +57,12 @@ function buildAndPushDockerImage(envVars, version) {
   const { IMAGE_NAME, DOCKERFILE_PATH } = envVars;
   const imageVersionTag = `${IMAGE_NAME}:${version}`;
   const imageLatestTag = `${IMAGE_NAME}:latest`;
-
   try {
     console.log("Building Docker image...");
-    execSync(`docker build -f ${DOCKERFILE_PATH} --build-arg VERSION_TAG=${version} -t ${imageVersionTag} -t ${imageLatestTag} .`, { stdio: 'inherit' });
-
+    execSync(`docker build -f ${path.join(__dirname, DOCKERFILE_PATH)} --build-arg VERSION_TAG=${version} -t ${imageVersionTag} -t ${imageLatestTag} .`, { stdio: 'inherit' });
     console.log(`Pushing '${version}' and 'latest' to Docker registry...`);
     execSync(`docker push ${imageVersionTag}`, { stdio: 'inherit' });
     execSync(`docker push ${imageLatestTag}`, { stdio: 'inherit' });
-
     console.log(`Docker image built and tagged with both ${version} and 'latest' successfully.`);
   } catch (error) {
     console.error("Error during Docker build or push:", error.message);
