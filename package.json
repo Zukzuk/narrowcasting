@@ -4,7 +4,7 @@
     "description": "A Node.js narrowcasting app for Komga images",
     "main": "server/index.js",
     "scripts": {
-        "start": "node scripts/docker-dev.js",
+        "dev": "node scripts/docker-dev.js",
         "commit": "cz",
         "release": "standard-version && git push --follow-tags origin main",
         "docker:release": "node scripts/docker-release.js"
