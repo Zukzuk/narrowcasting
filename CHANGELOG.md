@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.9.2](https://github.com/Zukzuk/narrowcasting/compare/v1.9.1...v1.9.2) (2024-11-02)
+
+
+### Bug Fixes
+
+* updated dockerfile prd path ([fc39a14](https://github.com/Zukzuk/narrowcasting/commit/fc39a14d9ace6e7edf48c65885a6039db81e36be))
+
 ### [1.9.1](https://github.com/Zukzuk/narrowcasting/compare/v1.9.0...v1.9.1) (2024-11-02)
 
 
