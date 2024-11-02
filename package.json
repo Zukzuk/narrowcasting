@@ -1,6 +1,6 @@
 {
     "name": "komga-narrowcasting-app",
-    "version": "1.9.3",
+    "version": "1.9.4",
     "description": "A Node.js narrowcasting app for Komga images",
     "main": "server/index.js",
     "scripts": {
