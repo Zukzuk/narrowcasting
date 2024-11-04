@@ -1,5 +1,5 @@
 services:
-  komga-app:
+  narrowcasting-app:
     image: zukzuk/narrowcasting
     ports:
       - "3001:3000"

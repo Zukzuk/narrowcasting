@@ -1,5 +1,5 @@
 services:
-  komga-app:
+  narrowcasting-app:
     build:
       context: .
       dockerfile: scripts/Dockerfile.dev
