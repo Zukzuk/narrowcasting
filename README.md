@@ -60,21 +60,17 @@ A Node.js narrowcasting application designed to serve and manage Komga book imag
 ### Environment Variables
 
 ```plaintext
-# .secrets/.env.private
+# .secrets/private.env
 KOMGA_USERNAME2=          # Username for accessing Komga
 KOMGA_PASSWORD2=          # Password for accessing Komga
 KOMGA_API_KEY=            # API key for Komga (if applicable)
 SESSION_SECRET=           # Secret key for session management
 
-# prd/.env.public
+# deploy/public.env
 KOMGA_ORIGIN=             # The origin URL for Komga
 KOMGA_API_PATH=           # Path to komga API
-DOCKERFILE_PATH=          # Path to dockerfile
-SERVER_PORT=              # Port to expose
-IMAGE_NAME=               # Namespace of docker image
-VERSION_TAG=              # Dynamically overwritten tag
 
-# .env.dev
+# dev.env
 # Any var needed, can overwrite all above
 ```
 

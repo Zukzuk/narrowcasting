@@ -9,7 +9,7 @@ const session = require('express-session');
 // Import main application router
 const router = require('./komga-app/router');
 const { getLocalIpAddress } = require('./utils');
-const { SERVER_PORT, SESSION_SECRET, CACHE_DURATION } = require('./config');
+const { SESSION_SECRET, CACHE_DURATION } = require('./config');
 const { KOMGA_ORIGIN } = require('./komga-app/config');
 
 const app = express();
@@ -41,7 +41,7 @@ axios.interceptors.request.use(request => {
 //     return response
 // })
 
-const PORT = SERVER_PORT || 3000;
+const PORT = 3000;
 app.listen(PORT, async () => {
     console.log(`Server is running on http://localhost:${PORT}`);
     console.log(`Local IP: ${getLocalIpAddress()}`);

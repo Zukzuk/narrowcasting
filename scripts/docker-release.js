@@ -1,4 +1,3 @@
-const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 const { version } = require('../package.json');
@@ -18,7 +17,7 @@ function buildAndPushDockerImage(VERSION_TAG) {
   const imageLatestTag = `zukzuk/narrowcasting:latest`;
   try {
     console.log("Building Docker image...");
-    execSync(`docker build -f ${path.join(__dirname, '../prd/Dockerfile')} --build-arg VERSION_TAG=${VERSION_TAG} -t ${imageVersionTag} -t ${imageLatestTag} .`, { stdio: 'inherit' });
+    execSync(`docker build -f ${path.join(__dirname, '../deploy/Dockerfile')} --build-arg VERSION_TAG=${VERSION_TAG} -t ${imageVersionTag} -t ${imageLatestTag} .`, { stdio: 'inherit' });
     console.log(`Pushing '${VERSION_TAG}' and 'latest' to Docker registry...`);
     execSync(`docker push ${imageVersionTag}`, { stdio: 'inherit' });
     execSync(`docker push ${imageLatestTag}`, { stdio: 'inherit' });
