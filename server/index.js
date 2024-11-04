@@ -1,4 +1,5 @@
 const express = require('express');
+const axios = require('axios');
 const compression = require('compression');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
@@ -29,12 +30,19 @@ app.use(session({
     saveUninitialized: true,
     cookie: { maxAge: CACHE_DURATION }
 }));
-
-// Apply routes
 app.use('/api', router);
+
+axios.interceptors.request.use(request => {
+    console.log('Starting Request', JSON.stringify(request.url, null, 2))
+    return request
+})
+// axios.interceptors.response.use(response => {
+//     console.log('Response:', JSON.stringify(response, null, 2))
+//     return response
+// })
 
 const PORT = SERVER_PORT || 3000;
 app.listen(PORT, async () => {
     console.log(`Server is running on http://localhost:${PORT}`);
-    console.log(`Making request from IP: ${getLocalIpAddress()}`);
+    console.log(`Local IP: ${getLocalIpAddress()}`);
 });

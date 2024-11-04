@@ -1,6 +1,6 @@
 services:
   komga-app:
-    image: zukzuk/narrowcasting:${VERSION_TAG}
+    image: zukzuk/narrowcasting
     ports:
       - "3001:3000"
     env_file:
@@ -8,10 +8,8 @@ services:
       - private.env
     restart: always
     networks:
-      - shared
-    environment:
-      - VERSION_TAG=${VERSION_TAG}
+      - bridge
 
 networks:
-  shared:
-    external: true
+  bridge:
+    driver: bridge

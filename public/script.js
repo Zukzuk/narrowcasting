@@ -99,6 +99,8 @@ function getQueryParams() {
 }
 
 async function startSlideshow() {
+    requestWakeLock();
+    // get all queryparams
     const { page, interval, showVersion } = getQueryParams();
     displayVersion(showVersion);
     // Prefetch the first image
@@ -109,24 +111,6 @@ async function startSlideshow() {
     setInterval(() => displayNextImage(page, interval), interval);
 }
 startSlideshow();
-
-async function requestWakeLock() {
-    try {
-        wakeLock = await navigator.wakeLock.request('screen');
-        wakeLock.addEventListener('release', () => {
-            console.log('Wake Lock released');
-        });
-        console.log('Wake Lock is active');
-    } catch (err) {
-        console.error(`${err.name}, ${err.message}`);
-    }
-}
-requestWakeLock();
-document.addEventListener('visibilitychange', () => {
-    if (wakeLock !== null && document.visibilityState === 'visible') {
-        requestWakeLock();
-    }
-});
 
 const fullscreenButton = document.getElementById('fullscreen-button');
 fullscreenButton.addEventListener('click', () => {
@@ -145,6 +129,23 @@ document.addEventListener('fullscreenchange', () => {
         fullscreenButton.textContent = '[x]';
     } else {
         fullscreenButton.textContent = '[ ]';
+    }
+});
+
+async function requestWakeLock() {
+    try {
+        wakeLock = await navigator.wakeLock.request('screen');
+        wakeLock.addEventListener('release', () => {
+            console.log('Wake Lock released');
+        });
+        console.log('Wake Lock is active');
+    } catch (err) {
+        console.error(`${err.name}, ${err.message}`);
+    }
+}
+document.addEventListener('visibilitychange', () => {
+    if (wakeLock !== null && document.visibilityState === 'visible') {
+        requestWakeLock();
     }
 });
 
