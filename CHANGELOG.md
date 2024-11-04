@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.1](https://github.com/Zukzuk/narrowcasting/compare/v1.10.0...v1.10.1) (2024-11-04)
+
+
+### Bug Fixes
+
+* fixed dockerfile release reference ([706fd34](https://github.com/Zukzuk/narrowcasting/commit/706fd344cf9ab088c2f638d3d6dd572f8353d035))
+
 ## [1.10.0](https://github.com/Zukzuk/narrowcasting/compare/v1.9.4...v1.10.0) (2024-11-04)
 
 
