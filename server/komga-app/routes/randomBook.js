@@ -9,7 +9,7 @@ let totalSetCache = { value: null, expiration: 0 };
 
 // Fetch image by book ID and page
 async function fetchImage(req, bookId, page, interval, cancelToken, startTime, retryCount) {
-    console.log('fetchImage', 'id:', bookId, 'page:', page, 'attempt:', retryCount);
+    console.log('fetchImage attempt', retryCount);
     try {
         const image = await axios.get(`${KOMGA_API}/books/${bookId}/pages/${page}`, {
             params: { zero_based: true, contentNegotiation: true },
