@@ -1,4 +1,4 @@
-const { VERSION_TAG } = require('../config');
+const { VERSION_TAG } = require('../../config');
 
 function version() {
     return VERSION_TAG || 'unknown';
