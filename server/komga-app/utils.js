@@ -1,4 +1,4 @@
-const { jaroWinkler } = require('@skyra/jaro-winkler');
+// const { jaroWinkler } = require('@skyra/jaro-winkler');
 
 // Shuffle array elements
 function shuffleArray(array) {
@@ -18,9 +18,15 @@ function handleError(error, res, message) {
 // Fuzzy search
 function fuzzySearch(cache, search) {
     if (!search) return cache;
-    return cache.filter(
-        item => jaroWinkler(search, item, { caseSensitive: false }) >= 0.8
-    );
+    // Create a case-insensitive fuzzy matching pattern allowing for variations
+    const pattern = new RegExp(search.split(" ").join(".*"), "i");
+    // Filter the data with generalized fuzzy matching
+    return Object.keys(cache)
+        .filter(key => pattern.test(cache[key]))
+        .reduce((acc, key) => {
+            acc[key] = cache[key];
+            return acc;
+        }, {});
 }
 
 module.exports = {
