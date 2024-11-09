@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.11.0](https://github.com/Zukzuk/narrowcasting/compare/v1.10.4...v1.11.0) (2024-11-09)
+
+
+### Features
+
+* added host-gateway to find related addresses ([4896d51](https://github.com/Zukzuk/narrowcasting/commit/4896d516c23fb663b3b5810240ead53fac2ea3d4))
+
 ### [1.10.4](https://github.com/Zukzuk/narrowcasting/compare/v1.10.3...v1.10.4) (2024-11-09)
 
 
