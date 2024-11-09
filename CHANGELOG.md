@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.11.1](https://github.com/Zukzuk/narrowcasting/compare/v1.11.0...v1.11.1) (2024-11-09)
+
+
+### Bug Fixes
+
+* fixed fuzzySearch ([e3f2cf5](https://github.com/Zukzuk/narrowcasting/commit/e3f2cf589821dd7a13504d41b79cc3029d1186f3))
+
 ## [1.11.0](https://github.com/Zukzuk/narrowcasting/compare/v1.10.4...v1.11.0) (2024-11-09)
 
 
