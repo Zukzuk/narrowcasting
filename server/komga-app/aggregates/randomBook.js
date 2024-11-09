@@ -46,11 +46,11 @@ async function fetchImage(req, bookId, page, interval, cancelToken, startTime, r
 }
 
 // Fetch a random book ID
-async function fetchBookId(randomInSet, cancelToken) {
+async function fetchBookId(randomIndex, cancelToken) {
     console.log('fetchBookId');
     try {
         const response = await axios.get(`${KOMGA_API}/books`, {
-            params: { page: randomInSet, size: 1 },
+            params: { page: randomIndex, size: 1 },
             auth: KOMGA_AUTH,
             cancelToken,
         });
@@ -67,8 +67,8 @@ async function fetchBookId(randomInSet, cancelToken) {
 }
 
 // Fetch total number of sets
-async function fetchTotalSet() {
-    console.log('fetchTotalSet');
+async function fetchIndexTotal() {
+    console.log('fetchIndexTotal');
     try {
         const response = await axios.get(`${KOMGA_API}/books`, {
             params: { size: 1 },
@@ -78,12 +78,12 @@ async function fetchTotalSet() {
         if (!totalSet) throw new Error("No set found.");
         return totalSet;
     } catch (error) {
-        throw new Error(`Failed fetchTotalSet: ${error}`);
+        throw new Error(`Failed fetchIndexTotal: ${error}`);
     }
 }
 
 // General cache and/or fetch logic
-async function retrieveTotalSet(cache, fetch) {
+async function retrieveIndexTotal(cache, fetch) {
     const currentTime = Date.now();
     if (cache.value !== null && currentTime < cache.expiration) {
         return Promise.resolve(cache.value);
@@ -96,9 +96,9 @@ async function retrieveTotalSet(cache, fetch) {
 }
 
 // Retrieve a random unused index from session set
-async function findRandomUnusedInSet(req) {
+async function retrieveRandomIndex(req) {
     if (!req.session.remainingSet || req.session.remainingSet.length === 0) {
-        const totalSet = await retrieveTotalSet(totalSetCache, fetchTotalSet);
+        const totalSet = await retrieveIndexTotal(totalSetCache, fetchIndexTotal);
         req.session.remainingSet = Array.from({ length: totalSet }, (_, i) => i);
     }
     const randomIndex = Math.floor(Math.random() * req.session.remainingSet.length);
@@ -106,8 +106,8 @@ async function findRandomUnusedInSet(req) {
 }
 
 async function randomBook(req, page, interval, cancelToken, startTime = Date.now(), retryCount = 1) {
-    const randomInSet = await findRandomUnusedInSet(req);
-    const bookId = await fetchBookId(randomInSet, cancelToken);
+    const randomIndex = await retrieveRandomIndex(req);
+    const bookId = await fetchBookId(randomIndex, cancelToken);
     return await fetchImage(req, bookId, page, interval, cancelToken, startTime, retryCount);
 }
 

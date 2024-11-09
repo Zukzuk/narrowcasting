@@ -2,14 +2,14 @@ const axios = require('axios');
 const express = require('express');
 const router = express.Router();
 
-const randomBook = require('./routes/randomBook');
-const crawl = require('./routes/crawl');
-const version = require('./routes/version');
+const randomBook = require('./aggregates/randomBook');
+const crawl = require('./aggregates/crawl');
+const version = require('./aggregates/version');
 const { handleError } = require('./utils');
 
 /**
  * @openapi
- * /api/slideshow/random-book:
+ * /api/books/random:
  *   get:
  *     summary: Get a random book image
  *     description: Fetches a random book image from the database
@@ -37,7 +37,7 @@ const { handleError } = require('./utils');
  *       500:
  *         description: Internal Server Error or no valid image found
  */
-router.get('/slideshow/random-book', async (req, res) => {
+router.get('/books/random', async (req, res) => {
     const { page = 0, interval = 10 } = req.query;
     const cancelToken = axios.CancelToken.source();
     req.on('close', () => {
@@ -61,8 +61,8 @@ router.get('/slideshow/random-book', async (req, res) => {
  * @openapi
  * /api/series:
  *   get:
- *     summary: Perform a crawling operation
- *     description: Initiates a crawling operation to fetch data from the target source
+ *     summary: Crawl series
+ *     description: Initiates a crawling operation to fetch series data
  *     parameters:
  *       - in: query
  *         name: search
@@ -94,8 +94,8 @@ router.get('/series', async (req, res) => {
  * @openapi
  * /api/collections:
  *   get:
- *     summary: Perform a crawling operation
- *     description: Initiates a crawling operation to fetch data from the target source
+ *     summary: Crawl collections
+ *     description: Initiates a crawling operation to fetch collections data
  *     parameters:
  *       - in: query
  *         name: search
@@ -142,8 +142,9 @@ router.get('/collections', async (req, res) => {
  *         description: Internal server error
  */
 router.get('/version', async (req, res) => {
-    const semver = await version();
-    res.type('text').send(semver); // Send as plain text
+    const response = await version();
+    if (!response) return res.status(500).json({ error: "No valid content found" });
+    res.type('text').send(response); // Send as plain text
 });
 
 module.exports = router;
