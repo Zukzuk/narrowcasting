@@ -64,6 +64,12 @@ router.get('/slideshow/random-book', async (req, res) => {
  *   get:
  *     summary: Perform a crawling operation
  *     description: Initiates a crawling operation to fetch data from the target source
+ *     parameters:
+ *       - in: query
+ *         name: type
+ *         schema:
+ *           type: string
+ *         description: Page number of selected page
  *     responses:
  *       200:
  *         description: Successfully crawled data
@@ -75,8 +81,9 @@ router.get('/slideshow/random-book', async (req, res) => {
  *         description: Internal Server Error or no valid content found
  */
 router.get('/crawl', async (req, res) => {
+    const { type } = req.query;
     try {
-        const crawled = await crawl();
+        const crawled = await crawl(type);
         if (!crawled) return res.status(500).json({ error: "No valid content found" });
         res.json(crawled);
     } catch (error) {

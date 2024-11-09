@@ -17,17 +17,14 @@ async function fetchImage(req, bookId, page, interval, cancelToken, startTime, r
             auth: KOMGA_AUTH,
             cancelToken,
         });
-
         const contentType = image.headers['content-type'];
         if (contentType === 'image/jp2' || contentType === 'image/jpeg2000')
             throw new Error("Unsupported image format");
-
         // Use sharp to resize and optimize the image for 4K
         const optimizedImage = await sharp(image.data)
             .resize({ width: 3840, height: 2160, fit: 'inside' })
             .toFormat('webp', { quality: 80 })
             .toBuffer();
-
         return { image: optimizedImage, contentType: 'image/webp' };
     } catch (error) {
         if (axios.isCancel(error)) {

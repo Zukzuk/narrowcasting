@@ -1,7 +1,7 @@
 const axios = require('axios');
 const { CRAWL_PAGE_SIZE, KOMGA_API, KOMGA_AUTH } = require('../config');
 
-let cache = {};  // Map of all collections name/id
+let cache;
 
 function cacheContent(content) {
     content.forEach(item => {
@@ -10,8 +10,8 @@ function cacheContent(content) {
     });
 }
 
-async function fetch(page) {
-    const url = `${KOMGA_API}/collections?size=${CRAWL_PAGE_SIZE}&page=${page}`;
+async function fetch(page, type) {
+    const url = `${KOMGA_API}/${type}?size=${CRAWL_PAGE_SIZE}&page=${page}`;
     try {
         const response = await axios.get(url, { auth: KOMGA_AUTH });
         return response.data;
@@ -21,20 +21,20 @@ async function fetch(page) {
     }
 }
 
-async function crawl() {
+async function crawl(type) {
+    cache = {};
     try {
         // Fetch the first page to get the total number of pages
-        const firstPageData = await fetch(0);
+        const firstPageData = await fetch(0, type);
         const totalPages = firstPageData.totalPages;
         // Cache content from the first page
         cacheContent(firstPageData.content);
         // Loop to fetch remaining pages
         for (let page = 1; page < totalPages; page++) {
-            const { content } = await fetch(page);
+            const { content } = await fetch(page, type);
             cacheContent(content);
         }
-
-        console.log(cache, `crawled ${totalPages} pages and found ${ Object.entries(cache).length} items...`);
+        console.log(cache, `crawled ${totalPages} pages and found ${ Object.entries(cache).length} ${type}...`);
         return cache;
     } catch (error) {
         console.error("Error during crawling and caching of items:", error.message || error);
