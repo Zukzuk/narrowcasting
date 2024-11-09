@@ -1,3 +1,5 @@
+const { jaroWinkler } = require('@skyra/jaro-winkler');
+
 // Shuffle array elements
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -13,7 +15,16 @@ function handleError(error, res, message) {
     res.status(500).json({ error: message });
 }
 
+// Fuzzy search
+function fuzzySearch(cache, search) {
+    if (!search) return cache;
+    return cache.filter(
+        item => jaroWinkler(search, item, { caseSensitive: false }) >= 0.8
+    );
+}
+
 module.exports = {
     shuffleArray,
-    handleError
+    handleError,
+    fuzzySearch,
 };

@@ -35,7 +35,7 @@ app.use('/api', router);
 axios.interceptors.request.use(request => {
     console.log('Call', request.url, request.params);
     return request;
-})
+});
 // axios.interceptors.response.use(response => {
 //     console.log('Response', response);
 //     return response;

@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { fuzzySearch } = require('../utils');
 const { CRAWL_PAGE_SIZE, KOMGA_API, KOMGA_AUTH } = require('../config');
 
 let cache;
@@ -21,24 +22,26 @@ async function fetch(page, type) {
     }
 }
 
-async function crawl(type) {
-    cache = {};
-    try {
-        // Fetch the first page to get the total number of pages
-        const firstPageData = await fetch(0, type);
-        const totalPages = firstPageData.totalPages;
-        // Cache content from the first page
-        cacheContent(firstPageData.content);
-        // Loop to fetch remaining pages
-        for (let page = 1; page < totalPages; page++) {
-            const { content } = await fetch(page, type);
-            cacheContent(content);
+async function crawl(type, search) {
+    if (!cache) {
+        try {
+            cache = {};
+            // Fetch the first page to get the total number of pages
+            const firstPageData = await fetch(0, type);
+            const totalPages = firstPageData.totalPages;
+            // Cache content from the first page
+            cacheContent(firstPageData.content);
+            // Loop to fetch remaining pages
+            for (let page = 1; page < totalPages; page++) {
+                const { content } = await fetch(page, type);
+                cacheContent(content);
+            }
+            console.log(cache, `crawled ${totalPages} pages and found ${ Object.entries(cache).length} ${type}...`);
+        } catch (error) {
+            console.error("Error during crawling and caching of items:", error.message || error);
         }
-        console.log(cache, `crawled ${totalPages} pages and found ${ Object.entries(cache).length} ${type}...`);
-        return cache;
-    } catch (error) {
-        console.error("Error during crawling and caching of items:", error.message || error);
     }
+    return fuzzySearch(cache, search);
 }
 
 module.exports = crawl;

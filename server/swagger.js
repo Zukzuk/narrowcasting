@@ -5,7 +5,7 @@ const options = {
         openapi: "3.0.0",
         info: {
             title: "Book Slideshow API",
-            version: "1.0.0",
+            version: process.env.VERSION_TAG,
             description: "API documentation for the book slideshow service",
         },
     },

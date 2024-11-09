@@ -8,8 +8,10 @@ services:
       - private.env
     restart: always
     networks:
-      - bridge
+      - narrowcasting
+    extra_hosts:
+      - "comics.daveloper.nl:host-gateway"
 
 networks:
-  bridge:
+  narrowcasting:
     driver: bridge

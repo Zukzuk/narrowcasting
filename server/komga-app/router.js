@@ -43,7 +43,6 @@ router.get('/slideshow/random-book', async (req, res) => {
     req.on('close', () => {
         cancelToken.cancel("Client disconnected, request canceled.");
     });
-    
     try {
         const { image, contentType } = await randomBook(req, page, interval, cancelToken.token);
         if (!image) return res.status(500).json({ error: "No valid image or content type found" });
@@ -60,16 +59,16 @@ router.get('/slideshow/random-book', async (req, res) => {
 
 /**
  * @openapi
- * /api/crawl:
+ * /api/series:
  *   get:
  *     summary: Perform a crawling operation
  *     description: Initiates a crawling operation to fetch data from the target source
  *     parameters:
  *       - in: query
- *         name: type
+ *         name: search
  *         schema:
  *           type: string
- *         description: Page number of selected page
+ *         description: Search term
  *     responses:
  *       200:
  *         description: Successfully crawled data
@@ -80,12 +79,45 @@ router.get('/slideshow/random-book', async (req, res) => {
  *       500:
  *         description: Internal Server Error or no valid content found
  */
-router.get('/crawl', async (req, res) => {
-    const { type } = req.query;
+router.get('/series', async (req, res) => {
+    const { search } = req.query;
     try {
-        const crawled = await crawl(type);
-        if (!crawled) return res.status(500).json({ error: "No valid content found" });
-        res.json(crawled);
+        const response = await crawl('series', search);
+        if (!response) return res.status(500).json({ error: "No valid content found" });
+        res.json(response);
+    } catch (error) {
+        handleError(error, res, "Error crawling komga");
+    }
+});
+
+/**
+ * @openapi
+ * /api/collections:
+ *   get:
+ *     summary: Perform a crawling operation
+ *     description: Initiates a crawling operation to fetch data from the target source
+ *     parameters:
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search term
+ *     responses:
+ *       200:
+ *         description: Successfully crawled data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *       500:
+ *         description: Internal Server Error or no valid content found
+ */
+router.get('/collections', async (req, res) => {
+    const { search } = req.query;
+    try {
+        const response = await crawl('collections', search);
+        if (!response) return res.status(500).json({ error: "No valid content found" });
+        res.json(response);
     } catch (error) {
         handleError(error, res, "Error crawling komga");
     }
