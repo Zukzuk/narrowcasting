@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.11.2](https://github.com/Zukzuk/narrowcasting/compare/v1.11.1...v1.11.2) (2024-11-09)
+
+
+### Bug Fixes
+
+* renamed endpoint ([3a1063d](https://github.com/Zukzuk/narrowcasting/commit/3a1063d694a340e64fb3a69c0df847cc8e1da643))
+
 ### [1.11.1](https://github.com/Zukzuk/narrowcasting/compare/v1.11.0...v1.11.1) (2024-11-09)
 
 
