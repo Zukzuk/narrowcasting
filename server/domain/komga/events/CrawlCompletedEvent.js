@@ -1,6 +1,8 @@
+const CrawlCompletedEventType = 'CrawlCompletedEvent';
+
 class CrawlCompletedEvent {
     constructor({ endpoint, totalItems, payload, timestamp }) {
-        this.type = 'CrawlCompletedEvent';
+        this.type = CrawlCompletedEventType;
         this.endpoint = endpoint,
         this.payload = payload;
         this.totalItems = totalItems;
@@ -8,4 +10,7 @@ class CrawlCompletedEvent {
     }
 }
 
-module.exports = CrawlCompletedEvent;
+module.exports = {
+    CrawlCompletedEvent,
+    CrawlCompletedEventType,
+}

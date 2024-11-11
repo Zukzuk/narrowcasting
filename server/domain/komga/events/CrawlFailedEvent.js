@@ -1,6 +1,8 @@
+const CrawlFailedEventType = 'CrawlFailedEvent';
+
 class CrawlFailedEvent {
     constructor({ endpoint, url, error, timestamp }) {
-        this.type = 'CrawlFailedEvent';
+        this.type = CrawlFailedEventType;
         this.endpoint = endpoint,
         this.url = url,
         this.error = error;
@@ -8,4 +10,7 @@ class CrawlFailedEvent {
     }
 }
 
-module.exports = CrawlFailedEvent;
+module.exports = {
+    CrawlFailedEvent,
+    CrawlFailedEventType,
+}

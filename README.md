@@ -1,6 +1,11 @@
 # Komga Narrowcasting App
 
-A Node.js narrowcasting application designed to serve and manage Komga book images with a simple REST API and frontend interface. This app is Docker-ready and includes configurations for both development and production environments.
+A Node.js narrowcasting application designed to serve and manage Komga book images with a simple REST API and frontend interface. This app is Docker-ready and includes configurations for both development and production environments. 
+
+## CQRS Pattern
+
+This project follows the CQRS (Command Query Responsibility Segregation) pattern, which separates the responsibilities of commands (write operations) and queries (read operations).
+Commands are handled by the CommandHandler and aggregates, while queries are handled by read models. Events are used to communicate the results of command execution. The Orchestrator class ties everything together, ensuring that commands and queries are processed correctly.
 
 ## Installation
 
@@ -47,15 +52,31 @@ A Node.js narrowcasting application designed to serve and manage Komga book imag
 
 ### Folder Details
 
-- **.dev.env**: Environment variables for development.
-- **Dockerfile**: Docker image setup for both development and production.
-- **docker-compose.dev.yml**: Configuration file for local development on `localhost:3001`.
-- **scripts/**: Script for CI/CD.
+- **deploy/**: Production-specific configuration files
+- **public/**: Frontend assets for displaying images and interacting with Komga data.
+- **scripts/**: Scripts and Dockerfiles for CI/CD.
 - **server/**: Backend code, Express API setup, routing, and utility modules.
-- **public/**: Frontend assets, including HTML, JS and CSS, for displaying images and interacting with Komga data.
-- **.deploy/**: Production-specific configuration files:
-  - **.env**: Environment variables for production.
-  - **docker-compose.yml**: Docker configuration for production deployment.
+- **.dev.env**: Environment variables for development.
+- **docker-compose.dev.yml**: Configuration file for local development on `localhost:3001`.
+
+### Server Directory ###
+  - `application/`: Contains backend application logic.
+    - `CommandHandler.js`, `Orchestrator.js`
+  - `domain/`: Domain-specific logic.
+    - `[DOMAIN]/`
+      - `commands/`
+      - `events/`
+      - `services/`
+      - `AggregateFactory.js`
+  - `infrastructure/`: Infrastructure-related code.
+    - `filesystem/`
+    - `repositories/`
+  - `interfaces/`: Interface definitions.
+    - `api/`
+    - `repositories/`
+  - `index.js`: Server init and bootstrap.
+  - `utils.js`: Utility functions for the server.
+  - `config.js`: Configuration file for the server.
 
 ### Environment Variables
 
@@ -68,7 +89,9 @@ SESSION_SECRET=           # Secret key for session management
 
 # deploy/public.env
 KOMGA_ORIGIN=             # The origin URL for Komga
-KOMGA_API_PATH=           # Path to komga API
+KOMGA_API_PATH=           # Path to Komga API
+NARROWCASTING_API_PATH=   # Api path of the app itself
+API_DOCS_PATH=            # Api Docs path
 
 # dev.env
 # Any var needed, can overwrite all above

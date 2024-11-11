@@ -4,7 +4,7 @@ class CrawlReadModel {
     }
 
     onCrawlCompleted(event) {
-        console.log(event.type, event.endpoint);
+        console.log('CrawlReadModel:', event.type, event.endpoint);
         // denormalize
         this.cache[event.endpoint] = event.payload;
     }

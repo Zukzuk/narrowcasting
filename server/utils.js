@@ -1,5 +1,6 @@
 const os = require('os');
 // const defaultGateway = require('default-gateway');
+const axios = require('axios');
 
 function getLocalIpAddress() {
     const networkInterfaces = os.networkInterfaces();
@@ -32,9 +33,26 @@ function getHostName() {
 //     }
 // }
 
+function doAxiosLogging(logReq = true, logResp = true) {
+    // axios logging
+    if (logReq) {
+        axios.interceptors.request.use(request => {
+            console.log('Call', request.url, request.params ? request.params : '');
+            return request;
+        });
+    }
+    if (logResp) {
+        axios.interceptors.response.use(response => {
+            console.log('Response', response);
+            return response;
+        });
+    }
+}
+
 module.exports = {
     localIpAddress: getLocalIpAddress,
     hostName: getHostName,
     // gatewayAddress: getGatewayAddress,
     port: getPort,
+    axiosLogging: doAxiosLogging,
 }

@@ -18,11 +18,9 @@ export function toggleVisibility(activeImage, inactiveImage) {
 // Function to reset the loader animation and apply the hue color
 export function resetLoaderAnimation(value, interval) {
     const fill = document.querySelector('.progress-bar-fill');
-    
     // Apply the hue as the loader color
     fill.style.backgroundColor = `hsl(${rgbToHue(value)}, 70%, 50%)`;
     // fill.style.backgroundColor = `rgb(${value.r},${value.g},${value.b})`;
-
     // Reset animation
     fill.style.animation = 'none';
     void fill.offsetWidth; // Trigger reflow to restart the animation

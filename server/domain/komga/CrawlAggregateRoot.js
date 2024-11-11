@@ -1,5 +1,5 @@
-const CrawlCompletedEvent = require('./events/CrawlCompletedEvent');
-const CrawlFailedEvent = require('./events/CrawlFailedEvent');
+const { CrawlCompletedEvent } = require('./events/CrawlCompletedEvent');
+const { CrawlFailedEvent } = require('./events/CrawlFailedEvent');
 const CrawlEndpoint = require('./services/CrawlEndpoint');
 const { KOMGA_API, KOMGA_AUTH, CRAWL_PAGE_SIZE } = require('../../config');
 

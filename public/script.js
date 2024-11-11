@@ -1,5 +1,10 @@
 
-import { calculateLoaderColor, adjustAspectRatio, toggleVisibility, resetLoaderAnimation } from './utils.js';
+import { 
+    calculateLoaderColor, 
+    adjustAspectRatio, 
+    toggleVisibility, 
+    resetLoaderAnimation 
+} from './utils.js';
 
 let currentImage = 1;
 let nextImageDataUrl = null;
@@ -50,7 +55,6 @@ function getActiveAndInactiveImages() {
 async function displayNextImage(page, interval) {
     const { activeImage, inactiveImage } = getActiveAndInactiveImages();
     setImageSource(inactiveImage, nextImageDataUrl);
-
     // Start prefetching the next image after displaying the current one
     inactiveImage.onload = async () => {
         adjustAspectRatio(inactiveImage);
@@ -58,7 +62,6 @@ async function displayNextImage(page, interval) {
         resetLoaderAnimation(value, interval);
         nextImageDataUrl = await fetchImageData(page, interval);
     };
-
     toggleVisibility(activeImage, inactiveImage);
     currentImage = currentImage === 1 ? 2 : 1;
 }
@@ -95,22 +98,22 @@ function getQueryParams() {
     const interval = isNaN(intervalParam) ? 10 : intervalParam < 3 ? 3 : intervalParam;
     const showVersionParam = urlParams.get('showVersion');
     const showVersion = showVersionParam === 'true' ? true : false;
-    return { interval: interval*1000, showVersion, page };
+    return { interval: interval * 1000, showVersion, page };
 }
 
-async function startSlideshow() {
+async function narrowcasting() {
     requestWakeLock();
     // get all queryparams
     const { page, interval, showVersion } = getQueryParams();
     displayVersion(showVersion);
     // Prefetch the first image
-    nextImageDataUrl = await fetchImageData(page, interval); 
+    nextImageDataUrl = await fetchImageData(page, interval);
     // Display the first fetched image
-    displayNextImage(page, interval); 
+    displayNextImage(page, interval);
     // Pass params explicitly
     setInterval(() => displayNextImage(page, interval), interval);
 }
-startSlideshow();
+narrowcasting();
 
 const fullscreenButton = document.getElementById('fullscreen-button');
 fullscreenButton.addEventListener('click', () => {
@@ -121,31 +124,24 @@ fullscreenButton.addEventListener('click', () => {
         });
     } else {
         // Exit fullscreen mode
-        document.exitFullscreen();
+        document.exitFullscreen(); 
     }
 });
 document.addEventListener('fullscreenchange', () => {
-    if (document.fullscreenElement) {
-        fullscreenButton.textContent = '[x]';
-    } else {
-        fullscreenButton.textContent = '[ ]';
-    }
+    if (document.fullscreenElement) fullscreenButton.textContent = '[x]';
+    else fullscreenButton.textContent = '[ ]';
 });
 
 async function requestWakeLock() {
     try {
         wakeLock = await navigator.wakeLock.request('screen');
-        wakeLock.addEventListener('release', () => {
-            console.log('Wake Lock released');
-        });
+        wakeLock.addEventListener('release', () => console.log('Wake Lock released'));
         console.log('Wake Lock is active');
     } catch (err) {
         console.error(`${err.name}, ${err.message}`);
     }
 }
 document.addEventListener('visibilitychange', () => {
-    if (wakeLock !== null && document.visibilityState === 'visible') {
-        requestWakeLock();
-    }
+    if (wakeLock !== null && document.visibilityState === 'visible') requestWakeLock();
 });
 
