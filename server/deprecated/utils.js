@@ -15,22 +15,7 @@ function handleError(error, res, message) {
     res.status(500).json({ error: message });
 }
 
-// Fuzzy search
-function fuzzySearch(cache, search) {
-    if (!search) return cache;
-    // Create a case-insensitive fuzzy matching pattern allowing for variations
-    const pattern = new RegExp(search.split(" ").join(".*"), "i");
-    // Filter the data with generalized fuzzy matching
-    return Object.keys(cache)
-        .filter(key => pattern.test(cache[key]))
-        .reduce((acc, key) => {
-            acc[key] = cache[key];
-            return acc;
-        }, {});
-}
-
 module.exports = {
     shuffleArray,
     handleError,
-    fuzzySearch,
 };

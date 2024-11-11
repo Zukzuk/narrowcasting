@@ -5,35 +5,47 @@ const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swagger');
 const session = require('express-session');
+// application imports
+const Orchestrator = require('./application/Orchestrator');
+const { 
+    port, 
+    localIpAddress, 
+    hostName, 
+    // gatewayAddress,
+} = require('./utils');
+const { 
+    SESSION_SECRET, 
+    CACHE_DURATION, 
+    KOMGA_ORIGIN, 
+    NARROWCASTING_API_PATH,
+} = require('./config');
 
-// Import main application router
-const router = require('./komga-app/router');
-const { getLocalIpAddress } = require('./utils');
-const { SESSION_SECRET, CACHE_DURATION } = require('./config');
-const { KOMGA_ORIGIN } = require('./komga-app/config');
-
-const app = express();
-app.use(compression());
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-// Middleware
-app.use(express.static('public'));
-app.use(cors({
+// initialize
+const server = express();
+// middleware
+server.use(cors({
     origin: KOMGA_ORIGIN,
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-XSRF-TOKEN'],
     credentials: true,
 }));
-app.use(session({
+server.use(session({
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: CACHE_DURATION }
+    cookie: { maxAge: CACHE_DURATION },
 }));
-app.use('/api', router);
+server.use(compression());
+server.use(express.static('public'));
+server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+// application orchestration
+const orchestrator = new Orchestrator();
+orchestrator.useApi(server, NARROWCASTING_API_PATH);
+
+// axios logging
 axios.interceptors.request.use(request => {
-    console.log('Call', request.url, request.params);
+    console.log('Call', request.url, request.params ? request.params : '');
     return request;
 });
 // axios.interceptors.response.use(response => {
@@ -41,8 +53,8 @@ axios.interceptors.request.use(request => {
 //     return response;
 // })
 
-const PORT = 3000;
-app.listen(PORT, async () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-    console.log(`Local IP: ${getLocalIpAddress()}`);
+// start server
+server.listen(port(), async () => {
+    console.log(`Server is running on http://${localIpAddress()}:${port()}`);
+    // console.log(`Hostname is '${hostName()} and gatewayAddress is '${gatewayAddress()}'`);
 });
