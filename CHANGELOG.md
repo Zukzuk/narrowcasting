@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.1](https://github.com/Zukzuk/narrowcasting/compare/v2.0.0...v2.0.1) (2024-11-11)
+
+
+### Bug Fixes
+
+* added better typing in events and commands ([94c31d3](https://github.com/Zukzuk/narrowcasting/commit/94c31d3e9f27434a836f581dab953d6d2365f8f7))
+
 ## [2.0.0](https://github.com/Zukzuk/narrowcasting/compare/v1.11.3...v2.0.0) (2024-11-11)
 
 
