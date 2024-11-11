@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/Zukzuk/narrowcasting/compare/v1.11.3...v2.0.0) (2024-11-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* All actions are now eventually consistent
+
+* added CQRS implementation for crawling and version endpoints ([dcd0eda](https://github.com/Zukzuk/narrowcasting/commit/dcd0eda409da6dd35be31e83f97e41e5c22c742c))
+
 ### [1.11.3](https://github.com/Zukzuk/narrowcasting/compare/v1.11.2...v1.11.3) (2024-11-09)
 
 
