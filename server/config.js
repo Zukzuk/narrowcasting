@@ -1,7 +1,6 @@
 require('dotenv').config();
 
 const SESSION_SECRET = process.env.SESSION_SECRET;
-const CACHE_DURATION = 12 * 60 * 60 * 1000; // 12 hours
 const VERSION_TAG = process.env.VERSION_TAG;
 const APP_API_PATH = process.env.APP_API_PATH;
 const KOMGA_NARROWCASTING_API_PATH = process.env.KOMGA_NARROWCASTING_API_PATH;
@@ -12,7 +11,9 @@ const KOMGA_AUTH = {
     username: process.env.KOMGA_USERNAME2,
     password: process.env.KOMGA_PASSWORD2
 };
+
 const CRAWL_PAGE_SIZE = 200;
+const CACHE_DURATION = 12 * 60 * 60 * 1000; // 12 hours
 
 module.exports = {
     SESSION_SECRET,

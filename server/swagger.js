@@ -10,7 +10,10 @@ const options = {
             description: "API documentation for the narrowcasting service",
         },
     },
-    apis: [`${__dirname}/interfaces/api/router.js`],
+    apis: [
+        `${__dirname}/interfaces/api/AppApi.js`,
+        `${__dirname}/interfaces/api/KomgaNarrowcastingApi.js`,
+    ],
 };
 
 module.exports = swaggerJSDoc(options);

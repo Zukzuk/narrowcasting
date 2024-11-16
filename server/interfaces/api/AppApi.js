@@ -12,6 +12,8 @@ function AppApi(models) {
      * @openapi
      * /api/version:
      *   get:
+     *     tags: 
+     *       - application
      *     summary: Get the application version
      *     description: Returns the current semantic version of the application as plain text.
      *     responses:

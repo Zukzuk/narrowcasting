@@ -17,6 +17,8 @@ function KomgaNarrowcastingApi(models) {
      * @openapi
      * /api/komga/books/random:
      *   get:
+     *     tags: 
+     *       - komga-narrowcasting
      *     summary: Get a random book image
      *     description: Fetches a random book image from the database
      *     parameters:
@@ -68,6 +70,8 @@ function KomgaNarrowcastingApi(models) {
      * @openapi
      * /api/komga/series:
      *   get:
+     *     tags: 
+     *       - komga-narrowcasting
      *     summary: Crawl series
      *     description: Initiates a crawling operation to fetch series data
      *     parameters:
@@ -101,6 +105,8 @@ function KomgaNarrowcastingApi(models) {
      * @openapi
      * /api/komga/collections:
      *   get:
+     *     tags: 
+     *       - komga-narrowcasting
      *     summary: Crawl collections
      *     description: Initiates a crawling operation to fetch collections data
      *     parameters:

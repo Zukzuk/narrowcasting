@@ -13,7 +13,7 @@ services:
       - .secrets/private.env
       - dev.env
     volumes:
-      - .:/usr/src/app            # Mounts the current directory to in the container
+      - .:/usr/src/app            # Mounts the current directory into the container
       - /usr/src/app/node_modules # Creates an anonymous volume for node_modules to prevent folder collision
     environment:
       - VERSION_TAG=${VERSION_TAG}
