@@ -24,7 +24,7 @@ async function fetchImage(req, bookId, page, interval, cancelToken, startTime, r
             .resize({ width: 3840, height: 2160, fit: 'inside' })
             .toFormat('webp', { quality: 80 })
             .toBuffer();
-        return { image: optimizedImage, contentType: 'image/webp' };
+        return { image: optimizedImage, contentType: 'image/webp', bookId };
     } catch (error) {
         if (axios.isCancel(error)) {
             console.log("Previous fetchImage request canceled:", error.message);

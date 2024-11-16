@@ -1,10 +1,10 @@
-class CrawlReadModel {
+class KomgaCrawlReadModel {
     constructor() {
         this.cache = {};
     }
 
     onCrawlCompleted(event) {
-        console.log('CrawlReadModel:', event.type, event.endpoint);
+        console.log('KomgaCrawlReadModel:', event.type, event.endpoint);
         // denormalize
         this.cache[event.endpoint] = event.payload;
     }
@@ -24,4 +24,4 @@ class CrawlReadModel {
     }
 }
 
-module.exports = CrawlReadModel;
+module.exports = KomgaCrawlReadModel;

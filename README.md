@@ -90,7 +90,8 @@ SESSION_SECRET=           # Secret key for session management
 # deploy/public.env
 KOMGA_ORIGIN=             # The origin URL for Komga
 KOMGA_API_PATH=           # Path to Komga API
-NARROWCASTING_API_PATH=   # Api path of the app itself
+APP_API_PATH=             # Api path of the app itself
+[APPNAME]]_API_PATH=      # Api path of a narowcasting target
 API_DOCS_PATH=            # Api Docs path
 
 # dev.env

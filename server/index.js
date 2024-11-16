@@ -5,7 +5,8 @@ const swaggerUi = require('swagger-ui-express');
 const session = require('express-session');
 // application imports
 const swaggerSpec = require('./swagger');
-const Orchestrator = require('./application/Orchestrator');
+const AppBFF = require('./application/AppBFF');
+const KomgaBFF = require('./application/KomgaBFF');
 const { 
     port, 
     localIpAddress, 
@@ -17,7 +18,8 @@ const {
     SESSION_SECRET, 
     CACHE_DURATION, 
     KOMGA_ORIGIN, 
-    NARROWCASTING_API_PATH,
+    APP_API_PATH,
+    KOMGA_NARROWCASTING_API_PATH,
     API_DOCS_PATH,
 } = require('./config');
 
@@ -48,5 +50,7 @@ server.listen(port(), async () => {
 });
 
 // application orchestration
-const orchestrator = new Orchestrator();
-orchestrator.bootstrap(server, NARROWCASTING_API_PATH);
+const appBFF = new AppBFF();
+appBFF.bootstrap(server, APP_API_PATH);
+const komgaBFF = new KomgaBFF();
+komgaBFF.bootstrap(server, KOMGA_NARROWCASTING_API_PATH);

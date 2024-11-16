@@ -4,18 +4,18 @@ const router = express.Router();
 
 const randomBook = require('../../deprecated/randomBook');
 const { handleError } = require('../../deprecated/utils');
+const { KOMGA_ORIGIN } = require('../../config');
 
-function createRouter(models) {
+function KomgaNarrowcastingApi(models) {
     const {
-        commandHandler, 
-        crawlReadModel, 
-        errorReadModel, 
-        versionReadModel
+        commandHandler,
+        komgaCrawlReadModel, 
+        errorReadModel,
     } = models;
 
     /**
      * @openapi
-     * /api/books/random:
+     * /api/komga/books/random:
      *   get:
      *     summary: Get a random book image
      *     description: Fetches a random book image from the database
@@ -50,8 +50,9 @@ function createRouter(models) {
             cancelToken.cancel("Client disconnected, request canceled.");
         });
         try {
-            const { image, contentType } = await randomBook(req, page, interval, cancelToken.token);
+            const { image, contentType, bookId } = await randomBook(req, page, interval, cancelToken.token);
             if (!image) return res.status(500).json({ error: "No valid image or content type found" });
+            res.set('X-Custom-Book-URL', `${KOMGA_ORIGIN}/book/${bookId}`);
             res.set('Content-Type', contentType);
             res.send(image);
         } catch (error) {
@@ -65,7 +66,7 @@ function createRouter(models) {
 
     /**
      * @openapi
-     * /api/series:
+     * /api/komga/series:
      *   get:
      *     summary: Crawl series
      *     description: Initiates a crawling operation to fetch series data
@@ -88,7 +89,7 @@ function createRouter(models) {
     router.get('/series', async (req, res) => {
         const { search } = req.query;
         try {
-            const response = await crawlReadModel.query({endpoint: 'series', search});
+            const response = await komgaCrawlReadModel.query({endpoint: 'series', search});
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.json(response);
         } catch (error) {
@@ -98,7 +99,7 @@ function createRouter(models) {
 
     /**
      * @openapi
-     * /api/collections:
+     * /api/komga/collections:
      *   get:
      *     summary: Crawl collections
      *     description: Initiates a crawling operation to fetch collections data
@@ -121,7 +122,7 @@ function createRouter(models) {
     router.get('/collections', async (req, res) => {
         const { search } = req.query;
         try {
-            const response = await crawlReadModel.query({endpoint: 'collections', search});
+            const response = await komgaCrawlReadModel.query({endpoint: 'collections', search});
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.json(response);
         } catch (error) {
@@ -129,35 +130,7 @@ function createRouter(models) {
         }
     });
 
-    /**
-     * @openapi
-     * /api/version:
-     *   get:
-     *     summary: Get the application version
-     *     description: Returns the current semantic version of the application as plain text.
-     *     responses:
-     *       200:
-     *         description: Successfully retrieved version
-     *         content:
-     *           text/plain:
-     *             schema:
-     *               type: string
-     *               example: "1.2.3"
-     *               description: Semantic version of the application
-     *       500:
-     *         description: Internal server error
-     */
-    router.get('/version', async (req, res) => {
-        try {
-            const response = await versionReadModel.query();
-            if (!response) return res.status(500).json({ error: "No valid content found" });
-            res.type('text').send(response); // Send as plain text
-        } catch (error) {
-            handleError(error, res, "Error requesting version");
-        }
-    });
-
     return router;
 }
 
-module.exports = createRouter;
+module.exports = KomgaNarrowcastingApi;

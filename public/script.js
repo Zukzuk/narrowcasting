@@ -7,7 +7,7 @@ import {
 } from './utils.js';
 
 let currentImage = 1;
-let nextImageDataUrl = null;
+let nextImageData = null;
 let abortController;
 let wakeLock = null;
 
@@ -18,16 +18,18 @@ async function fetchImageData(page, interval) {
     const { signal } = abortController;
 
     // Setup API url and params
-    const apiUrl = new URL('/api/books/random', window.location.origin);
+    const apiUrl = new URL('/api/komga/books/random', window.location.origin);
     apiUrl.searchParams.append('page', page);
     apiUrl.searchParams.append('interval', interval);
 
     try {
         const response = await fetch(apiUrl, { signal });
         if (!response.ok) throw new Error(response.statusText);
+        // Access the custom header
+        const bookUrl = response.headers.get('X-Custom-Book-URL');
         // Read the response as a binary Blob
         const blob = await response.blob();
-        return URL.createObjectURL(blob);
+        return { blob, bookUrl };
     } catch (error) {
         if (error.name === 'AbortError') {
             console.log("Fetch aborted due to a new request.");
@@ -42,8 +44,10 @@ async function fetchImageData(page, interval) {
     }
 }
 
-function setImageSource(inactiveImage, imageDataUrl) {
-    inactiveImage.src = imageDataUrl;
+function setImageSource(inactiveImage, imageData) {
+    const parent = inactiveImage.parentElement;    
+    parent.href = imageData.bookUrl;
+    inactiveImage.src = URL.createObjectURL(imageData.blob);
 }
 
 function getActiveAndInactiveImages() {
@@ -54,13 +58,13 @@ function getActiveAndInactiveImages() {
 
 async function displayNextImage(page, interval) {
     const { activeImage, inactiveImage } = getActiveAndInactiveImages();
-    setImageSource(inactiveImage, nextImageDataUrl);
+    setImageSource(inactiveImage, nextImageData);
     // Start prefetching the next image after displaying the current one
     inactiveImage.onload = async () => {
         adjustAspectRatio(inactiveImage);
         const value = calculateLoaderColor(inactiveImage);
         resetLoaderAnimation(value, interval);
-        nextImageDataUrl = await fetchImageData(page, interval);
+        nextImageData = await fetchImageData(page, interval);
     };
     toggleVisibility(activeImage, inactiveImage);
     currentImage = currentImage === 1 ? 2 : 1;
@@ -107,7 +111,7 @@ async function narrowcasting() {
     const { page, interval, showVersion } = getQueryParams();
     displayVersion(showVersion);
     // Prefetch the first image
-    nextImageDataUrl = await fetchImageData(page, interval);
+    nextImageData = await fetchImageData(page, interval);
     // Display the first fetched image
     displayNextImage(page, interval);
     // Pass params explicitly
