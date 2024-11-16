@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/Zukzuk/narrowcasting/compare/v2.0.1...v2.1.0) (2024-11-16)
+
+
+### Features
+
+* refactored some api files and added komga url to image ([f9e644c](https://github.com/Zukzuk/narrowcasting/commit/f9e644c156c50feea7c363abb6c96553a573e7c1))
+
 ### [2.0.1](https://github.com/Zukzuk/narrowcasting/compare/v2.0.0...v2.0.1) (2024-11-11)
 
 
