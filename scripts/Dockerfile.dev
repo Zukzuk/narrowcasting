@@ -2,8 +2,8 @@
 FROM node:20-alpine
 
 # Accept args as build arguments
-ARG VERSION_TAG
-ENV VERSION_TAG=$VERSION_TAG
+ARG APP_VERSION_TAG
+ENV APP_VERSION_TAG=$APP_VERSION_TAG
 # npm will install dependencies and devDependencies
 ENV NODE_ENV=development 
 

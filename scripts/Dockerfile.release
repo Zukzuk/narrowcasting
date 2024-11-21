@@ -1,19 +1,14 @@
-# Use a Debian-based Node.js image
-FROM node:20-alpine
+# Stage 1: Build Stage
+FROM node:20-alpine AS build
 
 # Accept args as build arguments
-ARG VERSION_TAG
-ENV VERSION_TAG=$VERSION_TAG
-ENV VERSION_TAG=$VERSION_TAG
-# npm will install dependencies and devDependencies
-ENV NODE_ENV=production 
+ARG APP_VERSION_TAG
+ENV APP_VERSION_TAG=$APP_VERSION_TAG
 
-# Set up the working directory and install dependencies
+# Set up the working directory and install all dependencies
 WORKDIR /usr/src/app
 COPY package*.json ./
-
-# Install only production dependencies
-RUN npm install --only=production
+RUN npm install
 
 # Copy application code
 COPY . .
@@ -21,8 +16,27 @@ COPY . .
 # Build the project (compiles TypeScript and copies the public folder)
 RUN npm run build
 
-# Expose the port
+# Stage 2: Production Stage
+FROM node:20-alpine
+
+# Accept args as build arguments
+ARG APP_VERSION_TAG
+ENV APP_VERSION_TAG=$APP_VERSION_TAG
+
+# Set environment to production for optimized dependencies
+ENV NODE_ENV=production
+
+# Set up the working directory and install prd dependencies
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm install --only=production
+
+# Copy compiled application code from the build stage
+COPY --from=build /usr/src/app/dist ./dist
+
+# Expose the application port
 EXPOSE 3000
 
-# Start the app
+# Start the application
 CMD ["node", "dist/server/index.js"]
+
