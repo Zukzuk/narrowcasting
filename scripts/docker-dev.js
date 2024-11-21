@@ -7,13 +7,13 @@ function main() {
     process.exit(1);
   }
   buildTypeScript();
-  buildAndComposeDev(data.version);
+  buildAndComposeDev(`${data.version}-dev`);
 }
 
 function buildTypeScript() {
   try {
     console.log("Copying dist and compiling TypeScript...");
-    execSync('npm i --only=dev && mkdirp dist/public && cpx \"src/public/**/*\" dist/public && npm run build', { stdio: 'inherit' });
+    execSync('npm i --only=dev && npm run build', { stdio: 'inherit' });
     console.log("Build successful.");
   } catch (error) {
     console.error("Error compiling TypeScript:", error.message);

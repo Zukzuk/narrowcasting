@@ -14,7 +14,7 @@
         "url": "https://github.com/Zukzuk/narrowcasting.git"
     },
     "scripts": {
-        "build": "tsc",
+        "build": "mkdirp dist/public && cpx \"src/public/**/*\" dist/public && tsc",
         "dev": "node scripts/docker-dev.js",
         "commit": "cz",
         "release": "standard-version && git push --follow-tags origin main",
