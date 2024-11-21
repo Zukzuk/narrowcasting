@@ -1,11 +1,11 @@
 {
     "name": "narrowcasting-app",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "description": "Narrowcast your favorite media",
     "type": "module",
     "main": "dist/server/index.js",
     "engines": {
-        "node": ">=16.13.0"
+        "node": ">=16.14.0"
     },
     "author": "Dave Timmerman",
     "license": "MIT",
