@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: scripts/Dockerfile.dev
       args:
-        VERSION_TAG: ${VERSION_TAG}
+        APP_VERSION_TAG: ${APP_VERSION_TAG}
     image: zukzuk/narrowcasting
     ports:
       - "3001:3000"
@@ -16,5 +16,4 @@ services:
       - .:/usr/src/app            # Mounts the current directory into the container
       - /usr/src/app/node_modules # Creates an anonymous volume for node_modules to prevent folder collision
     environment:
-      - VERSION_TAG=${VERSION_TAG}
-
+      - APP_VERSION_TAG=${APP_VERSION_TAG}

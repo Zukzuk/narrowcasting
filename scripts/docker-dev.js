@@ -1,23 +1,32 @@
-const { execSync } = require('child_process');
-const { version } = require('../package.json');
+import { execSync } from 'child_process';
+import data from '../package.json' assert { type: 'json' };
 
-// Main function to orchestrate the script execution
 function main() {
-  if (!version) {
+  if (!data.version) {
     console.error("Error: No version found in package.json. Please specify a version.");
     process.exit(1);
   }
-  buildAndComposeDev(version);
+  buildTypeScript();
+  buildAndComposeDev(data.version);
 }
 
-// Function to build and push the Docker image
-function buildAndComposeDev(VERSION_TAG) {
+function buildTypeScript() {
   try {
-    // Set VERSION_TAG as an environment variable and run Docker Compose build and up
-    console.log(`Starting Docker compose with VERSION_TAG=${VERSION_TAG}...`);
+    console.log("Copying dist and compiling TypeScript...");
+    execSync('npm i --only=dev && mkdirp dist/public && cpx \"src/public/**/*\" dist/public && npm run build', { stdio: 'inherit' });
+    console.log("Build successful.");
+  } catch (error) {
+    console.error("Error compiling TypeScript:", error.message);
+    process.exit(1);
+  }
+}
+
+function buildAndComposeDev(APP_VERSION_TAG) {
+  try {
+    console.log(`Starting Docker compose with APP_VERSION_TAG=${APP_VERSION_TAG}...`);
     execSync(`docker-compose -f docker-compose.dev.yml up --build`, {
       stdio: 'inherit',
-      env: { ...process.env, VERSION_TAG }
+      env: { ...process.env, APP_VERSION_TAG }
     });
     console.log("Docker compose started successfully.");
   } catch (error) {
@@ -26,5 +35,4 @@ function buildAndComposeDev(VERSION_TAG) {
   }
 }
 
-// Run the main function
 main();

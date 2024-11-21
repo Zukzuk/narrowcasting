@@ -1,0 +1,26 @@
+import swaggerJSDoc from 'swagger-jsdoc';
+import { fileURLToPath } from 'url';
+import path from 'path';
+import { APP_VERSION_TAG } from './config.js';
+
+// Get the file path of the current module
+const __filename = fileURLToPath(import.meta.url);
+// Get the directory of the current module
+const __dirname = path.dirname(__filename);
+
+const options = {
+    definition: {
+        openapi: "3.0.0",
+        info: {
+            title: "Narrowcasting API",
+            version: APP_VERSION_TAG,
+            description: "API documentation for narrowcasting service",
+        },
+    },
+    apis: [
+        `${__dirname}/interfaces/api/AppApi.js`,
+        `${__dirname}/interfaces/api/KomgaNarrowcastingApi.js`,
+    ],
+};
+
+export default swaggerJSDoc(options);

@@ -1,11 +1,11 @@
 # Komga Narrowcasting App
 
-A Node.js narrowcasting application designed to serve and manage Komga book images with a simple REST API and frontend interface. This app is Docker-ready and includes configurations for both development and production environments. 
+A Node.js narrowcasting application designed to serve your media library images with a simple REST API and frontend interface. This app is Docker-ready and includes configurations for both development and production environments. 
 
 ## CQRS Pattern
 
-This project follows the CQRS (Command Query Responsibility Segregation) pattern, which separates the responsibilities of commands (write operations) and queries (read operations).
-Commands are handled by the CommandHandler and aggregates, while queries are handled by read models. Events are used to communicate the results of command execution. The Orchestrator class ties everything together, ensuring that commands and queries are processed correctly.
+This project follows the CQRS (Command Query Responsibility Segregation) pattern, which separates the responsibilities of commands ('do' operations) and queries ('read' operations).
+Commands are handled by the CommandBus, CommandHandler and aggregates, while queries are handled by readModels. Events are used to communicate the results of command execution.
 
 ## Installation
 
@@ -27,47 +27,44 @@ Commands are handled by the CommandHandler and aggregates, while queries are han
 
 ## Development
 
-1. **Run the Application**
+1. **Run the dev application**
    
    ```bash
-   npm run docker:dev # Run the docker dev container.
+   npm run docker:dev
    ```
-2. **Commit with Commitizen**
+2. **Commit with commitizen**
    
    ```bash
-   npm run commit # Uses Commitizen for structured commit messages.
+   npm run commit
    ```
-3. **Release a New Version**
+3. **Release a new version**
    
    ```bash
    npm run release # Uses standard-version for semantic versioning, Git tagging, and pushing to the main branch.
    ```
-4. **Build and Release Docker Image**
+4. **Build and release Docker Image**
    
    ```bash
-   npm run docker:release # Builds and releases a Docker image.
+   npm run docker:release
    ```
 
 ## Project Structure
 
 ### Folder Details
 
-- **deploy/**: Production-specific configuration files
-- **public/**: Frontend assets for displaying images and interacting with Komga data.
+- **deploy/**: Production-specific variables and compose files.
 - **scripts/**: Scripts and Dockerfiles for CI/CD.
-- **server/**: Backend code, Express API setup, routing, and utility modules.
+- **src/**: Application source code.
 - **.dev.env**: Environment variables for development.
-- **docker-compose.dev.yml**: Configuration file for local development on `localhost:3001`.
+- **docker-compose.dev.yml**: Development compose file.
 
 ### Server Directory ###
   - `application/`: Contains backend application logic.
-    - `CommandHandler.js`, `Orchestrator.js`
   - `domain/`: Domain-specific logic.
     - `[DOMAIN]/`
       - `commands/`
       - `events/`
       - `services/`
-      - `AggregateFactory.js`
   - `infrastructure/`: Infrastructure-related code.
     - `filesystem/`
     - `repositories/`
@@ -99,7 +96,7 @@ API_DOCS_PATH=            # Api Docs path
 ```
 
 # API Documentation
-[localhost]/api-docs
+http://localhost:3001/api-docs
 
 ## License
 This project is licensed under the **MIT License**.
