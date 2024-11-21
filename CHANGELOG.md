@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.2](https://github.com/Zukzuk/narrowcasting/compare/v3.0.1...v3.0.2) (2024-11-21)
+
+
+### Bug Fixes
+
+* fixed APP_VERSION_TAG arg ([41e6efe](https://github.com/Zukzuk/narrowcasting/commit/41e6efe4a36e5a923969e0306a8b2a40b2b4f681))
+
 ### [3.0.1](https://github.com/Zukzuk/narrowcasting/compare/v3.0.0...v3.0.1) (2024-11-21)
 
 ## [3.0.0](https://github.com/Zukzuk/narrowcasting/compare/v2.1.1...v3.0.0) (2024-11-21)
