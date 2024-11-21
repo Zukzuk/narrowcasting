@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/Zukzuk/narrowcasting/compare/v2.1.1...v3.0.0) (2024-11-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* js to tsc
+
+### Features
+
+* moved to typescript and ESmodules ([6f769a7](https://github.com/Zukzuk/narrowcasting/commit/6f769a71a71fd140fb7a3868e3395c2e86aa1ce0))
+
 ### [2.1.1](https://github.com/Zukzuk/narrowcasting/compare/v2.1.0...v2.1.1) (2024-11-16)
 
 ## [2.1.0](https://github.com/Zukzuk/narrowcasting/compare/v2.0.1...v2.1.0) (2024-11-16)
