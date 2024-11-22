@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/Zukzuk/narrowcasting/compare/v3.0.9...v4.0.0) (2024-11-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* TS
+
+### Features
+
+* moved to ts ([1265c70](https://github.com/Zukzuk/narrowcasting/commit/1265c70bc1052628d7983546eea9851b57ceb912))
+
 ### [3.0.9](https://github.com/Zukzuk/narrowcasting/compare/v3.0.8...v3.0.9) (2024-11-22)
 
 
