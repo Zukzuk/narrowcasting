@@ -6,8 +6,9 @@ function main() {
     console.error("Error: No version found in package.json. Please specify a version.");
     process.exit(1);
   }
+  const APP_RUN = process.env.APP_RUN ? "up --build" : "build";
   buildTypeScript();
-  buildAndComposeDev(`${data.version}-dev`);
+  buildAndComposeDev(`${data.version}-dev`, APP_RUN);
 }
 
 function buildTypeScript() {
@@ -21,10 +22,10 @@ function buildTypeScript() {
   }
 }
 
-function buildAndComposeDev(APP_VERSION_TAG) {
+function buildAndComposeDev(APP_VERSION_TAG, APP_RUN) {
   try {
     console.log(`Starting Docker compose with APP_VERSION_TAG=${APP_VERSION_TAG}...`);
-    execSync(`docker-compose -f docker-compose.dev.yml up --build`, {
+    execSync(`docker-compose -f docker-compose.dev.yml ${APP_RUN}`, {
       stdio: 'inherit',
       env: { ...process.env, APP_VERSION_TAG }
     });
