@@ -82,22 +82,22 @@ Commands are handled by the CommandBus, CommandHandler and aggregates, while que
 
 ```plaintext
 # .secrets/private.env
-APP_SESSION_SECRET=       # Secret key for session management
-KOMGA_USERNAME=           # Komga username
-KOMGA_PASSWORD=           # Komga password
-KOMGA_API_KEY=            # Komga API key (if applicable)
-PLEX_API_KEY=             # Plex API key
+APP_SESSION_SECRET=                 # Secret key for session management
+KOMGA_USERNAME=                     # Komga username
+KOMGA_PASSWORD=                     # Komga password
+KOMGA_API_KEY=                      # Komga API key (if applicable)
+PLEX_API_KEY=                       # Plex API key
 
 # deploy/public.env
-APP_STATIC_SERVE_PATH=    # Path to client's static files
-APP_API_PATH=             # Api path of the app itself
-APP_API_DOCS_PATH=        # Api Docs path
-[APPNAME]_ORIGIN=         # The origin URL for the target app
-[APPNAME]_API_PATH=       # Path to the target API
-[APPNAME]_API_PATH=       # Api path of a narrowcasting target
+APP_STATIC_SERVE_PATH=              # Path to client's static files
+APP_API_PATH=                       # Api path of the app itself
+APP_API_DOCS_PATH=                  # Api Docs path
+[APPNAME]_ORIGIN=                   # The origin URL for the target app
+[APPNAME]_API_PATH=                 # Path to the target API
+[APPNAME]_NARROWCASTING_API_PATH=   # Api path of a narrowcasting target
 
 # dev.env
-# Any var needed, overwrites all above
+# Add any var here, overwrites all above
 ```
 
 # API Documentation

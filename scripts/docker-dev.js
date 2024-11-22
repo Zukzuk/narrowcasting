@@ -7,9 +7,9 @@ function main() {
     process.exit(1);
   }
   const APP_VERSION_TAG = `${data.version}-dev`;
-  const APP_RUN = process.env.APP_RUN === undefined || process.env.APP_RUN === "true" || process.env.APP_RUN === "1" ? "up --build" : "build";
+  const PROCESS = process.env.APP_RUN === undefined || process.env.APP_RUN === "true" || process.env.APP_RUN === "1" ? "up --build" : "build";
   buildTypeScript();
-  buildAndComposeDev(APP_VERSION_TAG, APP_RUN);
+  buildAndComposeDev(APP_VERSION_TAG, PROCESS);
 }
 
 function buildTypeScript() {
@@ -23,12 +23,12 @@ function buildTypeScript() {
   }
 }
 
-function buildAndComposeDev(APP_VERSION_TAG, APP_RUN) {
+function buildAndComposeDev(APP_VERSION_TAG, PROCESS) {
   try {
-    if (APP_RUN === "build") console.log(`Building Docker image APP_VERSION_TAG=${APP_VERSION_TAG}...`);
+    if (PROCESS === "build") console.log(`Building Docker image APP_VERSION_TAG=${APP_VERSION_TAG}...`);
     else console.log(`Starting Docker compose with APP_VERSION_TAG=${APP_VERSION_TAG}...`);
     
-    execSync(`docker-compose -f docker-compose.dev.yml ${APP_RUN}`, {
+    execSync(`docker-compose -f docker-compose.dev.yml ${PROCESS}`, {
       stdio: 'inherit',
       env: { ...process.env, APP_VERSION_TAG }
     });
