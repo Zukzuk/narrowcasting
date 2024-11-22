@@ -1,5 +1,5 @@
 import express from 'express';
-import { handleError } from '../../deprecated/utils.js';
+import { handleError } from './utils.js';
 
 const router = express.Router();
 
@@ -22,7 +22,7 @@ image https://cinema.daveloper.nl/library/metadata/7036/thumb/1729734864?X-Plex-
 url https://cinema.daveloper.nl/web/index.html#!/server/66113111fd251ee1929107218d9b66e228933c1a/details?key=/library/metadata/7036
  */
 
-function PlexApi(models) {
+function PlexNarrowcastingApi(models) {
     const {
     } = models;
 
@@ -31,7 +31,7 @@ function PlexApi(models) {
      * /api/plex/covers/random:
      *   get:
      *     tags: 
-     *       - plex
+     *       - plex-narrowcasting
      */
     router.get('/covers/random', async (req, res) => {
         try {
@@ -44,4 +44,4 @@ function PlexApi(models) {
     return router;
 }
 
-export default PlexApi;
+export default PlexNarrowcastingApi;

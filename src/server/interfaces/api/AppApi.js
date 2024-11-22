@@ -1,5 +1,5 @@
 import express from 'express';
-import { handleError } from '../../deprecated/utils.js';
+import { handleError } from './utils.js';
 
 const router = express.Router();
 

@@ -1,6 +1,9 @@
-# Komga Narrowcasting App
+# Media library narrowcasting applications
 
-A Node.js narrowcasting application designed to serve your media library images with a simple REST API and frontend interface. This app is Docker-ready and includes configurations for both development and production environments. 
+A Node.js narrowcasting application designed to serve your media library images with a simple REST API and frontend interface. This app is Docker-ready and includes configurations for both development and production environments.
+Currently compatible with the following API's
+- Komga
+- Plex
 
 ## CQRS Pattern
 
@@ -79,20 +82,22 @@ Commands are handled by the CommandBus, CommandHandler and aggregates, while que
 
 ```plaintext
 # .secrets/private.env
-KOMGA_USERNAME2=          # Username for accessing Komga
-KOMGA_PASSWORD2=          # Password for accessing Komga
-KOMGA_API_KEY=            # API key for Komga (if applicable)
-SESSION_SECRET=           # Secret key for session management
+APP_SESSION_SECRET=       # Secret key for session management
+KOMGA_USERNAME=           # Komga username
+KOMGA_PASSWORD=           # Komga password
+KOMGA_API_KEY=            # Komga API key (if applicable)
+PLEX_API_KEY=             # Plex API key
 
 # deploy/public.env
-KOMGA_ORIGIN=             # The origin URL for Komga
-KOMGA_API_PATH=           # Path to Komga API
+APP_STATIC_SERVE_PATH=    # Path to client's static files
 APP_API_PATH=             # Api path of the app itself
-[APPNAME]]_API_PATH=      # Api path of a narowcasting target
-API_DOCS_PATH=            # Api Docs path
+APP_API_DOCS_PATH=        # Api Docs path
+[APPNAME]_ORIGIN=         # The origin URL for the target app
+[APPNAME]_API_PATH=       # Path to the target API
+[APPNAME]_API_PATH=       # Api path of a narrowcasting target
 
 # dev.env
-# Any var needed, can overwrite all above
+# Any var needed, overwrites all above
 ```
 
 # API Documentation

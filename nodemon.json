@@ -1,8 +1,10 @@
 {
     "watch": [
-        "dist"
+        "src"
     ],
-    "ext": "js",
-    "exec": "node dist/server/index.js",
-    "legacyWatch": true
+    "ignore": [
+        "dist",
+        "node_modules"
+    ],
+    "ext": "js,json,tsx,ts"
 }

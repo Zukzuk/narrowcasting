@@ -10,18 +10,16 @@ ENV NODE_ENV=development
 # Set up the working directory
 WORKDIR /usr/src/app
 COPY package*.json ./
-
-# Install dependencies and devDependencies
 RUN npm install
 
 # Copy application code
 COPY . .
 
-# Build the project (compiles TypeScript and copies the public folder)
+# Build the project (copies the public folder and compiles TypeScript)
 RUN npm run build
 
 # Expose the port
 EXPOSE 3000
 
 # Use a script to continuously compile TypeScript and watch for changes
-CMD ["npx", "concurrently", "\"npx tsc --watch --preserveWatchOutput --watchFile fixedpollinginterval\"", "\"npx nodemon -L dist/server/index.js\""]
+CMD ["npx", "concurrently", "\"npx tsc --watch --preserveWatchOutput --watchFile fixedpollinginterval\"", "\"npx nodemon -L\""]

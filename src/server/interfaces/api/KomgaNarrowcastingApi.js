@@ -1,7 +1,7 @@
 import axios from 'axios';
 import express from 'express';
 import randomBook from '../../deprecated/randomBook.js';
-import { handleError } from '../../deprecated/utils.js';
+import { handleError } from './utils.js';
 import { KOMGA_ORIGIN } from '../../config.js';
 
 const router = express.Router();
