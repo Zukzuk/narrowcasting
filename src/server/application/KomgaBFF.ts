@@ -10,6 +10,11 @@ import VersionReadModel from '../interfaces/readModels/VersionReadModel.js';
 import KomgaNarrowcastingApi from '../interfaces/api/KomgaNarrowcastingApi.js';
 
 class KomgaBFF {
+    private commandHandler: CommandHandler;
+    private komgaCrawlReadModel: KomgaCrawlReadModel;
+    private errorReadModel: ErrorReadModel;
+    private versionReadModel: VersionReadModel;
+
     constructor() {
         // This wiring should be done in the handler
         // aggregates and command handler
@@ -23,14 +28,14 @@ class KomgaBFF {
         this.versionReadModel = new VersionReadModel();
     }
 
-    bootstrap(server, path) {
+    bootstrap(server: any, path: string) {
         // bootstrap
         this.#useApi(server, path);
         this.#setupListeners();
         this.#initialCommands();
     }
 
-    #useApi(server, path) {
+    #useApi(server: any, path: string) {
         // read model and router orchestration
         server.use(path, KomgaNarrowcastingApi({ 
             commandHandler: this.commandHandler,
@@ -42,7 +47,7 @@ class KomgaBFF {
     #setupListeners() {
         // This should listen to the queryDB, with a socket connection, or a listener when internal
         // business event and query orchestration
-        this.commandHandler.on(CrawlCompletedEventType, event => this.crawlReadModel.onCrawlCompleted(event));
+        this.commandHandler.on(CrawlCompletedEventType, event => this.komgaCrawlReadModel.onCrawlCompleted(event));
         this.commandHandler.on(CrawlFailedEventType, event => this.errorReadModel.onApiCallFailed(event));
     }
 

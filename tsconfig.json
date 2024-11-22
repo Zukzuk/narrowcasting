@@ -1,13 +1,17 @@
 {
     "compilerOptions": {
+        "moduleResolution": "node",
         "module": "ESNext",
         "target": "ESNext",
+        "baseUrl": "./", // Allows absolute imports based on the root directory
+        "paths": {
+            "*": ["./*"] // Simplifies module resolution
+        },
         "esModuleInterop": true,
         "strict": true,
-        "outDir": "./dist",
-        "rootDir": "./src",
         "allowJs": true,
-        "moduleResolution": "node"
+        "outDir": "./dist",
+        "rootDir": "./src"
     },
     "include": [
         "src/**/*"

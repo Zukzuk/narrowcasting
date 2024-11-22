@@ -40,15 +40,15 @@ Commands are handled by the CommandBus, CommandHandler and aggregates, while que
    ```bash
    npm run commit
    ```
-3. **Release a new version**
+3. **Push a new version**
    
    ```bash
-   npm run release # Uses standard-version for semantic versioning, Git tagging, and pushing to the main branch.
+   npm run push # Does semantic versioning, pushes to git origin and creates a new development container.
    ```
 4. **Build and release Docker Image**
    
    ```bash
-   npm run docker:release
+   npm run release
    ```
 
 ## Project Structure

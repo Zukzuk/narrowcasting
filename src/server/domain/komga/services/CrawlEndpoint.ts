@@ -1,13 +1,10 @@
-import axios from 'axios';
+import axios, { AxiosBasicCredentials } from 'axios';
+import UrlError from '../../../application/utils.js';
 
 class CrawlEndpoint {
-    constructor({KOMGA_API, KOMGA_AUTH, APP_CRAWL_PAGE_SIZE}) {
-        this.KOMGA_API = KOMGA_API;
-        this.KOMGA_AUTH = KOMGA_AUTH;
-        this.APP_CRAWL_PAGE_SIZE = APP_CRAWL_PAGE_SIZE;
-    }
+    constructor(private KOMGA_API: string, private KOMGA_AUTH: AxiosBasicCredentials, private APP_CRAWL_PAGE_SIZE: number) {}
 
-    async crawl(endpoint) {
+    async crawl(endpoint: string): Promise<any[]> {
         // Initialize to 1 as a default, will be updated after the first fetch
         let totalPages = 1;
         const data = [];
@@ -19,14 +16,13 @@ class CrawlEndpoint {
         return data;
     }
 
-    async #fetchPage(page, endpoint) {
+    async #fetchPage(page: number, endpoint: string): Promise<{ content: any[], totalPages: number }> {
         const url = `${this.KOMGA_API}/${endpoint}?size=${this.APP_CRAWL_PAGE_SIZE}&page=${page}`;
         try {
             const { data } = await axios.get(url, { auth: this.KOMGA_AUTH });
             return data;
-        } catch (error) {
-            const errorEvent = new Error(error.message);
-            errorEvent.url = url;
+        } catch (error: any) {
+            const errorEvent = new UrlError(error.message, url);
             throw errorEvent;
         }
     }

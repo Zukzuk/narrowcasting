@@ -1,11 +1,10 @@
+import CacheRepository from '../../infrastructure/repositories/CacheRepository.js';
 import CrawlAggregateRoot from './CrawlAggregateRoot.js';
 
 class AggregateFactory {
-    constructor(repository) {
-        this.repository = repository; // Inject shared repository
-    }
+    constructor(private repository: CacheRepository) {}
 
-    createCrawlAggregate() {
+    createCrawlAggregate(): CrawlAggregateRoot {
         // Create and return a new instance of the CrawlAggregateRoot
         // Pass the shared repository to ensure consistent state
         return new CrawlAggregateRoot(this.repository);

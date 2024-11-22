@@ -2,14 +2,18 @@ import { CrawlCompletedEvent } from './events/CrawlCompletedEvent.js';
 import { CrawlFailedEvent } from './events/CrawlFailedEvent.js';
 import CrawlEndpoint from './services/CrawlEndpoint.js';
 import { KOMGA_API, KOMGA_AUTH, APP_CRAWL_PAGE_SIZE } from '../../config.js';
+import CacheRepository from '../../infrastructure/repositories/CacheRepository.js';
+import { CrawlCommand } from './commands/CrawlCommand.js';
 
 class CrawlAggregateRoot {
-    constructor(repository) {
-        this.repository = repository;
-        this.crawlEndpoint = new CrawlEndpoint({KOMGA_API, KOMGA_AUTH, APP_CRAWL_PAGE_SIZE});
+    private crawlEndpoint: CrawlEndpoint;
+
+    constructor(private repository: CacheRepository) {
+        this.crawlEndpoint = new CrawlEndpoint(KOMGA_API, KOMGA_AUTH, APP_CRAWL_PAGE_SIZE);
     }
 
-    async crawl({ endpoint }) {
+    async aggregate(command: CrawlCommand): Promise<CrawlCompletedEvent | CrawlFailedEvent> {
+        const { endpoint } = command.payload;
         try {
             // Get the available cache
             let payload = this.repository.retrieve(endpoint);
@@ -27,7 +31,7 @@ class CrawlAggregateRoot {
                 totalItems: this.repository.totalItems(),
                 timestamp: new Date().toISOString(),
             });
-        } catch (error) {
+        } catch (error: any) {
             // Return a business error event with detailed metadata
             const event = new CrawlFailedEvent({
                 endpoint,

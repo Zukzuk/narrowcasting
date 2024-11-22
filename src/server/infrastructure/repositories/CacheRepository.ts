@@ -1,26 +1,29 @@
 class CacheRepository {
+    private cache: Record<string, Record<string, string>>;
+    private cacheLength: number;
+
     constructor() {
         this.cache = {};
         this.cacheLength = 0;
     }
 
-    save(endpoint, data) {
+    save(endpoint: string, data: any): Record<string, string> {
         if (!this.cache[endpoint]) this.cache[endpoint] = {};
 
-        data.forEach(item => {
+        data.forEach((item: any) => {
             this.cache[endpoint][item.id] = item.name;
         });
 
         const payload = this.cache[endpoint];
 
-        this.cacheLength = payload.length;
+        this.cacheLength = parseInt(payload.length, 10);
 
         this.log('save', endpoint, payload, new Date().toISOString());
 
         return payload;
     }
 
-    retrieve(endpoint) {
+    retrieve(endpoint: string): Record<string, string> {
         const payload = this.cache[endpoint] || null;
 
         if (payload) this.log('retrieve', endpoint, payload, new Date().toISOString());
@@ -32,7 +35,7 @@ class CacheRepository {
         return this.cacheLength;
     }
 
-    log(action, endpoint, payload, timestamp) {
+    log(action: string, endpoint: string, payload: Record<string, string>, timestamp: string) {
         console.log(`CacheRepository: ${action}d ${Object.keys(payload).length} items for '${endpoint}' at ${timestamp}`);
     }
 }

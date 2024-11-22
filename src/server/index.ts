@@ -10,6 +10,7 @@ import KomgaBFF from './application/KomgaBFF.js';
 import { 
     getLocalIpAddress,
     getHostName,
+    getGatewayAddress,
     getPort,
     doAxiosLogging,
 } from './utils.js';
@@ -45,12 +46,21 @@ server.use(APP_API_DOCS_PATH, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 doAxiosLogging(true, false);
 // start server
 server.listen(getPort(), async () => {
-    console.log(`Server is running on http://${getLocalIpAddress()}:${getPort()}`);
-    // console.log(`Hostname is '${getHostName()} and gatewayAddress is '${getGatewayAddress()}'`);
+    console.log(
+        `Server is running`,
+        `LocalIpAddress=${getLocalIpAddress()}`,
+        `InternaPort=${getPort()}`,
+        `gatewayAddress='${await getGatewayAddress()}'`,
+        `Hostname='${getHostName()}`,
+    );
 });
+
+// TODO: Refactor to TS
 
 // application orchestration
 const appBFF = new AppBFF();
 appBFF.bootstrap(server, APP_API_PATH);
 const komgaBFF = new KomgaBFF();
+// TODO: Refactor Komga randomBook to use CQRS
 komgaBFF.bootstrap(server, KOMGA_NARROWCASTING_API_PATH);
+// TODO: Add Plex BFF

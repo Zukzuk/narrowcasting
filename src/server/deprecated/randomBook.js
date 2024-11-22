@@ -1,6 +1,5 @@
 import axios from 'axios';
 import sharp from 'sharp';
-
 import { shuffleArray } from './utils.js';
 import { APP_CACHE_DURATION, KOMGA_API, KOMGA_AUTH } from '../config.js';
 
