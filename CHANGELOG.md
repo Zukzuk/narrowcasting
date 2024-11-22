@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.9](https://github.com/Zukzuk/narrowcasting/compare/v3.0.8...v3.0.9) (2024-11-22)
+
+
+### Bug Fixes
+
+* added publish/release script ([6c8b6f2](https://github.com/Zukzuk/narrowcasting/commit/6c8b6f2d0498fc0c2ce2bdd48d7a26c47a6e2d8a))
+
 ### [3.0.8](https://github.com/Zukzuk/narrowcasting/compare/v3.0.7...v3.0.8) (2024-11-22)
 
 
