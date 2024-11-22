@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.8](https://github.com/Zukzuk/narrowcasting/compare/v3.0.7...v3.0.8) (2024-11-22)
+
+
+### Bug Fixes
+
+* updated dockerfiles ([bcd99d1](https://github.com/Zukzuk/narrowcasting/commit/bcd99d1e0c9c619abc2f9927c2fa0bb8e7b0eaff))
+
 ### [3.0.7](https://github.com/Zukzuk/narrowcasting/compare/v3.0.6...v3.0.7) (2024-11-22)
 
 
