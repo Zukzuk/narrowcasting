@@ -1,9 +1,10 @@
 import express from 'express';
 import { handleError } from '../../helpers.js';
+import VersionReadModel from '../../interfaces/readmodels/VersionReadModel.js';
 
 const router = express.Router();
 
-export default function AppApi(models: any) {
+export default function AppApi(models: { versionReadModel: VersionReadModel }) {
     const {
         versionReadModel
     } = models;

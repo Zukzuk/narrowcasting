@@ -1,14 +1,15 @@
 import express from 'express';
 import { handleError } from '../../helpers.js';
 import RandomImageCommand from '../../domain/comics/commands/RandomImageCommand.js';
+import ComicsCrawlReadModel from '../../interfaces/readmodels/ComicsCrawlReadModel.js';
 
 import broker from '../../infrastructure/broker/Broker.js';
 
 const router = express.Router();
 
-export default function ComicsNarrowcastingApi(models: any) {
+export default function ComicsNarrowcastingApi(models: { comicsCrawlReadModel: ComicsCrawlReadModel }) {
     const {
-        komgaCrawlReadModel,
+        comicsCrawlReadModel,
     } = models;
 
     /**
@@ -46,7 +47,7 @@ export default function ComicsNarrowcastingApi(models: any) {
     router.post('/pages/random', async (req: any, res: any) => {
         const { 
             page = 0, 
-            interval = 10 
+            interval = 10000
         }: { 
             page: number, 
             interval: number
@@ -56,7 +57,7 @@ export default function ComicsNarrowcastingApi(models: any) {
             broker.pub(new RandomImageCommand({ 
                 payload: { 
                     page, 
-                    interval, 
+                    interval,
                     session: req.session
                 }, 
                 timestamp: new Date().toISOString() })
@@ -94,7 +95,7 @@ export default function ComicsNarrowcastingApi(models: any) {
     router.get('/series', async (req: any, res: any) => {
         const { search } = req.query;
         try {
-            const response = await komgaCrawlReadModel.query({endpoint: 'series', search});
+            const response = await comicsCrawlReadModel.query({endpoint: 'series', search});
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.json(response);
         } catch (error: any) {
@@ -129,7 +130,7 @@ export default function ComicsNarrowcastingApi(models: any) {
     router.get('/collections', async (req: any, res: any) => {
         const { search } = req.query;
         try {
-            const response = await komgaCrawlReadModel.query({endpoint: 'collections', search});
+            const response = await comicsCrawlReadModel.query({endpoint: 'collections', search});
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.json(response);
         } catch (error: any) {

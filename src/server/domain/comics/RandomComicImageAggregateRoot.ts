@@ -16,7 +16,8 @@ export default class RandomComicImageAggregateRoot {
         const { page, interval, session } = command.payload;
 
         try {
-            const payload = await this.randomImageService.randomImage(page, interval, session);
+            const guardedInterval = isNaN(interval) ? 10000 : interval < 3000 ? 3000 : interval;
+            const payload = await this.randomImageService.randomImage(page, guardedInterval, session);
             // Return a business event
             return new ImageRetrievedEvent({
                 payload,

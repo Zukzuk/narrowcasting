@@ -1,4 +1,4 @@
-# Media library narrowcasting applications
+# Narrowcasting for all your media libraries
 
 A Node.js narrowcasting application designed to serve your media library images with a simple REST API and frontend interface. This app is Docker-ready and includes configurations for both development and production environments.
 Currently compatible with the following API's
@@ -7,8 +7,13 @@ Currently compatible with the following API's
 
 ## CQRS Pattern
 
-This project follows the CQRS (Command Query Responsibility Segregation) pattern, which separates the responsibilities of commands ('do' operations) and queries ('read' operations).
-Commands are handled by the CommandBus, CommandHandler and aggregates, while queries are handled by readModels. Events are used to communicate the results of command execution.
+This project implements ```CQRS``` (Command Query Responsibility Segregation), separating ```Commands``` (write operations) and ```Queries``` (read operations). Clients send GET (Queries) or POST (Commands) requests to the ```Backend For Frontend``` ```(BFF)```, which translates them into appropriate actions. The server can also generate internal ```Commands```.
+
+```Commands``` are processed by ```CommandHandlers``` and ```Aggregates```.
+```Queries``` are resolved using ```ReadModels```, updated through ```DomainEvents``` emitted after ```Command``` processing.
+```DomainEvents``` capture business state changes and ensure ```ReadModels``` stay consistent. ```Commands``` and ```DomainEvents``` enforce ```Domain Logic``` and are not a CRUD substitute.
+
+A ```Broker``` decouples the ```BFF``` and the domain components, ensuring flexibility and scalability.
 
 ## Installation
 
@@ -46,10 +51,27 @@ Commands are handled by the CommandBus, CommandHandler and aggregates, while que
    ```bash
    npm run release # Pushes release docker inages with semver and 'latest' tag
    ```
+## Running locally
+http://localhost:3001/
 
-## Project Structure
+Several querystring filters are added for tailoring the experience:
+```plaintext
+http://localhost:3001/?showVersion=12&sowVersion=true
 
-### Folder Details
+interval=12 
+   interval of requested images in seconds 
+   default = 10, 
+   minimum = 3 (enforced by server)
+
+showVersion=true 
+   show a version label in the bottom right
+   default = false
+```
+
+## API Documentation
+http://localhost:3001/api-docs
+
+# Project Structure
 
 - **deploy/**: Production-specific variables and compose files.
 - **dist/**: Automatically created on build for runtime files.
@@ -60,7 +82,7 @@ Commands are handled by the CommandBus, CommandHandler and aggregates, while que
 - **.dev.env**: Environment variables for development.
 - **docker-compose.dev.yml**: Development compose file.
 
-### Server Directory ###
+## Server structure
   - `application/`: Backend application logic.
   - `domain/`: Domain-specific logic.
     - `[DOMAIN]/`
@@ -79,9 +101,11 @@ Commands are handled by the CommandBus, CommandHandler and aggregates, while que
   - `index.js`: Server init and bootstrap.
   - `swagger.js`: Swagger implementation.
   - `utils.js`: Utility functions for the server.
-  
 
-### Environment Variables
+## Client structure
+TBD
+
+## Environment Variables
 
 ```plaintext
 # .secrets/private.env
@@ -104,8 +128,5 @@ APP_API_DOCS_PATH=                  # Api Docs path
 # Add any var here, overwrites all above
 ```
 
-# API Documentation
-http://localhost:3001/api-docs
-
-## License
+# License
 This project is licensed under the **MIT License**.
