@@ -22,33 +22,29 @@ Commands are handled by the CommandBus, CommandHandler and aggregates, while que
    ```bash
    cd narrowcasting
    ```
-3. **Install dependencies:**
-   
-   ```bash
-   npm install
-   ```
 
 ## Development
 
 1. **Run the dev application**
    
    ```bash
-   npm run docker:dev
+   npm run dev # Does npm install, compiles ts, creates a docker dev image and runs as container
    ```
 2. **Commit with commitizen**
    
    ```bash
-   npm run commit
+   git add .
+   npm run commit # Runs commitizen
    ```
 3. **Push a new version**
    
    ```bash
-   npm run push # Does semantic versioning, pushes to git origin and creates a new development container.
+   npm run push # Does semantic versioning, pushes to git origin and creates a new dev image.
    ```
 4. **Build and release Docker Image**
    
    ```bash
-   npm run release
+   npm run release # Pushes release docker inages with semver and 'latest' tag
    ```
 
 ## Project Structure
@@ -56,8 +52,11 @@ Commands are handled by the CommandBus, CommandHandler and aggregates, while que
 ### Folder Details
 
 - **deploy/**: Production-specific variables and compose files.
+- **dist/**: Automatically created on build for runtime files.
 - **scripts/**: Scripts and Dockerfiles for CI/CD.
 - **src/**: Application source code.
+   - **public/**: Frontend source code.
+   - **server/**: Server source code.
 - **.dev.env**: Environment variables for development.
 - **docker-compose.dev.yml**: Development compose file.
 
