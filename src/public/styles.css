@@ -89,6 +89,18 @@ body {
     right: 6px;
 }
 
+#fullscreen-button::before {
+    content: "";
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    right: -50px;
+    bottom: -50px;
+    background-color: transparent;
+    z-index: -1;
+    pointer-events: auto;
+}
+
 .button-label {
     position: fixed;
     font-family: monospace;

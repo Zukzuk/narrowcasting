@@ -7,9 +7,9 @@ function main() {
     process.exit(1);
   }
   const APP_VERSION_TAG = `${data.version}-dev`;
-  const PROCESS = process.env.APP_RUN === undefined || process.env.APP_RUN === "true" || process.env.APP_RUN === "1" ? "up --build --force-recreate" : "build";
+  const COMMANDS = process.env.APP_RUN === undefined || process.env.APP_RUN === "true" || process.env.APP_RUN === "1" ? "up --build --force-recreate" : "build";
   buildTypeScript();
-  buildAndComposeDev(APP_VERSION_TAG, PROCESS);
+  buildAndComposeDev(APP_VERSION_TAG, COMMANDS);
 }
 
 function buildTypeScript() {
@@ -23,10 +23,10 @@ function buildTypeScript() {
   }
 }
 
-function buildAndComposeDev(APP_VERSION_TAG, PROCESS) {
+function buildAndComposeDev(APP_VERSION_TAG, COMMANDS) {
   try {
-    console.log(`docker-compose -f docker-compose.dev.yml ${PROCESS}`);
-    execSync(`docker-compose -f docker-compose.dev.yml ${PROCESS}`, {
+    console.log(`docker-compose -f docker-compose.dev.yml ${COMMANDS}`);
+    execSync(`docker-compose -f docker-compose.dev.yml ${COMMANDS}`, {
       stdio: 'inherit',
       env: { ...process.env, APP_VERSION_TAG }
     });

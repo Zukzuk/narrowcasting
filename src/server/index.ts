@@ -52,10 +52,9 @@ doAxiosLogging(true, false);
 server.listen(getPort(), async () => {
     console.log(
         `Server is running`,
-        `LocalIpAddress=${getLocalIpAddress()}`,
-        `InternaPort=${getPort()}`,
+        `Address='${getLocalIpAddress()}:${getPort()}'`,
         `gatewayAddress='${await getGatewayAddress()}'`,
-        `Hostname='${getHostName()}`,
+        `Hostname='${getHostName()}'`,
     );
 });
 

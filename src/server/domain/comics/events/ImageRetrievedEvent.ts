@@ -5,8 +5,9 @@ interface IImageRetrievedEventData {
         bookId: string;
         image: Buffer;
         contentType: string;
+        totalItems: number;
     };
-    totalItems?: number;
+    domain: string;
     timestamp?: string;
 }
 
@@ -20,8 +21,9 @@ export default class ImageRetrievedEvent implements ISuccessEvent {
         bookId: string;
         image: Buffer;
         contentType: string;
+        totalItems: number;
     };
-    totalItems?: number;
+    domain!: string;
     timestamp?: string;
 
     constructor(data: IImageRetrievedEventData) {

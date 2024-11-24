@@ -1,8 +1,8 @@
-import axios from 'axios';
 import express from 'express';
-import randomBook from '../../deprecated/randomBook.js';
 import { handleError } from '../../helpers.js';
-import { KOMGA_ORIGIN } from '../../config.js';
+import RandomImageCommand from '../../domain/comics/commands/RandomImageCommand.js';
+
+import broker from '../../infrastructure/broker/Broker.js';
 
 const router = express.Router();
 
@@ -17,8 +17,8 @@ export default function ComicsNarrowcastingApi(models: any) {
      *   get:
      *     tags: 
      *       - comics-narrowcasting
-     *     summary: Get a random comic image
-     *     description: Fetches a random comic image from the database
+     *     summary: Command to retrieve a random comic image
+     *     description: Commands the system to retrieve a random comic image from Komga
      *     parameters:
      *       - in: query
      *         name: page
@@ -43,24 +43,27 @@ export default function ComicsNarrowcastingApi(models: any) {
      *       500:
      *         description: Internal Server Error or no valid image found
      */
-    router.get('/pages/random', async (req: any, res: any) => {
-        const { page = 0, interval = 10 } = req.query;
-        const cancelToken = axios.CancelToken.source();
-        req.on('close', () => {
-            cancelToken.cancel("Client disconnected, request canceled.");
-        });
+    router.post('/pages/random', async (req: any, res: any) => {
+        const { 
+            page = 0, 
+            interval = 10 
+        }: { 
+            page: number, 
+            interval: number
+        } = req.query;
+        
         try {
-            const { image, contentType, bookId } = await randomBook(req, page, interval, cancelToken.token);
-            if (!image) return res.status(500).json({ error: "No valid image or content type found" });
-            res.set('X-Custom-Book-URL', `${KOMGA_ORIGIN}/book/${bookId}`);
-            res.set('Content-Type', contentType);
-            res.send(image);
+            broker.pub(new RandomImageCommand({ 
+                payload: { 
+                    page, 
+                    interval, 
+                    session: req.session
+                }, 
+                timestamp: new Date().toISOString() })
+            );
+            res.status(202).type('text').send('ok');
         } catch (error: any) {
-            if (axios.isCancel(error)) {
-                console.log("Request canceled:", error.message);
-                return;
-            }
-            handleError(error, res, "Error fetching random comic image");
+            handleError(error, res, "Error publishing RandomImageCommand");
         }
     });
 
@@ -71,7 +74,7 @@ export default function ComicsNarrowcastingApi(models: any) {
      *     tags: 
      *       - comics-narrowcasting
      *     summary: Crawl series
-     *     description: Initiates a crawling operation to fetch series data
+     *     description: Initiates fetch of series data
      *     parameters:
      *       - in: query
      *         name: search
@@ -80,7 +83,7 @@ export default function ComicsNarrowcastingApi(models: any) {
      *         description: Search term
      *     responses:
      *       200:
-     *         description: Successfully crawled data
+     *         description: Successfully fetched data
      *         content:
      *           application/json:
      *             schema:
@@ -95,7 +98,7 @@ export default function ComicsNarrowcastingApi(models: any) {
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.json(response);
         } catch (error: any) {
-            handleError(error, res, "Error crawling series");
+            handleError(error, res, "Error requesting crawled series");
         }
     });
 
@@ -106,7 +109,7 @@ export default function ComicsNarrowcastingApi(models: any) {
      *     tags: 
      *       - comics-narrowcasting
      *     summary: Crawl collections
-     *     description: Initiates a crawling operation to fetch collections data
+     *     description: Initiates a fetch of collections data
      *     parameters:
      *       - in: query
      *         name: search
@@ -115,7 +118,7 @@ export default function ComicsNarrowcastingApi(models: any) {
      *         description: Search term
      *     responses:
      *       200:
-     *         description: Successfully crawled data
+     *         description: Successfully fetched data
      *         content:
      *           application/json:
      *             schema:
@@ -130,7 +133,7 @@ export default function ComicsNarrowcastingApi(models: any) {
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.json(response);
         } catch (error: any) {
-            handleError(error, res, "Error crawling collections");
+            handleError(error, res, "Error requesting crawled collections");
         }
     });
 

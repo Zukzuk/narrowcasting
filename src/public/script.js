@@ -24,6 +24,7 @@ async function fetchImageData(page, interval) {
 
     try {
         const response = await fetch(apiUrl, { signal });
+        // await fetch(apiUrl, { signal, method: 'POST' });
         if (!response.ok) throw new Error(response.statusText);
         // Access the custom header
         const bookUrl = response.headers.get('X-Custom-Book-URL');

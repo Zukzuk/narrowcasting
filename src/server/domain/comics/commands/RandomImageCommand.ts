@@ -1,7 +1,11 @@
 import { RANDOM_IMAGE_COMMAND, ICommand } from "../../../domain/Command.js";
 
 interface IRandomImageCommandData {
-    payload: { page: number, interval: number };
+    payload: { 
+        page: number, 
+        interval: number,
+        session: any
+    };
     timestamp?: string;
 }
 
@@ -11,7 +15,11 @@ export default class RandomImageCommand implements ICommand {
         return RANDOM_IMAGE_COMMAND;
     }
     
-    payload!: { page: number, interval: number };
+    payload!: { 
+        page: number, 
+        interval: number,
+        session: any
+    };
     timestamp?: string;
 
     constructor(data: IRandomImageCommandData) {
