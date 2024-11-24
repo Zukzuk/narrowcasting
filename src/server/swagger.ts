@@ -19,8 +19,9 @@ const options = {
     },
     apis: [
         `${__dirname}/interfaces/api/AppApi.js`,
-        `${__dirname}/interfaces/api/KomgaNarrowcastingApi.js`,
+        `${__dirname}/interfaces/api/ComicsNarrowcastingApi.js`,
+        `${__dirname}/interfaces/api/MoviesNarrowcastingApi.js`,
     ],
 };
 
-export default swaggerJSDoc(options);
+export default swaggerJSDoc(options); // Singleton instance

@@ -1,9 +1,9 @@
 import express from 'express';
-import { handleError } from './utils.js';
+import { handleError } from '../../helpers.js';
 
 const router = express.Router();
 
-function AppApi(models) {
+export default function AppApi(models: any) {
     const {
         versionReadModel
     } = models;
@@ -28,17 +28,15 @@ function AppApi(models) {
      *       500:
      *         description: Internal server error
      */
-    router.get('/version', async (req, res) => {
+    router.get('/version', async (req: any, res: any) => {
         try {
             const response = await versionReadModel.query();
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.type('text').send(response); // Send as plain text
-        } catch (error) {
+        } catch (error: any) {
             handleError(error, res, "Error requesting version");
         }
     });
 
     return router;
 }
-
-export default AppApi;

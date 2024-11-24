@@ -1,7 +1,7 @@
 {
     "name": "narrowcasting-app",
     "version": "4.0.0",
-    "description": "Narrowcast your favorite media",
+    "description": "Narrowcast images from your favorite media",
     "type": "module",
     "main": "dist/server/index.js",
     "engines": {
@@ -14,14 +14,16 @@
         "url": "https://github.com/Zukzuk/narrowcasting.git"
     },
     "scripts": {
+        "dev": "node scripts/docker-dev.js",
         "build": "mkdirp dist/public && cpx \"src/public/**/*\" dist/public && tsc",
-        "dev": "node scripts/docker-dev.js --",
         "commit": "cz",
         "push": "standard-version && git push --follow-tags origin main && cross-env APP_RUN=false npm run dev",
-        "release": "node scripts/docker-release.js"
+        "release": "node scripts/docker-release.js",
+        "internalscript:install:onlydev": "npm i --only=dev",
+        "internalscript:npx:tsc": "npx tsc --watch --preserveWatchOutput --watchFile fixedpollinginterval",
+        "internalscript:npx:nodemon": "npx nodemon -L dist/server/index.js"
     },
     "dependencies": {
-        "@skyra/jaro-winkler": "^1.1.1",
         "axios": "^1.7.7",
         "compression": "^1.7.5",
         "cors": "^2.8.5",
@@ -39,7 +41,8 @@
         "@types/default-gateway": "^7.2.2",
         "@types/express": "^5.0.0",
         "@types/express-session": "^1.18.0",
-        "@types/node": "^22.9.1",
+        "@types/module-alias": "^2.0.4",
+        "@types/node": "^22.9.3",
         "@types/swagger-jsdoc": "^6.0.4",
         "@types/swagger-ui-express": "^4.1.7",
         "commitizen": "^4.3.1",
@@ -47,10 +50,10 @@
         "cpx": "^1.2.1",
         "cross-env": "^7.0.3",
         "cz-conventional-changelog": "^3.3.0",
-        "husky": "^9.1.7",
         "mkdirp": "^3.0.1",
         "nodemon": "^3.1.7",
         "standard-version": "^9.5.0",
+        "ts-node": "^10.9.2",
         "typescript": "5.6"
     },
     "config": {

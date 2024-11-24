@@ -1,4 +1,9 @@
-export default class UrlError extends Error {
+export function handleError(error: any, res: any, message: string) {
+    console.error(message, error.message || error);
+    res.status(500).json({ error: message });
+}
+
+export class UrlError extends Error {
     url: string;
 
     constructor(message: string, url: string) {

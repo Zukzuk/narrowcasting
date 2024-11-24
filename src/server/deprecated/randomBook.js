@@ -1,6 +1,5 @@
 import axios from 'axios';
 import sharp from 'sharp';
-import { shuffleArray } from './utils.js';
 import { APP_CACHE_DURATION, KOMGA_API, KOMGA_AUTH } from '../config.js';
 
 let totalSetCache = { value: null, expiration: 0 };
@@ -93,14 +92,22 @@ async function retrieveIndexTotal(cache, fetch) {
     });
 }
 
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
 // Retrieve a random unused index from session set
 async function retrieveRandomIndex(req) {
-    if (!req.session.remainingSet || req.session.remainingSet.length === 0) {
+    if (!req.session.indexSet || req.session.indexSet.length === 0) {
         const totalSet = await retrieveIndexTotal(totalSetCache, fetchIndexTotal);
-        req.session.remainingSet = Array.from({ length: totalSet }, (_, i) => i);
+        req.session.indexSet = Array.from({ length: totalSet }, (_, i) => i);
     }
-    const randomIndex = Math.floor(Math.random() * req.session.remainingSet.length);
-    return shuffleArray(req.session.remainingSet).splice(randomIndex, 1)[0];
+    const randomIndex = Math.floor(Math.random() * req.session.indexSet.length);
+    return shuffleArray(req.session.indexSet).splice(randomIndex, 1)[0];
 }
 
 async function randomBook(req, page, interval, cancelToken, startTime = Date.now(), retryCount = 1) {

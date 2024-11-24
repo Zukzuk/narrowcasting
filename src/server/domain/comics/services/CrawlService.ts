@@ -1,7 +1,7 @@
 import axios, { AxiosBasicCredentials } from 'axios';
-import UrlError from '../../../application/utils.js';
+import { UrlError } from '../../../helpers.js';
 
-class CrawlEndpoint {
+export default class CrawlService {
     constructor(private KOMGA_API: string, private KOMGA_AUTH: AxiosBasicCredentials, private APP_CRAWL_PAGE_SIZE: number) {}
 
     async crawl(endpoint: string): Promise<any[]> {
@@ -27,5 +27,3 @@ class CrawlEndpoint {
         }
     }
 }
-
-export default CrawlEndpoint;

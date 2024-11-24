@@ -1,23 +1,27 @@
 {
     "compilerOptions": {
-        "moduleResolution": "node",
-        "module": "ESNext",
-        "target": "ESNext",
-        "baseUrl": "./", // Allows absolute imports based on the root directory
-        "paths": {
-            "*": ["./*"] // Simplifies module resolution
-        },
-        "esModuleInterop": true,
-        "strict": true,
-        "allowJs": true,
-        "outDir": "./dist",
-        "rootDir": "./src"
+        "module": "ESNext", // Ensure ES Modules compatibility
+        "target": "ESNext", // Modern JavaScript target
+        "moduleResolution": "node", // Resolve modules like Node.js
+        "esModuleInterop": true, // Ensure interop between ES Modules and CommonJS
+        "outDir": "./dist", // Output directory for compiled files
+        "rootDir": "./src", // Root directory for source files
+        "strict": true, // Enable all strict type-checking options
+        "allowJs": true, // Allow JavaScript files to be compiled
+        "checkJs": false, // Disable type checking for JavaScript files
+        "resolveJsonModule": true, // Allow importing JSON files
+        "sourceMap": true, // Include source maps for debugging
+        "skipLibCheck": true, // Skip type checking of declaration files
+        "baseUrl": "./src" // Base path for module resolution
     },
     "include": [
         "src/**/*"
-    ],
+    ], // Include all files in the src folder
     "exclude": [
         "node_modules",
-        "dist"
-    ]
+        "dist",
+        "src/public",
+        "scripts",
+        "deploy"
+    ] // Exclude these directories
 }

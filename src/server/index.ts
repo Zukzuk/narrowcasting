@@ -4,9 +4,9 @@ import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import session from 'express-session';
 // application imports
-import swaggerSpec from './swagger.js';
-import AppBFF from './application/AppBFF.js';
-import KomgaBFF from './application/KomgaBFF.js';
+import AggregateFactory from './application/AggregateFactory.js';
+import CommandHandler from './application/CommandHandler.js';
+import NarrowcastingBFF from './application/NarrowcastingBFF.js';
 import { 
     getLocalIpAddress,
     getHostName,
@@ -21,11 +21,14 @@ import {
     APP_STATIC_SERVE_PATH,
     APP_API_PATH,
     KOMGA_ORIGIN, 
-    KOMGA_NARROWCASTING_API_PATH,
+    COMICS_NARROWCASTING_API_PATH,
 } from './config.js';
+
+import swaggerSpec from './swagger.js'; // Singleton instance
 
 // initialize
 const server = express();
+
 // middleware
 server.use(cors({
     origin: KOMGA_ORIGIN,
@@ -42,6 +45,7 @@ server.use(session({
 server.use(compression());
 server.use(express.static(APP_STATIC_SERVE_PATH));
 server.use(APP_API_DOCS_PATH, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 // logging
 doAxiosLogging(true, false);
 // start server
@@ -55,12 +59,8 @@ server.listen(getPort(), async () => {
     );
 });
 
-// TODO: Refactor to TS
-
 // application orchestration
-const appBFF = new AppBFF();
-appBFF.bootstrap(server, APP_API_PATH);
-const komgaBFF = new KomgaBFF();
-// TODO: Refactor Komga randomBook to use CQRS
-komgaBFF.bootstrap(server, KOMGA_NARROWCASTING_API_PATH);
-// TODO: Add Plex BFF
+const commandHandler = new CommandHandler(new AggregateFactory());
+commandHandler.bootstrap();
+const narrowcastingBFF = new NarrowcastingBFF();
+narrowcastingBFF.bootstrap(server, APP_API_PATH, COMICS_NARROWCASTING_API_PATH);

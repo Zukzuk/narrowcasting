@@ -1,26 +1,24 @@
 import axios from 'axios';
 import express from 'express';
 import randomBook from '../../deprecated/randomBook.js';
-import { handleError } from './utils.js';
+import { handleError } from '../../helpers.js';
 import { KOMGA_ORIGIN } from '../../config.js';
 
 const router = express.Router();
 
-function KomgaNarrowcastingApi(models) {
+export default function ComicsNarrowcastingApi(models: any) {
     const {
-        commandHandler,
-        komgaCrawlReadModel, 
-        errorReadModel,
+        komgaCrawlReadModel,
     } = models;
 
     /**
      * @openapi
-     * /api/komga/books/random:
+     * /api/comics/pages/random:
      *   get:
      *     tags: 
-     *       - komga-narrowcasting
-     *     summary: Get a random book image
-     *     description: Fetches a random book image from the database
+     *       - comics-narrowcasting
+     *     summary: Get a random comic image
+     *     description: Fetches a random comic image from the database
      *     parameters:
      *       - in: query
      *         name: page
@@ -33,10 +31,10 @@ function KomgaNarrowcastingApi(models) {
      *         schema:
      *           type: integer
      *           default: 10
-     *         description: Time interval for retrieving a random book image
+     *         description: Time interval for retrieving a random comic image
      *     responses:
      *       200:
-     *         description: Returns the image of a random book
+     *         description: Returns the image of a random comic
      *         content:
      *           image/jpeg:
      *             schema:
@@ -45,7 +43,7 @@ function KomgaNarrowcastingApi(models) {
      *       500:
      *         description: Internal Server Error or no valid image found
      */
-    router.get('/books/random', async (req, res) => {
+    router.get('/pages/random', async (req: any, res: any) => {
         const { page = 0, interval = 10 } = req.query;
         const cancelToken = axios.CancelToken.source();
         req.on('close', () => {
@@ -57,21 +55,21 @@ function KomgaNarrowcastingApi(models) {
             res.set('X-Custom-Book-URL', `${KOMGA_ORIGIN}/book/${bookId}`);
             res.set('Content-Type', contentType);
             res.send(image);
-        } catch (error) {
+        } catch (error: any) {
             if (axios.isCancel(error)) {
                 console.log("Request canceled:", error.message);
                 return;
             }
-            handleError(error, res, "Error fetching random book image");
+            handleError(error, res, "Error fetching random comic image");
         }
     });
 
     /**
      * @openapi
-     * /api/komga/series:
+     * /api/comics/series:
      *   get:
      *     tags: 
-     *       - komga-narrowcasting
+     *       - comics-narrowcasting
      *     summary: Crawl series
      *     description: Initiates a crawling operation to fetch series data
      *     parameters:
@@ -90,23 +88,23 @@ function KomgaNarrowcastingApi(models) {
      *       500:
      *         description: Internal Server Error or no valid content found
      */
-    router.get('/series', async (req, res) => {
+    router.get('/series', async (req: any, res: any) => {
         const { search } = req.query;
         try {
             const response = await komgaCrawlReadModel.query({endpoint: 'series', search});
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.json(response);
-        } catch (error) {
+        } catch (error: any) {
             handleError(error, res, "Error crawling series");
         }
     });
 
     /**
      * @openapi
-     * /api/komga/collections:
+     * /api/comics/collections:
      *   get:
      *     tags: 
-     *       - komga-narrowcasting
+     *       - comics-narrowcasting
      *     summary: Crawl collections
      *     description: Initiates a crawling operation to fetch collections data
      *     parameters:
@@ -125,18 +123,16 @@ function KomgaNarrowcastingApi(models) {
      *       500:
      *         description: Internal Server Error or no valid content found
      */
-    router.get('/collections', async (req, res) => {
+    router.get('/collections', async (req: any, res: any) => {
         const { search } = req.query;
         try {
             const response = await komgaCrawlReadModel.query({endpoint: 'collections', search});
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.json(response);
-        } catch (error) {
+        } catch (error: any) {
             handleError(error, res, "Error crawling collections");
         }
     });
 
     return router;
 }
-
-export default KomgaNarrowcastingApi;

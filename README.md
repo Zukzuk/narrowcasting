@@ -62,21 +62,25 @@ Commands are handled by the CommandBus, CommandHandler and aggregates, while que
 - **docker-compose.dev.yml**: Development compose file.
 
 ### Server Directory ###
-  - `application/`: Contains backend application logic.
+  - `application/`: Backend application logic.
   - `domain/`: Domain-specific logic.
     - `[DOMAIN]/`
       - `commands/`
       - `events/`
       - `services/`
   - `infrastructure/`: Infrastructure-related code.
+    - `broker/`
     - `filesystem/`
     - `repositories/`
   - `interfaces/`: Interface definitions.
-    - `api/`
-    - `repositories/`
-  - `index.js`: Server init and bootstrap.
-  - `utils.js`: Utility functions for the server.
+    - `apis/`
+    - `readmodels/`
   - `config.js`: Configuration file for the server.
+  - `helpers.js`: Helper functions for the code-base.
+  - `index.js`: Server init and bootstrap.
+  - `swagger.js`: Swagger implementation.
+  - `utils.js`: Utility functions for the server.
+  
 
 ### Environment Variables
 
@@ -87,14 +91,15 @@ KOMGA_USERNAME=                     # Komga username
 KOMGA_PASSWORD=                     # Komga password
 KOMGA_API_KEY=                      # Komga API key (if applicable)
 PLEX_API_KEY=                       # Plex API key
+PLEX_MACHINE_DENTIFIER=             # Plex Server ID
 
 # deploy/public.env
 APP_STATIC_SERVE_PATH=              # Path to client's static files
 APP_API_PATH=                       # Api path of the app itself
 APP_API_DOCS_PATH=                  # Api Docs path
-[APPNAME]_ORIGIN=                   # The origin URL for the target app
-[APPNAME]_API_PATH=                 # Path to the target API
-[APPNAME]_NARROWCASTING_API_PATH=   # Api path of a narrowcasting target
+[DOMAIN]_NARROWCASTING_API_PATH=    # Api path of a narrowcasting domain
+[TARGET]_ORIGIN=                    # The origin URL for the target app
+[TARGET]_API_PATH=                  # Path to the target API
 
 # dev.env
 # Add any var here, overwrites all above

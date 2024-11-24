@@ -18,7 +18,7 @@ async function fetchImageData(page, interval) {
     const { signal } = abortController;
 
     // Setup API url and params
-    const apiUrl = new URL('/api/komga/books/random', window.location.origin);
+    const apiUrl = new URL('/api/comics/pages/random', window.location.origin);
     apiUrl.searchParams.append('page', page);
     apiUrl.searchParams.append('interval', interval);
 

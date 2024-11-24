@@ -1,30 +1,44 @@
-import { EventEmitter } from 'events';
-import AggregateFactory from '../domain/komga/AggregateFactory.js';
-import { CRAWL_COMMAND, ICommand } from '../domain/komga/commands/Command.js';
-import { CrawlCommand } from '../domain/komga/commands/CrawlCommand.js';
+import AggregateFactory from '../application/AggregateFactory.js';
+import { ICommand, CRAWL_COMMAND, RANDOM_IMAGE_COMMAND } from '../domain/Command.js';
+import CrawlCommand from '../domain/comics/commands/CrawlCommand.js';
+import RandomImageCommand from '../domain/comics/commands/RandomImageCommand.js';
 
-class CommandHandler extends EventEmitter {
+import broker from '../infrastructure/broker/Broker.js'; // Singleton instance
+
+export default class CommandHandler {
+    eventHandlers: any;
+
     constructor(private aggregateFactory: AggregateFactory) {
-        super();
+        this.eventHandlers = {
+            [CRAWL_COMMAND]: async (command: CrawlCommand) => {
+                const aggregateRoot = this.aggregateFactory.createCrawlComics();
+                return await aggregateRoot.consume(command);
+            },
+            [RANDOM_IMAGE_COMMAND]: async (command: RandomImageCommand) => {
+                const aggregateRoot = this.aggregateFactory.createRandomComicImage();
+                return await aggregateRoot.consume(command);
+            }
+        };
     }
 
-    async handle(command: ICommand) {
-        switch (command.type) {
-            case CRAWL_COMMAND:
-                try {
-                    const crawlAggregateRoot = this.aggregateFactory.createCrawlAggregate();
-                    const event = await crawlAggregateRoot.aggregate(command as CrawlCommand);
-                    this.emit(event.type, event);
-                } catch (error: any) {
-                    this.emit(error.event?.type, error.event);
-                    delete error.event;
-                    // throw error;
-                }
-                break;
-            default:
-                throw new Error(`Unsupported command type: ${command.type}`);
+    bootstrap() {
+        broker.sub(CrawlCommand.type, command => this.#handle(command));
+        broker.sub(RandomImageCommand.type, command => this.#handle(command));
+    }
+
+    async #handle(command: ICommand) {
+        if (!this.eventHandlers[command.type]) {
+            throw new Error(`Unsupported command type: ${command.type}`);
         }
-    }
+    
+        try {
+            let events = await this.eventHandlers[command.type](command);
+            if (!Array.isArray(events)) events = [events];
+            for (const event of events) broker.pub(event);
+        } catch (error: any) {
+            broker.pub(error.event);
+            delete error.event;
+            // Optionally rethrow or handle the error
+        }
+    }    
 }
-
-export default CommandHandler;

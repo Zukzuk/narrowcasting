@@ -14,9 +14,9 @@ function main() {
 
 function buildTypeScript() {
   try {
-    console.log("Copying dist and compiling TypeScript...");
-    execSync('npm i --only=dev && npm run build', { stdio: 'inherit' });
-    console.log("Build successful.");
+    console.log(`npm i && npm run build`);
+    execSync('npm run internalscript:install:onlydev && npm run build', { stdio: 'inherit' });
+    console.log("Compilation successful.");
   } catch (error) {
     console.error("Error compiling TypeScript:", error.message);
     process.exit(1);
@@ -25,10 +25,8 @@ function buildTypeScript() {
 
 function buildAndComposeDev(APP_VERSION_TAG, PROCESS) {
   try {
-    if (PROCESS === "build") console.log(`Building Docker image APP_VERSION_TAG=${APP_VERSION_TAG}...`);
-    else console.log(`Starting Docker compose with APP_VERSION_TAG=${APP_VERSION_TAG}...`);
-    
-    execSync(`docker-compose -f docker-compose.dev.yml ${PROCESS}`, {
+    console.log(`docker-compose -f docker-compose.dev.yml ${PROCESS} --force-recreate`);
+    execSync(`docker-compose -f docker-compose.dev.yml ${PROCESS} --force-recreate`, {
       stdio: 'inherit',
       env: { ...process.env, APP_VERSION_TAG }
     });

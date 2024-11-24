@@ -2,7 +2,7 @@ import os from 'os';
 import defaultGateway from 'default-gateway';
 import axios from 'axios';
 
-function getLocalIpAddress() {
+export function getLocalIpAddress() {
     const networkInterfaces = os.networkInterfaces();
     for (const interfaceName in networkInterfaces) {
         const networkInterface = networkInterfaces[interfaceName];
@@ -17,15 +17,15 @@ function getLocalIpAddress() {
     return 'NoIP';
 }
 
-function getPort() {
+export function getPort() {
     return 3000;
 }
 
-function getHostName() {
+export function getHostName() {
     return os.hostname();
 }
 
-async function getGatewayAddress() {
+export async function getGatewayAddress() {
     try {
         const result = await defaultGateway.gateway4sync()
         return result.gateway;
@@ -35,7 +35,7 @@ async function getGatewayAddress() {
     }
 }
 
-function doAxiosLogging(logReq = true, logResp = true) {
+export function doAxiosLogging(logReq = true, logResp = true) {
     // axios logging
     if (logReq) {
         axios.interceptors.request.use(request => {
@@ -49,12 +49,4 @@ function doAxiosLogging(logReq = true, logResp = true) {
             return response;
         });
     }
-}
-
-export {
-    getLocalIpAddress,
-    getHostName,
-    getGatewayAddress,
-    getPort,
-    doAxiosLogging,
 }

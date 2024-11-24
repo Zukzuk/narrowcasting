@@ -1,4 +1,4 @@
-class CacheRepository {
+export default class CrawledComicsRepository {
     private cache: Record<string, Record<string, string>>;
     private cacheLength: number;
 
@@ -36,8 +36,6 @@ class CacheRepository {
     }
 
     log(action: string, endpoint: string, payload: Record<string, string>, timestamp: string) {
-        console.log(`CacheRepository: ${action}d ${Object.keys(payload).length} items for '${endpoint}' at ${timestamp}`);
+        console.log(`CrawledComicsRepository: ${action}d ${Object.keys(payload).length} items for '${endpoint}' at ${timestamp}`);
     }
 }
-
-export default CacheRepository;
