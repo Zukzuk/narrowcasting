@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.0](https://github.com/Zukzuk/narrowcasting/compare/v4.0.0...v4.1.0) (2024-11-24)
+
+
+### Features
+
+* added the broker and moved everything to ts ([a5e79d5](https://github.com/Zukzuk/narrowcasting/commit/a5e79d5879dd23819980596c1fc29bbf7993c5af))
+
 ## [4.0.0](https://github.com/Zukzuk/narrowcasting/compare/v3.0.9...v4.0.0) (2024-11-22)
 
 
