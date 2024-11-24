@@ -56,7 +56,7 @@ http://localhost:3001/
 
 Several querystring filters are added for tailoring the experience:
 ```plaintext
-http://localhost:3001/?showVersion=12&sowVersion=true
+http://localhost:3001/?interval=12&showVersion=true
 
 interval=12 
    interval of requested images in seconds 
