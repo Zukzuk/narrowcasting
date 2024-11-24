@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.2.0](https://github.com/Zukzuk/narrowcasting/compare/v4.1.1...v4.2.0) (2024-11-24)
+
+
+### Features
+
+* added randomBooks to CQ flow ([2ee3089](https://github.com/Zukzuk/narrowcasting/commit/2ee308971a14842c1a863658fe9214aa61c3e4b1))
+
 ### [4.1.1](https://github.com/Zukzuk/narrowcasting/compare/v4.1.0...v4.1.1) (2024-11-24)
 
 
