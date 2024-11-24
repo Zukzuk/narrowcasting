@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.2.3](https://github.com/Zukzuk/narrowcasting/compare/v4.2.2...v4.2.3) (2024-11-24)
+
+
+### Bug Fixes
+
+* fixed readmodel injections ([a681763](https://github.com/Zukzuk/narrowcasting/commit/a6817631b2de4474ac6f21d91ec5ae82073467c5))
+
 ### [4.2.2](https://github.com/Zukzuk/narrowcasting/compare/v4.2.1...v4.2.2) (2024-11-24)
 
 
