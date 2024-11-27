@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.3.0](https://github.com/Zukzuk/narrowcasting/compare/v4.2.4...v4.3.0) (2024-11-27)
+
+
+### Features
+
+* client now uses CQ ([6c2bff5](https://github.com/Zukzuk/narrowcasting/commit/6c2bff5dbfe3faa2dbd86cc15699461d3a628662))
+
 ### [4.2.4](https://github.com/Zukzuk/narrowcasting/compare/v4.2.3...v4.2.4) (2024-11-24)
 
 ### [4.2.3](https://github.com/Zukzuk/narrowcasting/compare/v4.2.2...v4.2.3) (2024-11-24)
