@@ -3,16 +3,15 @@ import CrawlCompletedEvent from "../../domain/comics/events/CrawlCompletedEvent.
 import broker from "../../infrastructure/broker/Broker.js";
 
 export default class ComicsCrawlReadModel {
-    private cache: Record<string, any>;
+    private cache: Record<string, any> = {};
 
     constructor() {
-        this.cache = {};
         // subscribe to events
         broker.sub(CrawlCompletedEvent.type, event => this.#denormalize(event));
     }
 
     #denormalize(event: CrawlCompletedEvent) {
-        console.log('ComicsCrawlReadModel:', event.type, event.endpoint);
+        console.log('ComicsCrawlReadModel:', event.type, event.endpoint, event.domain);
         // denormalize
         this.cache[event.endpoint] = event.payload;
     }

@@ -1,12 +1,13 @@
 import { IMAGE_RETRIEVED_EVENT, ISuccessEvent } from "../../../domain/Event.js";
 
+export type IImageRetrievedPayload = {
+    bookUrl: string;
+    image: Buffer;
+    contentType: string;
+}
+
 interface IImageRetrievedEventData {
-    payload: {
-        bookId: string;
-        image: Buffer;
-        contentType: string;
-        totalItems: number;
-    };
+    payload: IImageRetrievedPayload;
     domain: string;
     timestamp?: string;
 }
@@ -17,12 +18,7 @@ export default class ImageRetrievedEvent implements ISuccessEvent {
         return IMAGE_RETRIEVED_EVENT;
     }
 
-    payload!: {
-        bookId: string;
-        image: Buffer;
-        contentType: string;
-        totalItems: number;
-    };
+    payload!: IImageRetrievedPayload;
     domain!: string;
     timestamp?: string;
 

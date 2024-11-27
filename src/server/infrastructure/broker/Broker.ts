@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 
 class Broker extends EventEmitter {
     /**
-     * Emit an event or command.
+     * Emit an command/event.
      *
      * @param unit - An event or command.
      */
@@ -11,14 +11,14 @@ class Broker extends EventEmitter {
     }
 
     /**
-     * Subscribe to an event or command.
+     * Subscribe to an command/event.
      *
-     * @param type - The type of the event or command to listen for.
-     * @param listener - The function to handle the event or command.
+     * @param type - The type of the command/event to listen for.
+     * @param listener - The function to handle the command/event.
      */
     sub(type: string, listener: (unit: any) => void) {
         this.on(type, listener);
     }
 }
 
-export default new Broker(); // Singleton instance
+export default new Broker(); // Singleton instance through ES6 module caching

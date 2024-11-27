@@ -1,5 +1,5 @@
 
-import { KOMGA_API, KOMGA_AUTH, APP_CRAWL_PAGE_SIZE } from '.././../config.js';
+import { KOMGA_API, KOMGA_AUTH, APP_CRAWL_PAGE_SIZE } from '../../config.js';
 import CrawledComicsRepository from '../../infrastructure/repositories/CrawledComicsRepository.js';
 import CrawlCommand from '../../domain/comics/commands/CrawlCommand.js';
 import CrawlCompletedEvent from '../../domain/comics/events/CrawlCompletedEvent.js';
@@ -30,6 +30,7 @@ export default class CrawlComicsAggregateRoot {
                 endpoint,
                 payload,
                 totalItems: this.repository.totalItems(),
+                domain: 'comics',
                 timestamp: new Date().toISOString(),
             });
         } catch (error: any) {
@@ -38,6 +39,7 @@ export default class CrawlComicsAggregateRoot {
                 endpoint,
                 url: error.url,
                 error: error.message || error,
+                domain: 'comics',
                 timestamp: new Date().toISOString(),
             });
             error.event = event;

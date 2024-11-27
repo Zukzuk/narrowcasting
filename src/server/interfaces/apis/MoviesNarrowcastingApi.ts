@@ -19,7 +19,7 @@ studio="Paramount Pictures" type="movie" title="The Adventures of Tintin"
 viewCount="1" year="2011" thumb="/library/metadata/7036/thumb/1729734864" 
 art="/library/metadata/7036/art/1729734864" primaryExtraKey="/library/metadata/7193">
 image https://cinema.daveloper.nl/library/metadata/7036/thumb/1729734864?X-Plex-Token=PLEX_API_KEY
-url https://cinema.daveloper.nl/web/index.html#!/server/PLEX_MACHINE_DENTIFIER/details?key=/library/metadata/7036
+url https://cinema.daveloper.nl/web/index.html#!/server/PLEX_MACHINE_IDENTIFIER/details?key=/library/metadata/7036
  */
 
 export default function MoviesNarrowcastingApi(models: any) {

@@ -4,7 +4,11 @@ import VersionReadModel from '../../interfaces/readmodels/VersionReadModel.js';
 
 const router = express.Router();
 
-export default function AppApi(models: { versionReadModel: VersionReadModel }) {
+export default function AppApi(
+    models: { 
+        versionReadModel: VersionReadModel,
+    }
+) {
     const {
         versionReadModel
     } = models;

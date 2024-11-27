@@ -1,14 +1,14 @@
-import AggregateFactory from '../application/AggregateFactory.js';
+import AggregateFactory from '../domain/AggregateFactory.js';
 import { ICommand, CRAWL_COMMAND, RANDOM_IMAGE_COMMAND } from '../domain/Command.js';
 import CrawlCommand from '../domain/comics/commands/CrawlCommand.js';
 import RandomImageCommand from '../domain/comics/commands/RandomImageCommand.js';
 
 import broker from '../infrastructure/broker/Broker.js'; // Singleton instance
 
-export default class CommandHandler {
+class CommandHandler {
     eventHandlers: any;
 
-    constructor(private aggregateFactory: AggregateFactory) {
+    constructor(private aggregateFactory: typeof AggregateFactory) {
         this.eventHandlers = {
             [CRAWL_COMMAND]: async (command: CrawlCommand) => {
                 const aggregateRoot = this.aggregateFactory.createCrawlComics();
@@ -42,3 +42,6 @@ export default class CommandHandler {
         }
     }    
 }
+
+import aggregateFactory from '../domain/AggregateFactory.js';
+export default new CommandHandler(aggregateFactory);

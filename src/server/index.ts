@@ -4,8 +4,6 @@ import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import session from 'express-session';
 // application imports
-import AggregateFactory from './application/AggregateFactory.js';
-import CommandHandler from './application/CommandHandler.js';
 import NarrowcastingBFF from './application/NarrowcastingBFF.js';
 import { 
     getLocalIpAddress,
@@ -59,7 +57,7 @@ server.listen(getPort(), async () => {
 });
 
 // application orchestration
-const commandHandler = new CommandHandler(new AggregateFactory());
+import commandHandler from './application/CommandHandler.js';
 commandHandler.bootstrap();
 const narrowcastingBFF = new NarrowcastingBFF();
-narrowcastingBFF.bootstrap(server, APP_API_PATH, COMICS_NARROWCASTING_API_PATH);
+narrowcastingBFF.bootstrap(server, { APP_API_PATH, COMICS_NARROWCASTING_API_PATH});

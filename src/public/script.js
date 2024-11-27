@@ -1,4 +1,3 @@
-
 import { 
     calculateLoaderColor, 
     adjustAspectRatio, 
@@ -8,42 +7,7 @@ import {
 
 let currentImage = 1;
 let nextImageData = null;
-let abortController;
 let wakeLock = null;
-
-async function fetchImageData(page, interval) {
-    // Cancel the previous request if it exists
-    if (abortController) abortController.abort('Pending image load cancelled by new image load.');
-    abortController = new AbortController();
-    const { signal } = abortController;
-
-    // Setup API url and params
-    const apiUrl = new URL('/api/comics/pages/random', window.location.origin);
-    apiUrl.searchParams.append('page', page);
-    apiUrl.searchParams.append('interval', interval);
-
-    try {
-        const response = await fetch(apiUrl, { signal });
-        // await fetch(apiUrl, { signal, method: 'POST' });
-        if (!response.ok) throw new Error(response.statusText);
-        // Access the custom header
-        const bookUrl = response.headers.get('X-Custom-Book-URL');
-        // Read the response as a binary Blob
-        const blob = await response.blob();
-        return { blob, bookUrl };
-    } catch (error) {
-        if (error.name === 'AbortError') {
-            console.log("Fetch aborted due to a new request.");
-            throw error;
-        } else {
-            console.error("Error fetching image data:", error);
-            throw error;
-        }
-    } finally {
-        // Clear the abortController after the request completes
-        abortController = null;
-    }
-}
 
 function setImageSource(inactiveImage, imageData) {
     const parent = inactiveImage.parentElement;    
@@ -57,25 +21,9 @@ function getActiveAndInactiveImages() {
     return { activeImage, inactiveImage };
 }
 
-async function displayNextImage(page, interval) {
-    const { activeImage, inactiveImage } = getActiveAndInactiveImages();
-    setImageSource(inactiveImage, nextImageData);
-    // Start prefetching the next image after displaying the current one
-    inactiveImage.onload = async () => {
-        adjustAspectRatio(inactiveImage);
-        const value = calculateLoaderColor(inactiveImage);
-        resetLoaderAnimation(value, interval);
-        nextImageData = await fetchImageData(page, interval);
-    };
-    toggleVisibility(activeImage, inactiveImage);
-    currentImage = currentImage === 1 ? 2 : 1;
-}
-
 async function fetchVersion() {
     try {
-        // Setup API url and params
-        const apiUrl = new URL('/api/version', window.location.origin);
-        const response = await fetch(apiUrl);
+        const response = await fetch(new URL('/api/version', window.location.origin));
         if (!response.ok)
             throw new Error('Failed to fetch version');
         return await response.text();
@@ -106,20 +54,6 @@ function getQueryParams() {
     return { interval: interval * 1000, showVersion, page };
 }
 
-async function narrowcasting() {
-    requestWakeLock();
-    // get all queryparams
-    const { page, interval, showVersion } = getQueryParams();
-    displayVersion(showVersion);
-    // Prefetch the first image
-    nextImageData = await fetchImageData(page, interval);
-    // Display the first fetched image
-    displayNextImage(page, interval);
-    // Pass params explicitly
-    setInterval(() => displayNextImage(page, interval), interval);
-}
-narrowcasting();
-
 const fullscreenButton = document.getElementById('fullscreen-button');
 fullscreenButton.addEventListener('click', () => {
     if (!document.fullscreenElement) {
@@ -128,7 +62,6 @@ fullscreenButton.addEventListener('click', () => {
             console.error(`Error attempting to enable fullscreen mode: ${err.message}`);
         });
     } else {
-        // Exit fullscreen mode
         document.exitFullscreen(); 
     }
 });
@@ -149,4 +82,57 @@ async function requestWakeLock() {
 document.addEventListener('visibilitychange', () => {
     if (wakeLock !== null && document.visibilityState === 'visible') requestWakeLock();
 });
+
+async function commandRetrieveImage(page, interval) {
+    const url = new URL('/api/comics/pages/random', window.location.origin);
+    url.searchParams.append('page', page);
+    url.searchParams.append('interval', interval);
+
+    try {
+        return await fetch(url, { method: 'POST' });
+    } catch (error) {
+        console.error('Error fetching image:', error);
+    }
+}
+
+async function queryImage() {
+    const url = new URL('/api/comics/images', window.location.origin);
+
+    try {
+        const response = await fetch(url);
+        const bookUrl = response.headers.get('X-Custom-Book-URL');
+        const blob = await response.blob();
+        return { blob, bookUrl };
+    } catch (error) {
+        console.error('Error fetching image:', error);
+    }
+}
+
+async function displayNextImage(page, interval) {
+    const { activeImage, inactiveImage } = getActiveAndInactiveImages();
+    nextImageData = await queryImage();
+    commandRetrieveImage(page, interval);
+    setImageSource(inactiveImage, nextImageData);
+    inactiveImage.onload = async () => {
+        adjustAspectRatio(inactiveImage);
+        const value = calculateLoaderColor(inactiveImage);
+        resetLoaderAnimation(value, interval);
+    };
+    toggleVisibility(activeImage, inactiveImage);
+    currentImage = currentImage === 1 ? 2 : 1;
+}
+
+async function narrowcasting() {
+    requestWakeLock();
+    const { page, interval, showVersion } = getQueryParams();
+    displayVersion(showVersion);
+
+    // Command retrieval of the first image
+    await commandRetrieveImage(page, interval);
+    // Display the first fetched image
+    setTimeout(() => displayNextImage(page, interval), 3000);
+    // Set interval to display the next images
+    setInterval(() => displayNextImage(page, interval), interval);
+}
+narrowcasting();
 

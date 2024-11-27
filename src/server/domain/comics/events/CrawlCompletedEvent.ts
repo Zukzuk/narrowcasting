@@ -4,6 +4,7 @@ interface ICrawlCompletedEventData {
     endpoint: string;
     totalItems: number;
     payload: Record<string, string>;
+    domain: string;
     timestamp?: string;
 }
 
@@ -16,6 +17,7 @@ export default class CrawlCompletedEvent implements ISuccessEvent {
     payload!: Record<string, string>;
     endpoint!: string;
     totalItems!: number;
+    domain!: string;
     timestamp?: string;
 
     constructor(data: ICrawlCompletedEventData) {

@@ -3,8 +3,7 @@ import { RANDOM_IMAGE_COMMAND, ICommand } from "../../../domain/Command.js";
 interface IRandomImageCommandData {
     payload: { 
         page: number, 
-        interval: number,
-        session: any
+        interval: number
     };
     timestamp?: string;
 }
@@ -17,8 +16,7 @@ export default class RandomImageCommand implements ICommand {
     
     payload!: { 
         page: number, 
-        interval: number,
-        session: any
+        interval: number
     };
     timestamp?: string;
 

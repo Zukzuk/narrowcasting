@@ -3,6 +3,7 @@ import { IMAGE_RETRIEVAL_FAILED_EVENT, IFailedEvent } from "../../../domain/Even
 interface IImageRetrievalFailedEventData {
     url: string;
     error: any;
+    domain: string;
     timestamp?: string;
 }
 
@@ -14,6 +15,7 @@ export default class ImageRetrievalFailedEvent implements IFailedEvent {
 
     url!: string;
     error!: any;
+    domain!: string;
     timestamp?: string;
 
     constructor(data: IImageRetrievalFailedEventData) {

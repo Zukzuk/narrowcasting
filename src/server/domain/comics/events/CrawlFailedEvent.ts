@@ -4,6 +4,7 @@ interface ICrawlFailedEventData {
     endpoint: string;
     url: string;
     error: any;
+    domain: string;
     timestamp?: string;
 }
 
@@ -16,6 +17,7 @@ export default class CrawlFailedEvent implements IFailedEvent {
     error!: any; // Replace `any` with a specific error type if needed
     endpoint!: string;
     url!: string;
+    domain!: string;
     timestamp?: string;
 
     constructor(data: ICrawlFailedEventData) {

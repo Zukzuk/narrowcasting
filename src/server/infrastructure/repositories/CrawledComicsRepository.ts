@@ -9,13 +9,10 @@ export default class CrawledComicsRepository {
 
     save(endpoint: string, data: any): Record<string, string> {
         if (!this.cache[endpoint]) this.cache[endpoint] = {};
-
         data.forEach((item: any) => {
             this.cache[endpoint][item.id] = item.name;
         });
-
         const payload = this.cache[endpoint];
-
         this.cacheLength = parseInt(payload.length, 10);
 
         this.log('save', endpoint, payload, new Date().toISOString());
@@ -36,6 +33,6 @@ export default class CrawledComicsRepository {
     }
 
     log(action: string, endpoint: string, payload: Record<string, string>, timestamp: string) {
-        console.log(`CrawledComicsRepository: ${action}d ${Object.keys(payload).length} items for '${endpoint}' at ${timestamp}`);
+        console.log(`CrawledComicsRepository: ${action} -> ${Object.keys(payload).length} items for '${endpoint}' at ${timestamp}`);
     }
 }
