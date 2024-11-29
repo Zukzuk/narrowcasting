@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { TCommand } from '../../domain/Command.js';
-import { TEvent } from '../..domain/Event.js';
+import { TEvent } from '../../domain/Event.js';
 
 type CommandsAndEvents = TCommand | TEvent;
 
