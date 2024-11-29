@@ -1,8 +1,10 @@
 import express from 'express';
 import { handleError } from '../../helpers.js';
+import RandomImageCommand from '../../domain/generic/commands/RandomImageCommand.js';
 import VersionReadModel from '../../interfaces/readmodels/VersionReadModel.js';
 import ImageReadModel from '../../interfaces/readmodels/ImageReadModel.js';
 
+import broker from '../../infrastructure/broker/Broker.js';
 const router = express.Router();
 
 export default function AppApi(
@@ -43,6 +45,59 @@ export default function AppApi(
             res.type('text').send(response); // Send as plain text
         } catch (error: any) {
             handleError(error, res, "Error requesting version");
+        }
+    });
+
+    /**
+     * @openapi
+     * /api/images/random:
+     *   post:
+     *     tags: 
+     *       - application
+     *     summary: Command the retrieval of a random image
+     *     description: Commands the system to retrieve a random image from Komga
+     *     parameters:
+     *       - in: query
+     *         name: page
+     *         schema:
+     *           type: integer
+     *           default: 0
+     *         description: Page number of selected page
+     *       - in: query
+     *         name: interval
+     *         schema:
+     *           type: integer
+     *           default: 10
+     *         description: Time interval for retrieving a random image
+     *     responses:
+     *       200:
+     *         description: Command accepted
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "ok"
+     *               description: Command accepted
+     *       500:
+     *         description: Internal Server Error or no valid image found
+     */
+    router.post('/images/random', async (req: any, res: any) => {
+        const {
+            page = 0,
+            interval = 10000
+        }: {
+            page: number,
+            interval: number
+        } = req.query;
+
+        try {
+            broker.pub(new RandomImageCommand({
+                payload: { page, interval },
+                timestamp: new Date().toISOString()
+            }));
+            res.status(202).type('text').send('ok');
+        } catch (error: any) {
+            handleError(error, res, "Error publishing RandomImageCommand");
         }
     });
 

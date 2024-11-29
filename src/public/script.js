@@ -84,7 +84,7 @@ document.addEventListener('visibilitychange', () => {
 });
 
 async function commandRetrieveImage(page, interval) {
-    const url = new URL('/api/comics/pages/random', window.location.origin);
+    const url = new URL('/api/images/random', window.location.origin);
     url.searchParams.append('page', page);
     url.searchParams.append('interval', interval);
 

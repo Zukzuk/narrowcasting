@@ -17,19 +17,19 @@ export default function MediaNarrowcastingApi(
 
     /**
      * @openapi
-     * /api/movies/covers/random:
+     * /api/media/covers/random:
      *   post:
      *     tags: 
-     *       - movies-narrowcasting
-     *     summary: Command the retrieval of a random movie cover
-     *     description: Commands the system to retrieve a random movie cover from Plex
+     *       - media-narrowcasting
+     *     summary: Command the retrieval of a random media cover
+     *     description: Commands the system to retrieve a random media cover from Plex
      *     parameters:
      *       - in: query
      *         name: interval
      *         schema:
      *           type: integer
      *           default: 10
-     *         description: Time interval for retrieving a random movie cover
+     *         description: Time interval for retrieving a random media cover
      *     responses:
      *       200:
      *         description: Command accepted
@@ -64,10 +64,10 @@ export default function MediaNarrowcastingApi(
 
     /**
      * @openapi
-     * /api/movies/images:
+     * /api/media/images:
      *   get:
      *     tags: 
-     *       - movies-narrowcasting
+     *       - media-narrowcasting
      *     summary: Fetch last retrieved image
      *     description: Initiates fetch of last retrieved image data
      *     responses:
