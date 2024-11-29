@@ -8,6 +8,7 @@ import CrawlComicsEndpointService from './services/CrawlComicsEndpointService.js
 
 export default class CrawlComicsAggregateRoot {
     private crawlComicsEndpointService: CrawlComicsEndpointService;
+    private domain: string = 'comics';
 
     constructor(private repository: CrawledComicsRepository) {
         this.crawlComicsEndpointService = new CrawlComicsEndpointService(KOMGA_API, KOMGA_AUTH, APP_CRAWL_PAGE_SIZE);
@@ -15,6 +16,7 @@ export default class CrawlComicsAggregateRoot {
 
     async consume(command: CrawlCommand): Promise<CrawlCompletedEvent | CrawlFailedEvent> {
         const { endpoint } = command.payload;
+
         try {
             // Get the available cache
             let payload = this.repository.retrieve(endpoint);
@@ -26,22 +28,10 @@ export default class CrawlComicsAggregateRoot {
             }
 
             // Return a business event
-            return new CrawlCompletedEvent({
-                endpoint,
-                payload,
-                totalItems: this.repository.totalItems(),
-                domain: 'comics',
-                timestamp: new Date().toISOString(),
-            });
+            return new CrawlCompletedEvent(payload, endpoint, this.repository.totalItems(), this.domain);
         } catch (error: any) {
             // Return failure event
-            const event = new CrawlFailedEvent({
-                endpoint,
-                url: error.url,
-                error: error.message || error,
-                domain: 'comics',
-                timestamp: new Date().toISOString(),
-            });
+            const event = new CrawlFailedEvent(error.message || error, endpoint, error.url, this.domain);
             error.event = event;
             throw error;
         }

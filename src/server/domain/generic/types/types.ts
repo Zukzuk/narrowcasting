@@ -1,1 +1,0 @@
-export type TDomain = "comics" | "audiobooks" | "movies" | "series" | "animated-movies" | "animated-series";

@@ -1,20 +1,10 @@
-import { CRAWL_COMMAND, ICommand } from "../../../domain/Command.js";
+import { Timestamped } from "../../../domain/Annotations.js";   
 
-interface ICrawlCommandData {
-    payload: { endpoint: string };
-    timestamp?: string;
-}
+export const CRAWL_COMMAND = 'CRAWL_COMMAND' as const;
 
-export default class CrawlCommand implements ICommand {
+@Timestamped
+export default class CrawlCommand {
     public static type = CRAWL_COMMAND;
-    public get type() {
-        return CRAWL_COMMAND;
-    }
-
-    payload!: { endpoint: string };
-    timestamp?: string;
-
-    constructor(data: ICrawlCommandData) {
-        Object.assign(this, data);
-    }
+    type = CRAWL_COMMAND;
+    constructor(public payload: { endpoint: string }) {}
 }

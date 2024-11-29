@@ -55,7 +55,7 @@ export default class MediaImageService {
         interval: number,
         startTime: number,
         retryCount: number
-    ): Promise<Buffer> => {
+    ): Promise<Buffer | "RETRY"> => {
         try {
             const image = await axios.get(`${this.PLEX_API}${thumb}`, {
                 params: { 'X-Plex-Token': this.PLEX_API_KEY },

@@ -1,27 +1,32 @@
 import { EventEmitter } from 'events';
-import { ICommand } from '../../domain/Command.js';
-import { IFailedEvent, ISuccessEvent } from '../../domain/Event.js';
+import { TCommand } from '../../domain/Command.js';
+import { TEvent } from '../..domain/Event.js';
+
+type CommandsAndEvents = TCommand | TEvent;
 
 class Broker extends EventEmitter {
     /**
-     * Emit an command/event.
+     * Publish a command or event.
      *
-     * @param unit - An command/event.
+     * @param unit - The command or event to publish.
      */
-    pub(unit: any) {
+    pub(unit: CommandsAndEvents) {
         if (unit) {
             console.log('Broker: pub ->', unit.type);
             super.emit(unit.type, unit);
-            }
+        }
     }
 
     /**
-     * Subscribe to an command/event.
+     * Subscribe to a command or event type.
      *
-     * @param type - The type of the command/event to listen for.
-     * @param listener - The function to handle the command/event.
+     * @param type - The type of the command or event to listen for.
+     * @param listener - The function to handle the command or event.
      */
-    sub(type: string, listener: (unit: any) => void) {
+    sub<K extends CommandsAndEvents['type']>(
+        type: K,
+        listener: (unit: Extract<CommandsAndEvents, { type: K }>) => void
+    ) {
         console.log('Broker: sub ->', type);
         this.on(type, listener);
     }

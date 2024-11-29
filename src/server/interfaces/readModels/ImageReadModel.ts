@@ -1,4 +1,4 @@
-import ImageRetrievedEvent, { TImageRetrievedPayload } from "../../domain/generic/events/ImageRetrievedEvent.js";
+import ImageRetrievedEvent, { TImageRetrievedPayload } from "../../domain/shared/events/ImageRetrievedEvent.js";
 
 import broker from "../../infrastructure/broker/Broker.js";
 

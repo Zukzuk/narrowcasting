@@ -3,25 +3,21 @@ import compression from 'compression';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import session from 'express-session';
-// application imports
-import NarrowcastingBFF from './application/NarrowcastingBFF.js';
-import { 
+import {
     getLocalIpAddress,
     getHostName,
     getGatewayAddress,
     getPort,
     doAxiosLogging,
 } from './utils.js';
-import { 
-    APP_SESSION_SECRET, 
-    APP_CACHE_DURATION, 
+import {
+    APP_SESSION_SECRET,
+    APP_CACHE_DURATION,
     APP_API_DOCS_PATH,
     APP_STATIC_SERVE_PATH,
-    APP_API_PATH,
-    KOMGA_ORIGIN, 
-    COMICS_NARROWCASTING_API_PATH,
-    MEDIA_NARROWCASTING_API_PATH,
+    KOMGA_ORIGIN,
 } from './config.js';
+import orchestrate from './orchestrate.js';
 
 // initialize
 const server = express();
@@ -55,14 +51,6 @@ server.listen(getPort(), async () => {
         `gatewayAddress='${await getGatewayAddress()}'`,
         `Hostname='${getHostName()}'`,
     );
-});
-
-// application orchestration
-import commandHandler from './application/CommandHandler.js'; // Singleton instance
-commandHandler.bootstrap();
-const narrowcastingBFF = new NarrowcastingBFF();
-narrowcastingBFF.bootstrap(server, { 
-    APP_API_PATH, 
-    COMICS_NARROWCASTING_API_PATH,
-    MEDIA_NARROWCASTING_API_PATH,
+    // application orchestration
+    orchestrate(server);
 });

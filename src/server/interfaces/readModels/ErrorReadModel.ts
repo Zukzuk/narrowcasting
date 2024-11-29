@@ -1,4 +1,4 @@
-import ImageRetrievalFailedEvent from "../../domain/generic/events/ImageRetrievalFailedEvent.js";
+import ImageRetrievalFailedEvent from "../../domain/shared/events/ImageRetrievalFailedEvent.js";
 import CrawlFailedEvent from "../../domain/comics/events/CrawlFailedEvent.js";
 
 import broker from "../../infrastructure/broker/Broker.js";

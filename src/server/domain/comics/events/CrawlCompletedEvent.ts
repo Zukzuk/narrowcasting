@@ -1,26 +1,19 @@
-import { CRAWL_COMPLETED_EVENT, ISuccessEvent } from "../../../domain/Event.js";
+import { Timestamped } from "../../../domain/Annotations.js";
 
-interface ICrawlCompletedEventData {
-    endpoint: string;
-    totalItems: number;
-    payload: Record<string, string>;
-    domain: string;
-    timestamp?: string;
-}
+export const CRAWL_COMPLETED_EVENT = 'CRAWL_COMPLETED_EVENT' as const;
 
-export default class CrawlCompletedEvent implements ISuccessEvent {
+export type TCrawlCompletedPayload = Record<string, string>;
+
+@Timestamped
+export default class CrawlCompletedEvent {
     public static type = CRAWL_COMPLETED_EVENT;
-    public get type() {
-        return CRAWL_COMPLETED_EVENT;
-    }
+    type = CRAWL_COMPLETED_EVENT;
 
-    payload!: Record<string, string>;
-    endpoint!: string;
-    totalItems!: number;
-    domain!: string;
-    timestamp?: string;
-
-    constructor(data: ICrawlCompletedEventData) {
-        Object.assign(this, data);
-    }
+    constructor(
+        public payload: TCrawlCompletedPayload,
+        public endpoint: string,
+        public totalItems: number,
+        public domain: string,
+        public timestamp?: string
+    ) {}
 }

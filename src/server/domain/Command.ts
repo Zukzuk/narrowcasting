@@ -1,9 +1,4 @@
-export const CRAWL_COMMAND = 'CRAWL_COMMAND' as const;
-export const RANDOM_IMAGE_COMMAND = 'RANDOM_IMAGE_COMMAND' as const;
+import CrawlCommand from './comics/commands/CrawlCommand.js';
+import RandomImageCommand from './shared/commands/RandomImageCommand.js';
 
-export interface ICommand {
-    type: 
-    typeof CRAWL_COMMAND | 
-    typeof RANDOM_IMAGE_COMMAND;
-    payload: any;
-}
+export type TCommand = CrawlCommand | RandomImageCommand;

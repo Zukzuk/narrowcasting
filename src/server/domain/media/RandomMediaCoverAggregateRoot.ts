@@ -1,17 +1,18 @@
 import { PLEX_API_KEY, PLEX_MACHINE_IDENTIFIER, PLEX_API, PLEX_ORIGIN } from '../../config.js';
-import RandomImageCommand from '../generic/commands/RandomImageCommand.js';
-import ImageRetrievedEvent from '../generic/events/ImageRetrievedEvent.js';
-import ImageRetrievalFailedEvent from '../generic/events/ImageRetrievalFailedEvent.js';
+import RandomImageCommand from '../shared/commands/RandomImageCommand.js';
+import ImageRetrievedEvent from '../shared/events/ImageRetrievedEvent.js';
+import ImageRetrievalFailedEvent from '../shared/events/ImageRetrievalFailedEvent.js';
 import MediaImageService from '../../domain/media/services/MediaImageService.js';
-import ImageOptimizeService from '../generic/services/ImageOptimizeService.js';
+import ImageOptimizeService from '../shared/services/ImageOptimizeService.js';
 import MediaImageSetRepository from '../../infrastructure/repositories/MediaImageSetRepository.js';
-import { TDomain } from '../generic/types/types.js';
+import { TDomain } from '../shared/types/types.js';
 
 export default class RandomMediaCoverAggregateRoot {
     private mediaImageService: MediaImageService;
     private imageOptimizeService: ImageOptimizeService;
     private timestamp: number = 0;
     private retries: number = -1;
+    private domain: TDomain = 'media';
 
     constructor(private mediaImageSetRepository: MediaImageSetRepository) {
         this.mediaImageService = new MediaImageService(PLEX_API_KEY, PLEX_API);
@@ -24,41 +25,39 @@ export default class RandomMediaCoverAggregateRoot {
         this.timestamp = this.timestamp || Date.now();
 
         try {
+            // Fetch all media sections
             const sections = await this.mediaImageService.fetchSections();
-            // const movieKey = sections.find((d: any) => d.title === 'Movies').key;
+            
+            // Randomly select a section
             const index = Math.floor((Math.random() * sections.length));
             const key = sections[index].key;
-            const domain = sections[index].title.toLowerCase().replace(/ /g, '-') as TDomain;
-            const hasSet = this.mediaImageSetRepository.retrieveTotal(domain);
+            this.domain = sections[index].title.toLowerCase().replace(/ /g, '-') as TDomain;
+            
+            // Check if set is filled
+            const hasSet = this.mediaImageSetRepository.retrieveTotal(this.domain);
             if (!hasSet) {
-                const response = await this.mediaImageService.fetchSectionMedia(domain, key);
-                this.mediaImageSetRepository.save(domain, response);
+                // Fill set with media from domain
+                const response = await this.mediaImageService.fetchSectionMedia(this.domain, key);
+                this.mediaImageSetRepository.save(this.domain, response);
             }
-            const randomIndex = this.mediaImageSetRepository.retrieveFromSet(domain);
-            const randomMedia = this.mediaImageSetRepository.retrieveData(domain, randomIndex);
+            
+            // Get random media
+            const randomIndex = this.mediaImageSetRepository.retrieveFromSet(this.domain);
+            const randomMedia = this.mediaImageSetRepository.retrieveData(this.domain, randomIndex);
             const url = `${PLEX_ORIGIN}/web/index.html#!/server/${PLEX_MACHINE_IDENTIFIER}/details?key=/library/metadata/${randomMedia.ratingKey}`;
+            
+            // Fetch image
             const response = await this.mediaImageService.fetchImage(randomMedia.thumb, guardedInterval, this.timestamp, ++this.retries);
-            // if (response === 'RETRY') await this.consume(command);
-            const { optimizedImage, contentType } = await this.imageOptimizeService.webp(response, 90);
+            if (response === 'RETRY') await this.consume(command);
+            
+            // Optimize image
+            const { optimizedImage, contentType } = await this.imageOptimizeService.webp(response as Buffer, 90);
 
             // Return a business event
-            return new ImageRetrievedEvent({
-                payload: {
-                    image: optimizedImage,
-                    contentType,
-                    url,
-                },
-                domain,
-                timestamp: new Date().toISOString(),
-            });
+            return new ImageRetrievedEvent({image: optimizedImage, contentType, url }, this.domain);
         } catch (error: any) {
             // Return failure event
-            const event = new ImageRetrievalFailedEvent({
-                url: error.url,
-                error: error.message,
-                domain: 'movies',
-                timestamp: new Date().toISOString(),
-            });
+            const event = new ImageRetrievalFailedEvent(error.message, error.url, this.domain);
             error.event = event;
             throw error;
         }

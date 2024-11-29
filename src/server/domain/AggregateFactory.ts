@@ -16,9 +16,7 @@ class AggregateFactory {
         this.comicsImageSetRepository = new ComicsImageSetRepository(APP_CACHE_DURATION);
         this.mediaImageSetRepository = new MediaImageSetRepository(APP_CACHE_DURATION);
     }
-
-    // Pass the shared repository to ensure consistent state
-
+    
     createCrawlComics(): CrawlComicsAggregateRoot {        
         return new CrawlComicsAggregateRoot(this.crawledComicsRepository);
     }
@@ -32,4 +30,4 @@ class AggregateFactory {
     }
 }
 
-export default new AggregateFactory();
+export default new AggregateFactory(); // Singleton instance through ES6 module caching

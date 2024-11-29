@@ -10,6 +10,8 @@
         "allowJs": true, // Allow JavaScript files to be compiled
         "checkJs": false, // Disable type checking for JavaScript files
         "resolveJsonModule": true, // Allow importing JSON files
+        "experimentalDecorators": true, // Enable experimental decorators
+        "emitDecoratorMetadata": true, // Emit design-type metadata for decorators
         "sourceMap": true, // Include source maps for debugging
         "skipLibCheck": true, // Skip type checking of declaration files
         "baseUrl": "./src" // Base path for module resolution

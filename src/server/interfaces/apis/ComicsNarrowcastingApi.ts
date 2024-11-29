@@ -1,6 +1,6 @@
 import express from 'express';
 import { handleError } from '../../helpers.js';
-import RandomImageCommand from '../../domain/generic/commands/RandomImageCommand.js';
+import RandomImageCommand from '../../domain/shared/commands/RandomImageCommand.js';
 import ComicsCrawlReadModel from '../../interfaces/readmodels/ComicsCrawlReadModel.js';
 import ImageReadModel from '../../interfaces/readmodels/ImageReadModel.js';
 
@@ -77,10 +77,7 @@ export default function ComicsNarrowcastingApi(
         } = req.query;
 
         try {
-            broker.pub(new RandomImageCommand({
-                payload: { page, interval },
-                timestamp: new Date().toISOString()
-            }));
+            broker.pub(new RandomImageCommand({ page, interval }));
             res.status(202).type('text').send('ok');
         } catch (error: any) {
             handleError(error, res, "Error publishing RandomImageCommand");

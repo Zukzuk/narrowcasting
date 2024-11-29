@@ -1,18 +1,10 @@
-export const CRAWL_COMPLETED_EVENT = 'CRAWL_COMPLETED_EVENT' as const;
-export const CRAWL_FAILED_EVENT = 'CRAWL_FAILED_EVENT' as const;
-export const IMAGE_RETRIEVED_EVENT = 'IMAGE_RETRIEVED_EVENT' as const;
-export const IMAGE_RETRIEVAL_FAILED_EVENT = 'IMAGE_RETRIEVAL_FAILED_EVENT' as const;
+import CrawlCompletedEvent from '../domain/comics/events/CrawlCompletedEvent.js';
+import CrawlFailedEvent from '../domain/comics/events/CrawlFailedEvent.js';
+import ImageRetrievedEvent from '../domain/shared/events/ImageRetrievedEvent.js';
+import ImageRetrievalFailedEvent from '../domain/shared/events/ImageRetrievalFailedEvent.js';
 
-export interface ISuccessEvent {
-    type:
-    typeof CRAWL_COMPLETED_EVENT |
-    typeof IMAGE_RETRIEVED_EVENT;
-    payload: any;
-}
-
-export interface IFailedEvent {
-    type: 
-    typeof CRAWL_FAILED_EVENT | 
-    typeof IMAGE_RETRIEVAL_FAILED_EVENT;
-    error: any;
-}
+export type TEvent =
+    | CrawlCompletedEvent
+    | CrawlFailedEvent
+    | ImageRetrievedEvent
+    | ImageRetrievalFailedEvent;

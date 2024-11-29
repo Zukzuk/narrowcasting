@@ -8,7 +8,7 @@ import CrawlCommand from '../domain/comics/commands/CrawlCommand.js';
 
 import broker from '../infrastructure/broker/Broker.js'; // Singleton instance
 
-export default class NarrowcastingBFF {
+class NarrowcastingBFF {
     private versionReadModel: VersionReadModel;
     private comicsCrawlReadModel: ComicsCrawlReadModel;
     private imageReadModel: ImageReadModel;
@@ -45,13 +45,9 @@ export default class NarrowcastingBFF {
         }));
 
         // eager commands
-        broker.pub(new CrawlCommand({
-            payload: { endpoint: 'series' },
-            timestamp: new Date().toISOString(),
-        }));
-        broker.pub(new CrawlCommand({ 
-            payload: { endpoint: 'collections' }, 
-            timestamp: new Date().toISOString(),
-        }));
+        broker.pub(new CrawlCommand({ endpoint: 'series' }));
+        broker.pub(new CrawlCommand({ endpoint: 'collections' }));
     }
 }
+
+export default new NarrowcastingBFF(); // Singleton instance through ES6 module caching
