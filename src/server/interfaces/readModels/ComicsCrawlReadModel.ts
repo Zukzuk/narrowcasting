@@ -7,18 +7,18 @@ export default class ComicsCrawlReadModel {
 
     constructor() {
         // subscribe to events
-        broker.sub(CrawlCompletedEvent.type, event => this.#denormalize(event));
-    }
-
-    #denormalize(event: CrawlCompletedEvent) {
-        console.log('ComicsCrawlReadModel:', event.type, event.endpoint, event.domain);
-        // denormalize
-        this.cache[event.endpoint] = event.payload;
+        broker.sub(CrawlCompletedEvent.type, event => {
+            console.log('ComicsCrawlReadModel: listen ->', event.type, event.endpoint, event.domain);
+            this.#denormalize(event);
+        });
     }
 
     query({ endpoint, search }: { endpoint: string, search: string }): Record<string, any> {
         const payload = this.cache[endpoint] || {};
         if (!search) return payload;
+
+        console.log('ComicsCrawlReadModel: query ->', endpoint, search);
+
         // Create a case-insensitive fuzzy matching pattern allowing for variations
         const pattern = new RegExp(search.split(" ").join(".*"), "i");
         // Filter the payload with generalized fuzzy matching
@@ -28,5 +28,10 @@ export default class ComicsCrawlReadModel {
                 acc[key] = payload[key];
                 return acc;
             }, {});
+    }
+
+    #denormalize(event: CrawlCompletedEvent) {
+        // denormalize
+        this.cache[event.endpoint] = event.payload;
     }
 }

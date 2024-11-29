@@ -1,4 +1,4 @@
-export default class ImageRepository {
+export default class ComicImagesSetRepository {
     private set: number[];
     private total: number;
     private expiration: number;
@@ -42,12 +42,12 @@ export default class ImageRepository {
         return this.total;
     }
 
-    retrieveNumInSet(): number | null {
-        return (this.set) ? this.set.length : null;
+    retrieveNumInSet(): number {
+        return (this.set) ? this.set.length : 0;
     }
 
     #log(action: string, value: any, timestamp: string) {
-        console.log(`RandomComicsRepository: ${action} -> ${value} at ${timestamp}`);
+        console.log(`ComicsImageSetRepository: ${action} -> ${value} at ${timestamp}`);
     }
 
     #shuffleArray(array: number[]): number[] {

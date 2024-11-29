@@ -20,9 +20,8 @@ import {
     APP_API_PATH,
     KOMGA_ORIGIN, 
     COMICS_NARROWCASTING_API_PATH,
+    MEDIA_NARROWCASTING_API_PATH,
 } from './config.js';
-
-import swaggerSpec from './swagger.js'; // Singleton instance
 
 // initialize
 const server = express();
@@ -31,7 +30,7 @@ const server = express();
 server.use(cors({
     origin: KOMGA_ORIGIN,
     methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-XSRF-TOKEN'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-XSRF-TOKEN', 'X-Custom-Image-URL'],
     credentials: true,
 }));
 server.use(session({
@@ -42,12 +41,14 @@ server.use(session({
 }));
 server.use(compression());
 server.use(express.static(APP_STATIC_SERVE_PATH));
+
+import swaggerSpec from './swagger.js'; // Singleton instance
 server.use(APP_API_DOCS_PATH, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// logging
-doAxiosLogging(true, false);
 // start server
 server.listen(getPort(), async () => {
+    // logging
+    doAxiosLogging(true, false);
     console.log(
         `Server is running`,
         `Address='${getLocalIpAddress()}:${getPort()}'`,
@@ -57,7 +58,11 @@ server.listen(getPort(), async () => {
 });
 
 // application orchestration
-import commandHandler from './application/CommandHandler.js';
+import commandHandler from './application/CommandHandler.js'; // Singleton instance
 commandHandler.bootstrap();
 const narrowcastingBFF = new NarrowcastingBFF();
-narrowcastingBFF.bootstrap(server, { APP_API_PATH, COMICS_NARROWCASTING_API_PATH});
+narrowcastingBFF.bootstrap(server, { 
+    APP_API_PATH, 
+    COMICS_NARROWCASTING_API_PATH,
+    MEDIA_NARROWCASTING_API_PATH,
+});

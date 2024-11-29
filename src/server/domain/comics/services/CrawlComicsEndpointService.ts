@@ -1,7 +1,7 @@
 import axios, { AxiosBasicCredentials } from 'axios';
 import { UrlError } from '../../../helpers.js';
 
-export default class CrawlService {
+export default class CrawlComicsEndpointService {
     constructor(private KOMGA_API: string, private KOMGA_AUTH: AxiosBasicCredentials, private APP_CRAWL_PAGE_SIZE: number) {}
 
     async crawl(endpoint: string): Promise<any[]> {

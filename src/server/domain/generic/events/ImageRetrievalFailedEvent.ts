@@ -1,9 +1,10 @@
 import { IMAGE_RETRIEVAL_FAILED_EVENT, IFailedEvent } from "../../../domain/Event.js";
+import { TDomain } from "../../../domain/generic/types/types.js";
 
 interface IImageRetrievalFailedEventData {
     url: string;
     error: any;
-    domain: string;
+    domain: TDomain;
     timestamp?: string;
 }
 
@@ -15,7 +16,7 @@ export default class ImageRetrievalFailedEvent implements IFailedEvent {
 
     url!: string;
     error!: any;
-    domain!: string;
+    domain!: TDomain;
     timestamp?: string;
 
     constructor(data: IImageRetrievalFailedEventData) {

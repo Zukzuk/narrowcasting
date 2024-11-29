@@ -1,4 +1,4 @@
-import ImageRetrievalFailedEvent from "server/domain/comics/events/ImageRetrievalFailedEvent.js";
+import ImageRetrievalFailedEvent from "../../domain/generic/events/ImageRetrievalFailedEvent.js";
 import CrawlFailedEvent from "../../domain/comics/events/CrawlFailedEvent.js";
 
 import broker from "../../infrastructure/broker/Broker.js";
@@ -9,8 +9,14 @@ export default class ErrorReadModel {
     constructor() {
         this.errors = [];
         // subscribe to events
-        broker.sub(CrawlFailedEvent.type, event => this.#denormalize(event));
-        broker.sub(ImageRetrievalFailedEvent.type, event => this.#denormalize(event));
+        broker.sub(CrawlFailedEvent.type, event => {
+            console.log('ErrorReadModel: listen ->', event.type);
+            this.#denormalize(event);
+        });
+        broker.sub(ImageRetrievalFailedEvent.type, event => {
+            console.log('ErrorReadModel: listen ->', event.type);
+            this.#denormalize(event);
+        });
     }
 
     #denormalize(
@@ -23,6 +29,8 @@ export default class ErrorReadModel {
     }
 
     query(): any[] {
+        console.log('ErrorReadModel: query -> errors');
+
         return this.errors;
     }
     

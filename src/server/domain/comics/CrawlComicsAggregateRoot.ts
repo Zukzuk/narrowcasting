@@ -4,13 +4,13 @@ import CrawledComicsRepository from '../../infrastructure/repositories/CrawledCo
 import CrawlCommand from '../../domain/comics/commands/CrawlCommand.js';
 import CrawlCompletedEvent from '../../domain/comics/events/CrawlCompletedEvent.js';
 import CrawlFailedEvent from '../../domain/comics/events/CrawlFailedEvent.js';
-import CrawlService from '../../domain/comics/services/CrawlService.js';
+import CrawlComicsEndpointService from './services/CrawlComicsEndpointService.js';
 
 export default class CrawlComicsAggregateRoot {
-    private crawlService: CrawlService;
+    private crawlComicsEndpointService: CrawlComicsEndpointService;
 
     constructor(private repository: CrawledComicsRepository) {
-        this.crawlService = new CrawlService(KOMGA_API, KOMGA_AUTH, APP_CRAWL_PAGE_SIZE);
+        this.crawlComicsEndpointService = new CrawlComicsEndpointService(KOMGA_API, KOMGA_AUTH, APP_CRAWL_PAGE_SIZE);
     }
 
     async consume(command: CrawlCommand): Promise<CrawlCompletedEvent | CrawlFailedEvent> {
@@ -21,7 +21,7 @@ export default class CrawlComicsAggregateRoot {
 
             // Crawl if no cache is available
             if (!payload) {
-                const data = await this.crawlService.crawl(endpoint);
+                const data = await this.crawlComicsEndpointService.crawl(endpoint);
                 payload = this.repository.save(endpoint, data);
             }
 

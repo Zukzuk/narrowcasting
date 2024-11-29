@@ -1,13 +1,18 @@
 import { EventEmitter } from 'events';
+import { ICommand } from '../../domain/Command.js';
+import { IFailedEvent, ISuccessEvent } from '../../domain/Event.js';
 
 class Broker extends EventEmitter {
     /**
      * Emit an command/event.
      *
-     * @param unit - An event or command.
+     * @param unit - An command/event.
      */
     pub(unit: any) {
-        super.emit(unit.type, unit);
+        if (unit) {
+            console.log('Broker: pub ->', unit.type);
+            super.emit(unit.type, unit);
+            }
     }
 
     /**
@@ -17,6 +22,7 @@ class Broker extends EventEmitter {
      * @param listener - The function to handle the command/event.
      */
     sub(type: string, listener: (unit: any) => void) {
+        console.log('Broker: sub ->', type);
         this.on(type, listener);
     }
 }

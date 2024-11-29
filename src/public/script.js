@@ -1,8 +1,8 @@
-import { 
-    calculateLoaderColor, 
-    adjustAspectRatio, 
-    toggleVisibility, 
-    resetLoaderAnimation 
+import {
+    calculateLoaderColor,
+    adjustAspectRatio,
+    toggleVisibility,
+    resetLoaderAnimation
 } from './utils.js';
 
 let currentImage = 1;
@@ -10,8 +10,8 @@ let nextImageData = null;
 let wakeLock = null;
 
 function setImageSource(inactiveImage, imageData) {
-    const parent = inactiveImage.parentElement;    
-    parent.href = imageData.bookUrl;
+    const parent = inactiveImage.parentElement;
+    parent.href = imageData.imageUrl;
     inactiveImage.src = URL.createObjectURL(imageData.blob);
 }
 
@@ -62,7 +62,7 @@ fullscreenButton.addEventListener('click', () => {
             console.error(`Error attempting to enable fullscreen mode: ${err.message}`);
         });
     } else {
-        document.exitFullscreen(); 
+        document.exitFullscreen();
     }
 });
 document.addEventListener('fullscreenchange', () => {
@@ -96,13 +96,13 @@ async function commandRetrieveImage(page, interval) {
 }
 
 async function queryImage() {
-    const url = new URL('/api/comics/images', window.location.origin);
+    const url = new URL('/api/images', window.location.origin);
 
     try {
         const response = await fetch(url);
-        const bookUrl = response.headers.get('X-Custom-Book-URL');
         const blob = await response.blob();
-        return { blob, bookUrl };
+        const imageUrl = response.headers.get('X-Custom-Image-URL');
+        return { blob, imageUrl };
     } catch (error) {
         console.error('Error fetching image:', error);
     }
@@ -130,9 +130,11 @@ async function narrowcasting() {
     // Command retrieval of the first image
     await commandRetrieveImage(page, interval);
     // Display the first fetched image
-    setTimeout(() => displayNextImage(page, interval), 3000);
-    // Set interval to display the next images
-    setInterval(() => displayNextImage(page, interval), interval);
+    setTimeout(() => {
+        displayNextImage(page, interval)
+        // Set interval to display the next images
+        setInterval(() => displayNextImage(page, interval), interval);
+    }, 3000);
 }
 narrowcasting();
 

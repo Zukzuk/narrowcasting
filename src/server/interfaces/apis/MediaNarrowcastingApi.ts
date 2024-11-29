@@ -1,57 +1,73 @@
 import express from 'express';
 import { handleError } from '../../helpers.js';
-import VersionReadModel from '../../interfaces/readmodels/VersionReadModel.js';
+import RandomImageCommand from '../../domain/generic/commands/RandomImageCommand.js';
 import ImageReadModel from '../../interfaces/readmodels/ImageReadModel.js';
 
+import broker from '../../infrastructure/broker/Broker.js';
 const router = express.Router();
 
-export default function AppApi(
+export default function MediaNarrowcastingApi(
     models: {
-        versionReadModel: VersionReadModel,
         imageReadModel: ImageReadModel,
     }
 ) {
     const {
-        versionReadModel,
         imageReadModel,
     } = models;
 
     /**
      * @openapi
-     * /api/version:
-     *   get:
+     * /api/movies/covers/random:
+     *   post:
      *     tags: 
-     *       - application
-     *     summary: Get the application version
-     *     description: Returns the current semantic version of the application as plain text.
+     *       - movies-narrowcasting
+     *     summary: Command the retrieval of a random movie cover
+     *     description: Commands the system to retrieve a random movie cover from Plex
+     *     parameters:
+     *       - in: query
+     *         name: interval
+     *         schema:
+     *           type: integer
+     *           default: 10
+     *         description: Time interval for retrieving a random movie cover
      *     responses:
      *       200:
-     *         description: Successfully retrieved version
+     *         description: Command accepted
      *         content:
      *           text/plain:
      *             schema:
      *               type: string
-     *               example: "1.2.3"
-     *               description: Semantic version of the application
+     *               example: "ok"
+     *               description: Command accepted
      *       500:
-     *         description: Internal server error
+     *         description: Internal Server Error or no valid image found
      */
-    router.get('/version', async (req: any, res: any) => {
+    router.post('/covers/random', async (req: any, res: any) => {
+        const {
+            page = 0,
+            interval = 10000
+        }: {
+            page: number,
+            interval: number
+        } = req.query;
+
         try {
-            const response = await versionReadModel.query();
-            if (!response) return res.status(500).json({ error: "No valid content found" });
-            res.type('text').send(response); // Send as plain text
+            broker.pub(new RandomImageCommand({
+                payload: { page, interval },
+                timestamp: new Date().toISOString()
+            }));
+            res.status(202).type('text').send('ok');
         } catch (error: any) {
-            handleError(error, res, "Error requesting version");
+            handleError(error, res, "Error publishing RandomImageCommand");
         }
     });
 
     /**
      * @openapi
-     * /api/images:
+     * /api/movies/images:
      *   get:
      *     tags: 
-     *       - application
+     *       - movies-narrowcasting
      *     summary: Fetch last retrieved image
      *     description: Initiates fetch of last retrieved image data
      *     responses:
@@ -66,7 +82,7 @@ export default function AppApi(
      */
     router.get('/images', async (req: any, res: any) => {
         try {
-            const response = await imageReadModel.query();
+            const response = await imageReadModel.query('movies');
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.set('X-Custom-Image-URL', response.url);
             res.set('Content-Type', response.contentType);

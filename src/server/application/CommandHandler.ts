@@ -1,7 +1,7 @@
 import AggregateFactory from '../domain/AggregateFactory.js';
 import { ICommand, CRAWL_COMMAND, RANDOM_IMAGE_COMMAND } from '../domain/Command.js';
 import CrawlCommand from '../domain/comics/commands/CrawlCommand.js';
-import RandomImageCommand from '../domain/comics/commands/RandomImageCommand.js';
+import RandomImageCommand from '../domain/generic/commands/RandomImageCommand.js';
 
 import broker from '../infrastructure/broker/Broker.js'; // Singleton instance
 
@@ -15,7 +15,9 @@ class CommandHandler {
                 return await aggregateRoot.consume(command);
             },
             [RANDOM_IMAGE_COMMAND]: async (command: RandomImageCommand) => {
-                const aggregateRoot = this.aggregateFactory.createRandomComicImage();
+                let aggregateRoot;
+                if (Math.random() > .5) aggregateRoot = this.aggregateFactory.createRandomComicImage();
+                else aggregateRoot = this.aggregateFactory.createRandomMediaCover();
                 return await aggregateRoot.consume(command);
             }
         };

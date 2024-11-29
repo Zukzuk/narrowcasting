@@ -39,13 +39,13 @@ export function doAxiosLogging(logReq = true, logResp = true) {
     // axios logging
     if (logReq) {
         axios.interceptors.request.use(request => {
-            console.log('Call', request.url, request.params ? request.params : '');
+            console.log('Axios: request ->', request.url);
             return request;
         });
     }
     if (logResp) {
         axios.interceptors.response.use(response => {
-            console.log('Response', response);
+            console.log('Axios: response ->', response);
             return response;
         });
     }

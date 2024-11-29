@@ -20,7 +20,7 @@ const options = {
     apis: [
         `${__dirname}/interfaces/apis/AppApi.js`,
         `${__dirname}/interfaces/apis/ComicsNarrowcastingApi.js`,
-        `${__dirname}/interfaces/apis/MoviesNarrowcastingApi.js`,
+        `${__dirname}/interfaces/apis/MediaNarrowcastingApi.js`,
     ],
 };
 

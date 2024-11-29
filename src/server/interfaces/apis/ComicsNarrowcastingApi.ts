@@ -1,11 +1,10 @@
 import express from 'express';
 import { handleError } from '../../helpers.js';
-import RandomImageCommand from '../../domain/comics/commands/RandomImageCommand.js';
+import RandomImageCommand from '../../domain/generic/commands/RandomImageCommand.js';
 import ComicsCrawlReadModel from '../../interfaces/readmodels/ComicsCrawlReadModel.js';
 import ImageReadModel from '../../interfaces/readmodels/ImageReadModel.js';
 
 import broker from '../../infrastructure/broker/Broker.js';
-import { IImageRetrievedPayload } from 'server/domain/comics/events/ImageRetrievedEvent.js';
 const router = express.Router();
 
 /**
@@ -22,7 +21,7 @@ try {
     }
     handleError(error, res, "Some error occurred");
 }
- */
+*/
 
 export default function ComicsNarrowcastingApi(
     models: {
@@ -81,8 +80,7 @@ export default function ComicsNarrowcastingApi(
             broker.pub(new RandomImageCommand({
                 payload: { page, interval },
                 timestamp: new Date().toISOString()
-            })
-            );
+            }));
             res.status(202).type('text').send('ok');
         } catch (error: any) {
             handleError(error, res, "Error publishing RandomImageCommand");
@@ -109,9 +107,9 @@ export default function ComicsNarrowcastingApi(
      */
     router.get('/images', async (req: any, res: any) => {
         try {
-            const response = await imageReadModel.query({ domain: 'comics' });
+            const response = await imageReadModel.query('comics');
             if (!response) return res.status(500).json({ error: "No valid content found" });
-            res.set('X-Custom-Book-URL', response.bookUrl);
+            res.set('X-Custom-Image-URL', response.url);
             res.set('Content-Type', response.contentType);
             res.send(response.image);
 

@@ -1,10 +1,10 @@
 import axios, { AxiosBasicCredentials } from 'axios';
 
-export default class ImageService {
+export default class ComicsImageService {
 
     constructor(private KOMGA_API: string, private KOMGA_AUTH: AxiosBasicCredentials) {}
 
-    async fetchTotalBooks(): Promise<number> {
+    fetchTotalBooks = async (): Promise<number> => {
         try {
             const response = await axios.get(`${this.KOMGA_API}/books`, {
                 params: { size: 1 },
@@ -18,7 +18,7 @@ export default class ImageService {
         }
     }
 
-    async fetchBookId(randomIndex: number): Promise<string> {
+    fetchBookId = async (randomIndex: number): Promise<string> => {
         try {
             const response = await axios.get(`${this.KOMGA_API}/books`, {
                 params: { page: randomIndex, size: 1 },
@@ -32,13 +32,13 @@ export default class ImageService {
         }
     }
 
-    async fetchImage(
+    fetchImage = async (
         bookId: string,
         page: number,
         interval: number,
         startTime: number,
         retryCount: number
-    ): Promise<Buffer | "RETRY"> {
+    ): Promise<Buffer | "RETRY"> => {
         try {
             const image = await axios.get(`${this.KOMGA_API}/books/${bookId}/pages/${page}`, {
                 params: { zero_based: true, contentNegotiation: true },
