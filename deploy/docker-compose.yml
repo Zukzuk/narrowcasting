@@ -11,6 +11,7 @@ services:
       - narrowcasting
     extra_hosts:
       - "comics.daveloper.nl:host-gateway"
+      - "cinema.daveloper.nl:host-gateway"
 
 networks:
   narrowcasting:
