@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.4.1](https://github.com/Zukzuk/narrowcasting/compare/v4.4.0...v4.4.1) (2024-11-29)
+
+
+### Bug Fixes
+
+* fixed media endpoints ([d29d82e](https://github.com/Zukzuk/narrowcasting/commit/d29d82e825bbbfbc3289562fc7dafa4dfc293eea))
+
 ## [4.4.0](https://github.com/Zukzuk/narrowcasting/compare/v4.3.0...v4.4.0) (2024-11-29)
 
 
