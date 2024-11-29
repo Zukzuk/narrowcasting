@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.4.0](https://github.com/Zukzuk/narrowcasting/compare/v4.3.0...v4.4.0) (2024-11-29)
+
+
+### Features
+
+* added plex media narrowcasting ([71600b5](https://github.com/Zukzuk/narrowcasting/commit/71600b5386f9a3f71981f181b9718f37b3527121))
+
 ## [4.3.0](https://github.com/Zukzuk/narrowcasting/compare/v4.2.4...v4.3.0) (2024-11-27)
 
 
