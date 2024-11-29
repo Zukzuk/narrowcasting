@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.4.2](https://github.com/Zukzuk/narrowcasting/compare/v4.4.1...v4.4.2) (2024-11-29)
+
+
+### Bug Fixes
+
+* added plex to host gateway ([4e6e8c8](https://github.com/Zukzuk/narrowcasting/commit/4e6e8c80fd337d38d02cca278d9da894a20c2ccd))
+
 ### [4.4.1](https://github.com/Zukzuk/narrowcasting/compare/v4.4.0...v4.4.1) (2024-11-29)
 
 
