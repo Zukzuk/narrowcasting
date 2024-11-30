@@ -22,8 +22,7 @@ export default class CrawlComicsEndpointService {
             const { data } = await axios.get(url, { auth: this.KOMGA_AUTH });
             return data;
         } catch (error: any) {
-            const errorEvent = new UrlError(error.message, url);
-            throw errorEvent;
+            throw new UrlError(error.message, url);
         }
     }
 }

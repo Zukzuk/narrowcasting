@@ -1,8 +1,10 @@
 import axios from 'axios';
+import { UrlError } from '../../../helpers.js';
+import { TDomain } from '../../../domain/shared/types/types.js';
 
 export interface IPlexMediaSections {
     key: string,
-    title: "comics" | "audiobooks" | "movies" | "series" | "animated-movies" | "animated-series";
+    title: TDomain,
 }
 
 export interface IPlexMediaContainer {
@@ -25,28 +27,30 @@ export default class MediaImageService {
     ) {}
 
     fetchSections = async (): Promise<IPlexMediaSections[]> => {
+        const url = `${this.PLEX_API}/library/sections`;
         try {
-            const response = await axios.get(`${this.PLEX_API}/library/sections`, {
+            const response = await axios.get(url, {
                 params: { 'X-Plex-Token': this.PLEX_API_KEY },
                 headers: { Accept: 'application/json' },
             });
             if (!response.data) throw new Error("No sections found.");
             return response.data.MediaContainer.Directory;
         } catch (error: any) {
-            throw new Error(`Failed fetchSections: ${error}`);
+            throw new UrlError(`Failed fetchSections: ${error.message}`, url);
         }
     }
 
     fetchSectionMedia = async (domain: string, movieKey: string): Promise<IPlexMediaContainer[]> => {
+        const url = `${this.PLEX_API}/library/sections/${movieKey}/${domain === 'audiobooks' ? 'albums' : 'all'}`;
         try {
-            const response = await axios.get(`${this.PLEX_API}/library/sections/${movieKey}/${domain === 'audiobooks' ? 'albums' : 'all'}`, {
+            const response = await axios.get(url, {
                 params: { 'X-Plex-Token': this.PLEX_API_KEY },
                 headers: { Accept: 'application/json' },
             });
             if (!response.data) throw new Error("No media found.");
             return response.data.MediaContainer.Metadata;
         } catch (error: any) {
-            throw new Error(`Failed fetchSectionMedia: ${error}`);
+            throw new UrlError(`Failed fetchSectionMedia: ${error.message}`, url);
         }
     }
 
@@ -56,15 +60,16 @@ export default class MediaImageService {
         startTime: number,
         retryCount: number
     ): Promise<Buffer | "RETRY"> => {
+        const url = `${this.PLEX_API}${thumb}`;
         try {
-            const image = await axios.get(`${this.PLEX_API}${thumb}`, {
+            const image = await axios.get(url, {
                 params: { 'X-Plex-Token': this.PLEX_API_KEY },
                 responseType: 'arraybuffer',
             });
             if (!image.data) throw new Error("No image found.");
             return Buffer.from(image.data);
         } catch (error: any) {
-            throw new Error(`Failed fetchImage: ${error.message}`);
+            throw new UrlError(`Failed fetchImage: ${error.message}`, url);
         }
     }
 }

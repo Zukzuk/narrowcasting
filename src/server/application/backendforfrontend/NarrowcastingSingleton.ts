@@ -1,14 +1,14 @@
-import AppApi from '../interfaces/apis/AppApi.js';
-import VersionReadModel from '../interfaces/readmodels/VersionReadModel.js';
-import ComicsCrawlReadModel from '../interfaces/readmodels/ComicsCrawlReadModel.js';
-import ComicsNarrowcastingApi from '../interfaces/apis/ComicsNarrowcastingApi.js';
-import MediaNarrowcastingApi from '../interfaces/apis/MediaNarrowcastingApi.js';
-import ImageReadModel from '../interfaces/readmodels/ImageReadModel.js';
-import CrawlCommand from '../domain/comics/commands/CrawlCommand.js';
+import AppApi from '../../interfaces/apis/AppApi.js';
+import VersionReadModel from '../../interfaces/readmodels/VersionReadModel.js';
+import ComicsCrawlReadModel from '../../interfaces/readmodels/ComicsCrawlReadModel.js';
+import ComicsNarrowcastingApi from '../../interfaces/apis/ComicsNarrowcastingApi.js';
+import MediaNarrowcastingApi from '../../interfaces/apis/MediaNarrowcastingApi.js';
+import ImageReadModel from '../../interfaces/readmodels/ImageReadModel.js';
+import CrawlCommand from '../../domain/comics/commands/CrawlCommand.js';
 
-import broker from '../infrastructure/broker/Broker.js'; // Singleton instance
+import broker from '../../infrastructure/broker/Broker.js'; // Singleton instance
 
-class NarrowcastingBFF {
+class NarrowcastingSingleton {
     private versionReadModel: VersionReadModel;
     private comicsCrawlReadModel: ComicsCrawlReadModel;
     private imageReadModel: ImageReadModel;
@@ -50,4 +50,4 @@ class NarrowcastingBFF {
     }
 }
 
-export default new NarrowcastingBFF(); // Singleton instance through ES6 module caching
+export default new NarrowcastingSingleton(); // Singleton instance through ES6 module caching

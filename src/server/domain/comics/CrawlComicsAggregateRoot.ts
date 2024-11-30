@@ -4,7 +4,7 @@ import CrawledComicsRepository from '../../infrastructure/repositories/CrawledCo
 import CrawlCommand from '../../domain/comics/commands/CrawlCommand.js';
 import CrawlCompletedEvent from '../../domain/comics/events/CrawlCompletedEvent.js';
 import CrawlFailedEvent from '../../domain/comics/events/CrawlFailedEvent.js';
-import CrawlComicsEndpointService from './services/CrawlComicsEndpointService.js';
+import CrawlComicsEndpointService from '../../domain/comics/services/CrawlComicsEndpointService.js';
 
 export default class CrawlComicsAggregateRoot {
     private crawlComicsEndpointService: CrawlComicsEndpointService;
@@ -30,6 +30,9 @@ export default class CrawlComicsAggregateRoot {
             // Return a business event
             return new CrawlCompletedEvent(payload, endpoint, this.repository.totalItems(), this.domain);
         } catch (error: any) {
+            // Retry on error
+            if (error.retry) this.consume(command);
+
             // Return failure event
             const event = new CrawlFailedEvent(error.message || error, endpoint, error.url, this.domain);
             error.event = event;

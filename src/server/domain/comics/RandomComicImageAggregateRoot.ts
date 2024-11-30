@@ -1,11 +1,11 @@
 import { KOMGA_API, KOMGA_AUTH, KOMGA_ORIGIN } from '../../config.js';
-import RandomImageCommand from '../shared/commands/RandomImageCommand.js';
-import ImageRetrievedEvent from '../shared/events/ImageRetrievedEvent.js';
-import ImageRetrievalFailedEvent from '../shared/events/ImageRetrievalFailedEvent.js';
+import RandomImageCommand from '../../domain/shared/commands/RandomImageCommand.js';
+import ImageRetrievedEvent from '../../domain/shared/events/ImageRetrievedEvent.js';
+import ImageRetrievalFailedEvent from '../../domain/shared/events/ImageRetrievalFailedEvent.js';
 import ComicsImageService from '../../domain/comics/services/ComicsImageService.js';
-import ImageOptimizeService from '../shared/services/ImageOptimizeService.js';
+import ImageOptimizeService from '../../domain/shared/services/ImageOptimizeService.js';
 import ComicsImageSetRepository from '../../infrastructure/repositories/ComicsImageSetRepository.js';
-import { TDomain } from '../shared/types/types.js';
+import { TDomain } from '../../domain/shared/types/types.js';
 
 export default class RandomComicImageAggregateRoot {
     private comicsImageService: ComicsImageService;
@@ -39,7 +39,6 @@ export default class RandomComicImageAggregateRoot {
 
             // Fetch image
             const response = await this.comicsImageService.fetchImage(bookId, page, guardedInterval, this.timestamp, ++this.retries);
-            if (response === 'RETRY') await this.consume(command);
 
             // Optimize image
             const { optimizedImage, contentType } = await this.imageOptimizeService.webp(response as Buffer, 90);
@@ -47,6 +46,9 @@ export default class RandomComicImageAggregateRoot {
             // Return a business event
             return new ImageRetrievedEvent({ image: optimizedImage, contentType, url }, this.domain);
         } catch (error: any) {
+            // Retry on error
+            if (error.retry) this.consume(command);
+            
             // Return failure event
             const event = new ImageRetrievalFailedEvent(error.message, error.url, this.domain);
             error.event = event;

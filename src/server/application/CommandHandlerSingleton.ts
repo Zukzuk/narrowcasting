@@ -5,7 +5,7 @@ import RandomImageCommand, { RANDOM_IMAGE_COMMAND } from '../domain/shared/comma
 
 import broker from '../infrastructure/broker/Broker.js'; // Singleton instance
 
-class CommandHandler {
+class CommandHandlerSingleton {
     eventHandlers: any;
 
     constructor() {
@@ -45,4 +45,4 @@ class CommandHandler {
     }    
 }
 
-export default new CommandHandler(); // Singleton instance through ES6 module caching
+export default new CommandHandlerSingleton(); // Singleton instance through ES6 module caching

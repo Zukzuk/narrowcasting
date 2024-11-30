@@ -9,6 +9,18 @@ export class UrlError extends Error {
     constructor(message: string, url: string) {
         super(message);
         this.url = url;
-        Object.setPrototypeOf(this, UrlError.prototype); // Required for extending built-in classes
+        Object.setPrototypeOf(this, UrlError.prototype);
+    }
+}
+
+export class RetryError extends Error {
+    retry: boolean;
+    url: string;
+
+    constructor(message: string, url: string) {
+        super(message);
+        this.retry = true;
+        this.url = url;
+        Object.setPrototypeOf(this, RetryError.prototype);
     }
 }

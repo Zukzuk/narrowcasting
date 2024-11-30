@@ -3,13 +3,7 @@ import compression from 'compression';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import session from 'express-session';
-import {
-    getLocalIpAddress,
-    getHostName,
-    getGatewayAddress,
-    getPort,
-    doAxiosLogging,
-} from './utils.js';
+import { getPort, doServerLogging } from './utils.js';
 import {
     APP_SESSION_SECRET,
     APP_CACHE_DURATION,
@@ -44,13 +38,7 @@ server.use(APP_API_DOCS_PATH, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // start server
 server.listen(getPort(), async () => {
     // logging
-    doAxiosLogging(true, false);
-    console.log(
-        `Server is running`,
-        `Address='${getLocalIpAddress()}:${getPort()}'`,
-        `gatewayAddress='${await getGatewayAddress()}'`,
-        `Hostname='${getHostName()}'`,
-    );
+    await doServerLogging();
     // application orchestration
     orchestrate(server);
 });

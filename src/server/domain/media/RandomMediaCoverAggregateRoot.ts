@@ -1,11 +1,11 @@
 import { PLEX_API_KEY, PLEX_MACHINE_IDENTIFIER, PLEX_API, PLEX_ORIGIN } from '../../config.js';
-import RandomImageCommand from '../shared/commands/RandomImageCommand.js';
-import ImageRetrievedEvent from '../shared/events/ImageRetrievedEvent.js';
-import ImageRetrievalFailedEvent from '../shared/events/ImageRetrievalFailedEvent.js';
+import RandomImageCommand from '../../domain/shared/commands/RandomImageCommand.js';
+import ImageRetrievedEvent from '../../domain/shared/events/ImageRetrievedEvent.js';
+import ImageRetrievalFailedEvent from '../../domain/shared/events/ImageRetrievalFailedEvent.js';
 import MediaImageService from '../../domain/media/services/MediaImageService.js';
-import ImageOptimizeService from '../shared/services/ImageOptimizeService.js';
+import ImageOptimizeService from '../../domain/shared/services/ImageOptimizeService.js';
 import MediaImageSetRepository from '../../infrastructure/repositories/MediaImageSetRepository.js';
-import { TDomain } from '../shared/types/types.js';
+import { TDomain } from '../../domain/shared/types/types.js';
 
 export default class RandomMediaCoverAggregateRoot {
     private mediaImageService: MediaImageService;
@@ -48,7 +48,6 @@ export default class RandomMediaCoverAggregateRoot {
             
             // Fetch image
             const response = await this.mediaImageService.fetchImage(randomMedia.thumb, guardedInterval, this.timestamp, ++this.retries);
-            if (response === 'RETRY') await this.consume(command);
             
             // Optimize image
             const { optimizedImage, contentType } = await this.imageOptimizeService.webp(response as Buffer, 90);
@@ -56,6 +55,9 @@ export default class RandomMediaCoverAggregateRoot {
             // Return a business event
             return new ImageRetrievedEvent({image: optimizedImage, contentType, url }, this.domain);
         } catch (error: any) {
+            // Retry on error
+            if (error.retry) this.consume(command);
+            
             // Return failure event
             const event = new ImageRetrievalFailedEvent(error.message, error.url, this.domain);
             error.event = event;
