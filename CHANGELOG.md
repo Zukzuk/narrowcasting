@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.5.0](https://github.com/Zukzuk/narrowcasting/compare/v4.4.5...v4.5.0) (2024-12-24)
+
+
+### Features
+
+* added better domain decoupling ([42c69c6](https://github.com/Zukzuk/narrowcasting/commit/42c69c6ae542675fb4edd031bf022e965c867940))
+
 ### [4.4.5](https://github.com/Zukzuk/narrowcasting/compare/v4.4.4...v4.4.5) (2024-11-30)
 
 ### [4.4.4](https://github.com/Zukzuk/narrowcasting/compare/v4.4.3...v4.4.4) (2024-11-29)
