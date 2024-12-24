@@ -1,4 +1,5 @@
-import { Timestamped } from "../../../domain/Annotations.js";
+import { Timestamped } from "../../shared/annotations/index.js";
+import { TMediaType } from "../types/index.js";
 
 export const CRAWL_FAILED_EVENT = 'CRAWL_FAILED_EVENT' as const;
 
@@ -9,9 +10,9 @@ export default class CrawlFailedEvent {
 
     constructor(
         public error: any,
-        public endpoint: string,
         public url: string,
-        public domain: string,
-        public timestamp?: string
+        public endpoint: string,
+        public mediaType: TMediaType,
+        public timestamp?: string,
     ) {}
 }

@@ -1,5 +1,5 @@
-import { Timestamped } from "../../../domain/Annotations.js";
-import { TDomain } from "../../../domain/shared/types/types.js";
+import { Timestamped } from "../annotations/index.js";
+import { TMediaType } from "../types/index.js";
 
 export const IMAGE_RETRIEVED_EVENT = 'IMAGE_RETRIEVED_EVENT' as const;
 
@@ -16,7 +16,7 @@ export default class ImageRetrievedEvent {
 
     constructor(
         public payload: TImageRetrievedPayload,
-        public domain: TDomain,
-        public timestamp?: string
+        public mediaType: TMediaType,
+        public timestamp?: string,
     ) {}
 }

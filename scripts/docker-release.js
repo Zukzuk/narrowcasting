@@ -1,5 +1,5 @@
 import { execSync } from 'child_process';
-import data from '../package.json' assert { type: 'json' };
+import data from '../package.json' with { type: 'json' };
 
 // Main function to orchestrate the script execution
 function main() {

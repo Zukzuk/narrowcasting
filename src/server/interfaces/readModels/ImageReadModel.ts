@@ -1,8 +1,10 @@
+import { TMediaType } from "../../domain/shared/types/index.js";
 import ImageRetrievedEvent, { TImageRetrievedPayload } from "../../domain/shared/events/ImageRetrievedEvent.js";
 
 import broker from "../../infrastructure/broker/Broker.js";
 
 export default class ImageReadModel {
+    
     private cache: Record<string, any> = {
         latest: [],
     };
@@ -10,32 +12,32 @@ export default class ImageReadModel {
     constructor() {
         // subscribe to events
         broker.sub(ImageRetrievedEvent.type, event => {
-            console.log('ImageReadModel: listen ->', event.type, event.domain);
+            console.log('ImageReadModel: listen ->', event.type, event.mediaType);
             this.#denormalize(event);
         });
     }
 
-    query(domain: string = 'latest'): TImageRetrievedPayload | null {
-        if (!this.cache[domain]) return null;
-        const payload = this.cache[domain][this.#last(domain)];
+    query(mediaType: TMediaType | 'latest' = 'latest'): TImageRetrievedPayload | null {
+        if (!this.cache[mediaType]) return null;
+        const payload = this.cache[mediaType][this.#last(mediaType)];
 
-        console.log('ImageReadModel: query ->', domain);
+        console.log('ImageReadModel: query ->', mediaType);
 
         return payload;
     }
 
     #denormalize(event: ImageRetrievedEvent) {
         // denormalize
-        if (!this.cache[event.domain]) this.cache[event.domain] = [];
+        if (!this.cache[event.mediaType]) this.cache[event.mediaType] = [];
 
-        this.cache[event.domain].push(event.payload);
-        if (this.cache[event.domain].length > 20) this.cache[event.domain].shift();
+        this.cache[event.mediaType].push(event.payload);
+        if (this.cache[event.mediaType].length > 20) this.cache[event.mediaType].shift();
 
         this.cache.latest.push(event.payload);
         if (this.cache.latest.length > 20) this.cache.all.shift();
     }
 
-    #last(domain: string): number {
-        return this.cache[domain].length - 1;
+    #last(mediaType: TMediaType | 'latest'): number {
+        return this.cache[mediaType].length - 1;
     }
 }

@@ -1,4 +1,4 @@
-import { Timestamped } from "../../../domain/Annotations.js";   
+import { Timestamped } from "../../shared/annotations/index.js";   
 
 export const CRAWL_COMMAND = 'CRAWL_COMMAND' as const;
 

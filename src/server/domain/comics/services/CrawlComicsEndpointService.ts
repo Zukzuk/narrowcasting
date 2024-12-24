@@ -1,8 +1,13 @@
 import axios, { AxiosBasicCredentials } from 'axios';
-import { UrlError } from '../../../helpers.js';
+import { UrlError } from '../../../utils.js';
 
 export default class CrawlComicsEndpointService {
-    constructor(private KOMGA_API: string, private KOMGA_AUTH: AxiosBasicCredentials, private APP_CRAWL_PAGE_SIZE: number) {}
+
+    constructor(
+        private KOMGA_API: string, 
+        private KOMGA_AUTH: AxiosBasicCredentials, 
+        private APP_CRAWL_PAGE_SIZE: number
+    ) {}
 
     async crawl(endpoint: string): Promise<any[]> {
         // Initialize to 1 as a default, will be updated after the first fetch

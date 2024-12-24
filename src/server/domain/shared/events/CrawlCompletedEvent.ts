@@ -1,8 +1,7 @@
-import { Timestamped } from "../../../domain/Annotations.js";
+import { Timestamped } from "../../shared/annotations/index.js";
+import { TMediaType } from "../types/index.js";
 
 export const CRAWL_COMPLETED_EVENT = 'CRAWL_COMPLETED_EVENT' as const;
-
-export type TCrawlCompletedPayload = Record<string, string>;
 
 @Timestamped
 export default class CrawlCompletedEvent {
@@ -10,10 +9,9 @@ export default class CrawlCompletedEvent {
     type = CRAWL_COMPLETED_EVENT;
 
     constructor(
-        public payload: TCrawlCompletedPayload,
+        public payload: Record<string, string>,
         public endpoint: string,
-        public totalItems: number,
-        public domain: string,
-        public timestamp?: string
+        public mediaType: TMediaType,
+        public timestamp?: string,
     ) {}
 }

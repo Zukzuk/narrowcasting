@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { UrlError } from '../../../helpers.js';
-import { TDomain } from '../../../domain/shared/types/types.js';
+import { UrlError } from '../../../utils.js';
+import { TMediaType } from '../../shared/types/index.js';
 
 export interface IPlexMediaSections {
     key: string,
-    title: TDomain,
+    title: TMediaType,
 }
 
 export interface IPlexMediaContainer {
@@ -22,8 +22,8 @@ export interface IPlexMediaContainer {
 export default class MediaImageService {
 
     constructor(
-        private PLEX_API_KEY: string,
         private PLEX_API: string,
+        private PLEX_API_KEY: string,
     ) {}
 
     fetchSections = async (): Promise<IPlexMediaSections[]> => {
@@ -40,8 +40,8 @@ export default class MediaImageService {
         }
     }
 
-    fetchSectionMedia = async (domain: string, movieKey: string): Promise<IPlexMediaContainer[]> => {
-        const url = `${this.PLEX_API}/library/sections/${movieKey}/${domain === 'audiobooks' ? 'albums' : 'all'}`;
+    fetchSectionMedia = async (mediaType: TMediaType, movieKey: string): Promise<IPlexMediaContainer[]> => {
+        const url = `${this.PLEX_API}/library/sections/${movieKey}/${mediaType === 'audiobooks' ? 'albums' : 'all'}`;
         try {
             const response = await axios.get(url, {
                 params: { 'X-Plex-Token': this.PLEX_API_KEY },

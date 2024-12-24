@@ -1,12 +1,12 @@
 import { Timestamped } from "../annotations/index.js";
 import { TMediaType } from "../types/index.js";
 
-export const IMAGE_RETRIEVAL_FAILED_EVENT = 'IMAGE_RETRIEVAL_FAILED_EVENT' as const;
+export const RANDOM_IMAGE_SELECTION_FAILED_EVENT = 'RANDOM_IMAGE_SELECTION_FAILED_EVENT' as const;
 
 @Timestamped
-export default class ImageRetrievalFailedEvent {
-    public static type = IMAGE_RETRIEVAL_FAILED_EVENT;
-    type = IMAGE_RETRIEVAL_FAILED_EVENT;
+export default class RandomImageSelectionFailedEvent {
+    public static type = RANDOM_IMAGE_SELECTION_FAILED_EVENT;
+    type = RANDOM_IMAGE_SELECTION_FAILED_EVENT;
 
     constructor(
         public error: any,

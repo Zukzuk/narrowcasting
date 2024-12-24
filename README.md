@@ -120,9 +120,9 @@ PLEX_MACHINE_DENTIFIER=             # Plex Server ID
 APP_STATIC_SERVE_PATH=              # Path to client's static files
 APP_API_PATH=                       # Api path of the app itself
 APP_API_DOCS_PATH=                  # Api Docs path
-[DOMAIN]_NARROWCASTING_API_PATH=    # Api path of a narrowcasting domain
-[TARGET]_ORIGIN=                    # The origin URL for the target app
-[TARGET]_API_PATH=                  # Path to the target API
+[TARGET]_ORIGIN=                    # URL or path to the origin of a target app
+[TARGET]_API_PATH=                  # Path to a target app's API
+[TARGET]_BACKUP_ORIGIN=             # Path to a backup file of a target app
 
 # dev.env
 # Add any var here, overwrites all above

@@ -1,6 +1,7 @@
 import { APP_VERSION_TAG } from '../../config.js';
 
 export default class CrawlReadModel {
+    
     private version: string;
     
     constructor() {

@@ -1,6 +1,5 @@
 import { EventEmitter } from 'events';
-import { TCommand } from '../../domain/Command.js';
-import { TEvent } from '../../domain/Event.js';
+import { TCommand, TEvent } from '../../domain/shared/types/index.js';
 
 type BrokerTypes = TCommand | TEvent;
 

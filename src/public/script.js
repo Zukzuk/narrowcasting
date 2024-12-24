@@ -21,18 +21,6 @@ function getActiveAndInactiveImages() {
     return { activeImage, inactiveImage };
 }
 
-async function fetchVersion() {
-    try {
-        const response = await fetch(new URL('/api/version', window.location.origin));
-        if (!response.ok)
-            throw new Error('Failed to fetch version');
-        return await response.text();
-    } catch (error) {
-        console.error('Error fetching version:', error);
-        return 'unknown'; // Default in case of an error
-    }
-}
-
 function displayVersion(showVersion) {
     if (showVersion) {
         fetchVersion().then(semver => {
@@ -53,6 +41,22 @@ function getQueryParams() {
     const showVersion = showVersionParam === 'true' ? true : false;
     return { interval: interval * 1000, showVersion, page };
 }
+
+async function displayNextImage(page, interval) {
+    const { activeImage, inactiveImage } = getActiveAndInactiveImages();
+    nextImageData = await queryImage();
+    commandRetrieveImage(page, interval);
+    setImageSource(inactiveImage, nextImageData);
+    inactiveImage.onload = async () => {
+        adjustAspectRatio(inactiveImage);
+        const value = calculateLoaderColor(inactiveImage);
+        resetLoaderAnimation(value, interval);
+    };
+    toggleVisibility(activeImage, inactiveImage);
+    currentImage = currentImage === 1 ? 2 : 1;
+}
+
+///////////////////////////////////////////////////////
 
 const fullscreenButton = document.getElementById('fullscreen-button');
 fullscreenButton.addEventListener('click', () => {
@@ -83,8 +87,22 @@ document.addEventListener('visibilitychange', () => {
     if (wakeLock !== null && document.visibilityState === 'visible') requestWakeLock();
 });
 
+///////////////////////////////////////////////////////
+
+async function fetchVersion() {
+    try {
+        const response = await fetch(new URL('/api/query/version', window.location.origin));
+        if (!response.ok)
+            throw new Error('Failed to fetch version');
+        return await response.text();
+    } catch (error) {
+        console.error('Error fetching version:', error);
+        return 'unknown'; // Default in case of an error
+    }
+}
+
 async function commandRetrieveImage(page, interval) {
-    const url = new URL('/api/images/random', window.location.origin);
+    const url = new URL('/api/command/SelectRandomImageCommand', window.location.origin);
     url.searchParams.append('page', page);
     url.searchParams.append('interval', interval);
 
@@ -96,7 +114,7 @@ async function commandRetrieveImage(page, interval) {
 }
 
 async function queryImage() {
-    const url = new URL('/api/images', window.location.origin);
+    const url = new URL('/api/query/library/images', window.location.origin);
 
     try {
         const response = await fetch(url);
@@ -108,25 +126,12 @@ async function queryImage() {
     }
 }
 
-async function displayNextImage(page, interval) {
-    const { activeImage, inactiveImage } = getActiveAndInactiveImages();
-    nextImageData = await queryImage();
-    commandRetrieveImage(page, interval);
-    setImageSource(inactiveImage, nextImageData);
-    inactiveImage.onload = async () => {
-        adjustAspectRatio(inactiveImage);
-        const value = calculateLoaderColor(inactiveImage);
-        resetLoaderAnimation(value, interval);
-    };
-    toggleVisibility(activeImage, inactiveImage);
-    currentImage = currentImage === 1 ? 2 : 1;
-}
+///////////////////////////////////////////////////////
 
-async function narrowcasting() {
+async function main() {
     requestWakeLock();
     const { page, interval, showVersion } = getQueryParams();
     displayVersion(showVersion);
-
     // Command retrieval of the first image
     await commandRetrieveImage(page, interval);
     // Display the first fetched image
@@ -136,5 +141,5 @@ async function narrowcasting() {
         setInterval(() => displayNextImage(page, interval), interval);
     }, 3000);
 }
-narrowcasting();
+main();
 

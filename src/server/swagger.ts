@@ -19,8 +19,8 @@ const options = {
     },
     apis: [
         `${__dirname}/interfaces/apis/AppApi.js`,
-        `${__dirname}/interfaces/apis/ComicsNarrowcastingApi.js`,
-        `${__dirname}/interfaces/apis/MediaNarrowcastingApi.js`,
+        `${__dirname}/interfaces/apis/ComicsApi.js`,
+        `${__dirname}/interfaces/apis/MediaApi.js`,
     ],
 };
 

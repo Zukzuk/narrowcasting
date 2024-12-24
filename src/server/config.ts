@@ -15,14 +15,12 @@ export const APP_API_PATH: string = process.env.APP_API_PATH as string;
 export const APP_STATIC_SERVE_PATH: string = process.env.APP_STATIC_SERVE_PATH as string;
 export const APP_API_DOCS_PATH: string = process.env.APP_API_DOCS_PATH as string;
 // target environment variables
-export const COMICS_NARROWCASTING_API_PATH: string = process.env.COMICS_NARROWCASTING_API_PATH as string;
 export const KOMGA_ORIGIN: string = process.env.KOMGA_ORIGIN as string;
 export const KOMGA_API: string = KOMGA_ORIGIN+process.env.KOMGA_API_PATH as string;
 export const KOMGA_AUTH: AxiosBasicCredentials = {
     username: process.env.KOMGA_USERNAME as string,
     password: process.env.KOMGA_PASSWORD as string
 };
-export const MEDIA_NARROWCASTING_API_PATH: string = process.env.MEDIA_NARROWCASTING_API_PATH as string;
 export const PLEX_ORIGIN: string = process.env.PLEX_ORIGIN as string;
 export const PLEX_API: string = PLEX_ORIGIN+process.env.PLEX_API_PATH as string;
 export const PLEX_API_KEY: string = process.env.PLEX_API_KEY as string;

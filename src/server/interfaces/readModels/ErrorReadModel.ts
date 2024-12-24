@@ -1,9 +1,11 @@
 import ImageRetrievalFailedEvent from "../../domain/shared/events/ImageRetrievalFailedEvent.js";
-import CrawlFailedEvent from "../../domain/comics/events/CrawlFailedEvent.js";
+import RandomImageSelectionFailedEvent from "../../domain/shared/events/RandomImageSelectionFailedEvent.js";
+import CrawlFailedEvent from "../../domain/shared/events/CrawlFailedEvent.js";
 
 import broker from "../../infrastructure/broker/Broker.js";
 
 export default class ErrorReadModel {
+    
     private errors: any[];
 
     constructor() {
@@ -17,15 +19,20 @@ export default class ErrorReadModel {
             console.log('ErrorReadModel: listen ->', event.type);
             this.#denormalize(event);
         });
+        broker.sub(RandomImageSelectionFailedEvent.type, event => {
+            console.log('ErrorReadModel: listen ->', event.type);
+            this.#denormalize(event);
+        });
     }
 
     #denormalize(
         event: 
             CrawlFailedEvent | 
-            ImageRetrievalFailedEvent
+            ImageRetrievalFailedEvent |
+            RandomImageSelectionFailedEvent
         ) {
         this.errors.push(event);
-        console.error(JSON.stringify(event, null, 2));
+        console.log(JSON.stringify(event, null, 2));
     }
 
     query(): any[] {

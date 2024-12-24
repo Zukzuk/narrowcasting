@@ -11,34 +11,42 @@ import {
     APP_STATIC_SERVE_PATH,
     KOMGA_ORIGIN,
 } from './config.js';
-import orchestrate from './orchestrate.js';
 
-// initialize
+// server
 const server = express();
 
-// middleware
+// cors
 server.use(cors({
     origin: KOMGA_ORIGIN,
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-XSRF-TOKEN', 'X-Custom-Image-URL'],
     credentials: true,
 }));
+
+// session
 server.use(session({
     secret: APP_SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: APP_CACHE_DURATION },
 }));
+
+// compression
 server.use(compression());
+
+// static files serve
 server.use(express.static(APP_STATIC_SERVE_PATH));
 
+// api docs
 import swaggerSpec from './swagger.js'; // Singleton instance
 server.use(APP_API_DOCS_PATH, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // start server
 server.listen(getPort(), async () => {
     // logging
-    await doServerLogging();
-    // application orchestration
-    orchestrate(server);
+    await doServerLogging();  
 });
+
+// orchestrate application
+import orchestrator from './application/OrchestrateSingleton.js'; // Singleton instance
+orchestrator.init(server);

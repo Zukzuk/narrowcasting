@@ -1,9 +1,12 @@
 import axios, { AxiosBasicCredentials } from 'axios';
-import { RetryError, UrlError } from '../../../helpers.js';
+import { RetryError, UrlError } from '../../../utils.js';
 
 export default class ComicsImageService {
 
-    constructor(private KOMGA_API: string, private KOMGA_AUTH: AxiosBasicCredentials) {}
+    constructor(
+        private KOMGA_API: string, 
+        private KOMGA_AUTH: AxiosBasicCredentials
+    ) {}
 
     fetchTotalBooks = async (): Promise<number> => {
         const url = `${this.KOMGA_API}/books`;
@@ -41,7 +44,7 @@ export default class ComicsImageService {
         interval: number,
         startTime: number,
         retryCount: number
-    ): Promise<Buffer | "RETRY"> => {
+    ): Promise<Buffer> => {
         const url = `${this.KOMGA_API}/books/${bookId}/pages/${page}`;
         try {
             const image = await axios.get(url, {
@@ -58,7 +61,7 @@ export default class ComicsImageService {
                 const elapsedTime = Date.now() - startTime;
                 const remainingTime = interval - elapsedTime;
                 if (remainingTime > 5000) {
-                    throw new RetryError(`Retry attempt ${retryCount} with ${remainingTime}ms remaining`, url);
+                    throw new RetryError(`Retry attempt ${retryCount} with ${remainingTime}ms remaining`, startTime, url);
                 } else {
                     console.log(`No retry attempt because remaining time in interval (${remainingTime}ms) is too short...`);
                 }
