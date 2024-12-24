@@ -4,23 +4,21 @@ import ImageRetrievedEvent from '../shared/events/ImageRetrievedEvent.js';
 import ImageRetrievalFailedEvent from '../shared/events/ImageRetrievalFailedEvent.js';
 import ComicsImageService from './services/ComicsImageService.js';
 import ImageOptimizeService from '../shared/services/ImageOptimizeService.js';
-import ImageSetRepository from '../../infrastructure/repositories/ImageIndexRepository.js';
+import RetryImageRetrievalEvent from '../shared/events/RetryImageRetrievalEvent.js';
 
 export default class RetrieveComicImageAggregateRoot {
     
     private comicsImageService: ComicsImageService;
     private imageOptimizeService: ImageOptimizeService;
-    private timestamp: number = 0;
-    private retries: number = -1;
 
-    constructor(private imageSetRepository: ImageSetRepository) {
+    constructor() {
         this.comicsImageService = new ComicsImageService(KOMGA_API, KOMGA_AUTH);
         this.imageOptimizeService = new ImageOptimizeService();
     }
 
-    async consume(command: RetrieveImageCommand): Promise<ImageRetrievedEvent | ImageRetrievalFailedEvent> {
-        const { index, mediaType, page, interval } = command.payload;
-        this.timestamp = this.timestamp || Date.now();
+    async consume(command: RetrieveImageCommand): Promise<ImageRetrievedEvent | RetryImageRetrievalEvent | ImageRetrievalFailedEvent> {
+        
+        const { index, mediaType, page, interval, startTime } = command.payload;
 
         try {
             // Get random comic
@@ -28,16 +26,28 @@ export default class RetrieveComicImageAggregateRoot {
             const url = `${KOMGA_ORIGIN}/book/${bookId}`
 
             // Fetch image
-            const response = await this.comicsImageService.fetchImage(bookId, page, interval, this.timestamp, ++this.retries);
+            const response = await this.comicsImageService.fetchImage(bookId, page);
 
             // Optimize image
             const { optimizedImage, contentType } = await this.imageOptimizeService.webp(response as Buffer, 90);
 
             // Return a business event
             return new ImageRetrievedEvent({ image: optimizedImage, contentType, url }, mediaType);
-        } catch (error: any) {            
+        } catch (error: any) {     
+            // Retry image retrieval if image format is not supported
+            if (error.message.contains('Unsupported image format')) {
+                const elapsedTime = Date.now() - startTime;
+                const remainingTime = interval - elapsedTime;
+                if (remainingTime > 5000) {
+                    const payload = { page, interval, startTime };
+                    const event = new RetryImageRetrievalEvent(payload);
+                    return event;
+                }
+                console.log(`No retry attempt because remaining time in interval (${remainingTime}ms) is too short...`);
+            }
+                   
             // Return failure event
-            const event = new ImageRetrievalFailedEvent(error.message, error.url);
+            const event = new ImageRetrievalFailedEvent(error.message, error.url, error.mediaType);
             error.event = event;
             return event;
             // throw error;

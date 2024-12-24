@@ -32,7 +32,6 @@ async function getGatewayAddress() {
 }
 
 function doAxiosLogging(logReq = true, logResp = true) {
-    // axios logging
     if (logReq) {
         axios.interceptors.request.use(request => {
             console.log('Axios: request ->', request.url);
@@ -68,26 +67,9 @@ export function handleError(error: any, res: any, message: string) {
 }
 
 export class UrlError extends Error {
-    url: string;
-
-    constructor(message: string, url: string) {
+    constructor(public message: string, public url: string) {
         super(message);
-        this.url = url;
         Object.setPrototypeOf(this, UrlError.prototype);
-    }
-}
-
-export class RetryError extends Error {
-    retry: boolean;
-    startTime: number;
-    url: string;
-
-    constructor(message: string, startTime: number, url: string) {
-        super(message);
-        this.retry = true;
-        this.startTime = startTime;
-        this.url = url;
-        Object.setPrototypeOf(this, RetryError.prototype);
     }
 }
 

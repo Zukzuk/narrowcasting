@@ -32,7 +32,6 @@ export default class ComicsCrawlReadModel {
     }
 
     #denormalize(event: CrawlCompletedEvent) {
-        // denormalize
         this.cache[event.endpoint] = event.payload;
     }
 }

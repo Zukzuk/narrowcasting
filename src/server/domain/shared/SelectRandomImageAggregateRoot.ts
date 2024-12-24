@@ -11,8 +11,6 @@ export default class SelectRandomImageAggregateRoot {
 
     private mediaImageService: MediaImageService;
     private comicsImageService: ComicsImageService;
-    private timestamp: number = 0;
-    private retries: number = -1;
 
     constructor(private imageIndexRepository: ImageIndexRepository) {
         this.mediaImageService = new MediaImageService(PLEX_API, PLEX_API_KEY);
@@ -21,8 +19,7 @@ export default class SelectRandomImageAggregateRoot {
 
     async consume(command: SelectRandomImageCommand): Promise<RandomImageSelectedEvent | RandomImageSelectionFailedEvent> {
 
-        const { page, interval } = command.payload;
-        this.timestamp = this.timestamp || Date.now();
+        const { page, interval, startTime } = command.payload;
 
         try {
             // Check if library indexes cache is filled
@@ -72,22 +69,20 @@ export default class SelectRandomImageAggregateRoot {
             const mediaType = probabilityMap.find(({ threshold }) => randomValue <= threshold)?.mediaType;
             if (!mediaType) throw new Error("Failed to select a random media type (this should not happen).");
             const cacheItem = cache[mediaType];
-            if (!cacheItem) throw new Error(`Media type "${mediaType}" not found in cache.`);
-            console.log(probabilityMap, randomValue, mediaType);
+            if (!cacheItem) throw new Error(`Media type "${mediaType}" not found in cache (this should not happen).`);
+            console.log(`SelectRandomImageAggregateRoot: threshold ${randomValue} -> ${mediaType}`);
 
             // Pick random index from the random mediaType
             const index = this.imageIndexRepository.popUniqueIndex(mediaType);
 
             // Return a business event
-            return new RandomImageSelectedEvent({ index, mediaType, page, interval });
+            return new RandomImageSelectedEvent({ index, mediaType, page, interval, startTime });
         } catch (error: any) {
-            // Retry on error
-            if (error.retry) this.consume(command);
-
             // Return failure event
-            const event = new RandomImageSelectionFailedEvent(error.message, error.url);
+            const event = new RandomImageSelectionFailedEvent(error.message);
             error.event = event;
-            throw error;
+            return event;
+            // throw error;
         }
     }
 }

@@ -32,13 +32,10 @@ export default class CrawlComicsAggregateRoot {
             // Return a business event
             return new CrawlCompletedEvent(payload, endpoint, this.mediaType);
         } catch (error: any) {
-            // Retry on error
-            if (error.retry) this.consume(command);
-
             // Return failure event
             const event = new CrawlFailedEvent(error.message || error, endpoint, error.url, this.mediaType);
             error.event = event;
-            throw error;
+            return event;
         }
     }
 }

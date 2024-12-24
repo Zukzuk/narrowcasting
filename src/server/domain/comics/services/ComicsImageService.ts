@@ -1,5 +1,6 @@
 import axios, { AxiosBasicCredentials } from 'axios';
-import { RetryError, UrlError } from '../../../utils.js';
+import { UrlError } from '../../../utils.js';
+import { TMediaType } from '../../../domain/shared/types/index.js';
 
 export default class ComicsImageService {
 
@@ -41,9 +42,6 @@ export default class ComicsImageService {
     fetchImage = async (
         bookId: string,
         page: number,
-        interval: number,
-        startTime: number,
-        retryCount: number
     ): Promise<Buffer> => {
         const url = `${this.KOMGA_API}/books/${bookId}/pages/${page}`;
         try {
@@ -57,15 +55,6 @@ export default class ComicsImageService {
                 throw new Error("Unsupported image format");
             return Buffer.from(image.data);
         } catch (error: any) {
-            if (error.message === "Unsupported image format") {
-                const elapsedTime = Date.now() - startTime;
-                const remainingTime = interval - elapsedTime;
-                if (remainingTime > 5000) {
-                    throw new RetryError(`Retry attempt ${retryCount} with ${remainingTime}ms remaining`, startTime, url);
-                } else {
-                    console.log(`No retry attempt because remaining time in interval (${remainingTime}ms) is too short...`);
-                }
-            }
             throw new UrlError(`Failed fetchImage: ${error.message}`, url);
         }
     }

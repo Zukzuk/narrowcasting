@@ -63,7 +63,7 @@ export default function AppApi(
         } = req.query;
 
         try {
-            broker.pub(new SelectRandomImageCommand({ page, interval }));
+            broker.pub(new SelectRandomImageCommand({ page, interval, startTime: Date.now() }));
             res.status(202).type('text').send('ok');
         } catch (error: any) {
             handleError(error, res, "Error publishing RandomImageCommand");

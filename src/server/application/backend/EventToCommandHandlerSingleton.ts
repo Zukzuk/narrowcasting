@@ -1,5 +1,7 @@
 import { TEvent } from '../../domain/shared/types/index.js';
 import RetrieveImageCommand from '../../domain/shared/commands/RetrieveImageCommand.js';
+import SelectRandomImageCommand from '../../domain/shared/commands/SelectRandomImageCommand.js';
+import RetryImageRetrievalEvent, { RETRY_IMAGE_RETRIEVAL_EVENT } from '../../domain/shared/events/RetryImageRetrievalEvent.js';
 import RandomImageSelectedEvent, { RANDOM_IMAGE_SELECTED_EVENT } from '../../domain/shared/events/RandomImageSelectedEvent.js';
 
 import broker from '../../infrastructure/broker/Broker.js'; // Singleton instance
@@ -13,11 +15,15 @@ class EventToCommandHandlerSingleton {
             [RANDOM_IMAGE_SELECTED_EVENT]: async (event: RandomImageSelectedEvent) => {
                 return new RetrieveImageCommand(event.payload);
             },
+            [RETRY_IMAGE_RETRIEVAL_EVENT]: async (event: RetryImageRetrievalEvent) => {
+                return new SelectRandomImageCommand(event.payload);
+            },
         };
     }
 
     bootstrap() {
         broker.sub(RANDOM_IMAGE_SELECTED_EVENT, event => this.#handle(event));
+        broker.sub(RETRY_IMAGE_RETRIEVAL_EVENT, event => this.#handle(event));
     }
 
     async #handle(event: TEvent) {

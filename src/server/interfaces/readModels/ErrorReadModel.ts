@@ -25,16 +25,6 @@ export default class ErrorReadModel {
         });
     }
 
-    #denormalize(
-        event: 
-            CrawlFailedEvent | 
-            ImageRetrievalFailedEvent |
-            RandomImageSelectionFailedEvent
-        ) {
-        this.errors.push(event);
-        console.log(JSON.stringify(event, null, 2));
-    }
-
     query(): any[] {
         console.log('ErrorReadModel: query -> errors');
 
@@ -44,5 +34,15 @@ export default class ErrorReadModel {
     // Method to clear logged errors
     clear() {
         this.errors = [];
+    }
+
+    #denormalize(
+        event: 
+            CrawlFailedEvent | 
+            ImageRetrievalFailedEvent |
+            RandomImageSelectionFailedEvent
+        ) {
+        this.errors.push(event);
+        console.log(JSON.stringify(event, null, 2));
     }
 }

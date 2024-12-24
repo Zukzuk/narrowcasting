@@ -28,10 +28,12 @@ import ImageRetrievedEvent from '../events/ImageRetrievedEvent.js';
 import ImageRetrievalFailedEvent from '../events/ImageRetrievalFailedEvent.js';
 import RandomImageSelectedEvent from '../events/RandomImageSelectedEvent.js';
 import RandomImageSelectionFailedEvent from '../events/RandomImageSelectionFailedEvent.js';
+import RetryImageRetrievalEvent from '../events/RetryImageRetrievalEvent.js';
 export type TEvent =
     | CrawlCompletedEvent
     | CrawlFailedEvent
     | ImageRetrievedEvent
+    | RetryImageRetrievalEvent
     | ImageRetrievalFailedEvent
     | RandomImageSelectedEvent
     | RandomImageSelectionFailedEvent;

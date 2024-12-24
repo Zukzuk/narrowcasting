@@ -8,6 +8,7 @@ export type TRandomImageSelectedPayload = {
     mediaType: TMediaType; 
     page: number;
     interval: number; 
+    startTime: number; 
 }
 
 @Timestamped

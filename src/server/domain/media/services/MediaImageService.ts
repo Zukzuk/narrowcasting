@@ -24,7 +24,7 @@ export default class MediaImageService {
     constructor(
         private PLEX_API: string,
         private PLEX_API_KEY: string,
-    ) {}
+    ) { }
 
     fetchSections = async (): Promise<IPlexMediaSections[]> => {
         const url = `${this.PLEX_API}/library/sections`;
@@ -54,19 +54,16 @@ export default class MediaImageService {
         }
     }
 
-    fetchImage = async (
-        thumb: string,
-        interval: number,
-        startTime: number,
-        retryCount: number
-    ): Promise<Buffer | "RETRY"> => {
+    fetchImage = async (thumb: string): Promise<Buffer> => {
         const url = `${this.PLEX_API}${thumb}`;
         try {
             const image = await axios.get(url, {
                 params: { 'X-Plex-Token': this.PLEX_API_KEY },
                 responseType: 'arraybuffer',
             });
-            if (!image.data) throw new Error("No image found.");
+            const contentType = image.headers['content-type'];
+            if (contentType === 'image/jp2' || contentType === 'image/jpeg2000')
+                throw new Error("Unsupported image format");
             return Buffer.from(image.data);
         } catch (error: any) {
             throw new UrlError(`Failed fetchImage: ${error.message}`, url);

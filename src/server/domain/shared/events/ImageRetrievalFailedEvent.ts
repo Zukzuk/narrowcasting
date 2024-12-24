@@ -11,7 +11,7 @@ export default class ImageRetrievalFailedEvent {
     constructor(
         public error: any,
         public url: string,
-        public mediaType?: TMediaType,
+        public mediaType: TMediaType,
         public timestamp?: string,
     ) {}
 }

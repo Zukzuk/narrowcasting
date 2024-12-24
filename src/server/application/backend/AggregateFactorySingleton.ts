@@ -18,7 +18,7 @@ class AggregateFactorySingleton {
     }
 
     createRetrieveComicImage(): RetrieveComicImageAggregateRoot {
-        return new RetrieveComicImageAggregateRoot(this.imageSetRepository);
+        return new RetrieveComicImageAggregateRoot();
     }
 
     createRetrieveMediaCover(): RetrieveMediaCoverAggregateRoot {

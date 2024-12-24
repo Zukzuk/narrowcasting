@@ -27,7 +27,6 @@ export default class ImageReadModel {
     }
 
     #denormalize(event: ImageRetrievedEvent) {
-        // denormalize
         if (!this.cache[event.mediaType]) this.cache[event.mediaType] = [];
 
         this.cache[event.mediaType].push(event.payload);

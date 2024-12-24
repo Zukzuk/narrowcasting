@@ -10,8 +10,6 @@ export default class RandomImageSelectionFailedEvent {
 
     constructor(
         public error: any,
-        public url: string,
-        public mediaType?: TMediaType,
         public timestamp?: string,
     ) {}
 }
