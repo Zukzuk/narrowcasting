@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.7.1](https://github.com/Zukzuk/narrowcasting/compare/v4.7.0...v4.7.1) (2024-12-26)
+
+
+### Bug Fixes
+
+* fixed some mounting configs ([cfd7dc6](https://github.com/Zukzuk/narrowcasting/commit/cfd7dc673899c5d2161b08f6e82b4b9d3c6696f2))
+
 ## [4.7.0](https://github.com/Zukzuk/narrowcasting/compare/v4.6.0...v4.7.0) (2024-12-26)
 
 
