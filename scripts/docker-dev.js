@@ -14,8 +14,8 @@ function main() {
 
 function buildTypeScript() {
   try {
-    console.log(`npm i && npm run build`);
-    execSync('npm run internalscript:install:onlydev && npm run build', { stdio: 'inherit' });
+    console.log(`npm cache clean --force && npm install --os=linux --libc=musl --cpu=x64 sharp && npm run build`);
+    execSync('npm cache clean --force && npm install --os=linux --libc=musl --cpu=x64 sharp && npm run build', { stdio: 'inherit' });
     console.log("Compilation successful.");
   } catch (error) {
     console.error("Error compiling TypeScript:", error.message);

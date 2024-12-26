@@ -1,4 +1,4 @@
-import { PLAYNITE_BACKUP_IMAGE_FOLDER, PLAYNITE_BACKUP_ORIGIN } from '../../config.js';
+import { PLAYNITE_BACKUP_ORIGIN } from '../../config.js';
 import RetrieveImageCommand from '../shared/commands/RetrieveImageCommand.js';
 import ImageRetrievedEvent from '../shared/events/ImageRetrievedEvent.js';
 import ImageRetrievalFailedEvent from '../shared/events/ImageRetrievalFailedEvent.js';
