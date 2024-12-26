@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.7.0](https://github.com/Zukzuk/narrowcasting/compare/v4.6.0...v4.7.0) (2024-12-26)
+
+
+### Features
+
+* added mounts folder ([d16bed9](https://github.com/Zukzuk/narrowcasting/commit/d16bed9d42972b617e16d3aa88b2025d062a092b))
+
 ## [4.6.0](https://github.com/Zukzuk/narrowcasting/compare/v4.5.1...v4.6.0) (2024-12-26)
 
 
