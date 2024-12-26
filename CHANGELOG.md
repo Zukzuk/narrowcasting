@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.6.0](https://github.com/Zukzuk/narrowcasting/compare/v4.5.1...v4.6.0) (2024-12-26)
+
+
+### Features
+
+* added playnite compatibility ([b6292d4](https://github.com/Zukzuk/narrowcasting/commit/b6292d4d4d07c5b4e05e8d00fa03f1b21c3da36b))
+
 ### [4.5.1](https://github.com/Zukzuk/narrowcasting/compare/v4.5.0...v4.5.1) (2024-12-24)
 
 
