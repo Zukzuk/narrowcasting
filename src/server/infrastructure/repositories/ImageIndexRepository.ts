@@ -1,13 +1,16 @@
+import { shuffleArray } from "../../utils.js";
 import { mediaTypes, TMediaType } from "../../domain/shared/types/index.js";
 import { IPlexMediaContainer } from "../../domain/media/services/MediaImageService.js";
-import { shuffleArray } from "../../utils.js";
+import { IPlayniteGamesContainer } from "../../domain/games/services/GamesImageService.js";
+
+type TCacheData = IPlayniteGamesContainer[] | IPlexMediaContainer[];
 
 interface IImageSet {
     total: number;
     remaining: number;
     expiration: number;
     uniqueIndexes: number[];
-    data: IPlexMediaContainer[];
+    data: TCacheData;
 }
 
 export default class ImageIndexRepository {
@@ -18,11 +21,11 @@ export default class ImageIndexRepository {
 
     save(
         mediaType: TMediaType,
-        { data, total }: { data?: IPlexMediaContainer[]; total?: number }
+        { data, total }: { data?: TCacheData; total?: number }
     ): IImageSet {
         const resolvedTotal = total ?? data?.length;
 
-        if (typeof resolvedTotal !== "number" || isNaN(resolvedTotal)) {
+        if (typeof resolvedTotal !== 'number' || isNaN(resolvedTotal)) {
             throw new Error(`Invalid parameters for saving ${mediaType}. Either 'total' or 'data' with length must be provided.`);
         }
 
@@ -34,7 +37,7 @@ export default class ImageIndexRepository {
             data: data ?? [],
         };
 
-        this.#log("save", `${mediaType} with length ${this.cache[mediaType].remaining}`);
+        this.#log('save', `${mediaType} with length ${this.cache[mediaType].remaining}`);
 
         return this.cache[mediaType];
     }
@@ -42,15 +45,15 @@ export default class ImageIndexRepository {
     retrieve(): Record<string, IImageSet> {
         const payload = this.cache;
 
-        this.#log('retrieve', `complete index cache`);
+        this.#log('retrieve', 'full cache');
 
         return payload;
     }
 
-    retrieveData(mediaType: TMediaType, index: number): IPlexMediaContainer {
+    retrieveData(mediaType: TMediaType, index: number): IPlexMediaContainer | IPlayniteGamesContainer {
         const payload = this.cache[mediaType].data[index];
 
-        this.#log('retrieve', `${mediaType} with index '${index}'`);
+        this.#log('retrieveData', `${mediaType} with index '${index}'`);
 
         return payload;
     }
@@ -61,21 +64,29 @@ export default class ImageIndexRepository {
         const value = this.cache[mediaType].uniqueIndexes.splice(index, 1)[0];
         this.cache[mediaType].remaining = this.cache[mediaType].uniqueIndexes.length;
 
-        this.#log('popUniqueIndex', `pop ${value} from '${mediaType}' cache with length ${this.cache[mediaType].remaining}`);
+        this.#log('popUniqueIndex', `${value} from '${mediaType}' cache with length ${this.cache[mediaType].remaining}`);
 
         return value;
     }
 
     hasValidCache(): boolean {
-        return mediaTypes.every(mediaType => {
+        const result = mediaTypes.every(mediaType => {
             return !!this.cache[mediaType]?.remaining;
         });
+
+        this.#log('hasValidCache', result.toString());
+
+        return result;
     }
 
     getInvalidCacheHits(): TMediaType[] {
-        return mediaTypes.filter(mediaType => {
+        const result = mediaTypes.filter(mediaType => {
             return !this.cache[mediaType]?.remaining;
         });
+        
+        this.#log('getInvalidCacheHits', result.toString());
+
+        return result;
     }
 
     #log(action: string, message: string) {

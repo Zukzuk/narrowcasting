@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
-        "module": "ESNext", // Ensure ES Modules compatibility
-        "target": "ESNext", // Modern JavaScript target
-        "moduleResolution": "node", // Resolve modules like Node.js
+        "module": "NodeNext", // Node.js module resolution
+        "target": "ESNext", // ECMAScript version
+        "moduleResolution": "nodenext", // Node.js module resolution
         "esModuleInterop": true, // Ensure interop between ES Modules and CommonJS
         "outDir": "./dist", // Output directory for compiled files
         "rootDir": "./src", // Root directory for source files
@@ -14,7 +14,8 @@
         "emitDecoratorMetadata": true, // Emit design-type metadata for decorators
         "sourceMap": true, // Include source maps for debugging
         "skipLibCheck": true, // Skip type checking of declaration files
-        "baseUrl": "./src" // Base path for module resolution
+        "baseUrl": "./src", // Base path for module resolution
+        "allowSyntheticDefaultImports": true // Allow default imports from modules with no default export
     },
     "include": [
         "src/**/*"

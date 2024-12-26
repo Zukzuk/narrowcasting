@@ -6,6 +6,8 @@ services:
     env_file:
       - public.env
       - private.env
+    volumes:
+      - ../../Games/Playnite:/usr/src/app/mounts
     restart: always
     networks:
       - narrowcasting

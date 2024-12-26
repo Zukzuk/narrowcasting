@@ -40,8 +40,8 @@ export default class MediaImageService {
         }
     }
 
-    fetchSectionMedia = async (mediaType: TMediaType, movieKey: string): Promise<IPlexMediaContainer[]> => {
-        const url = `${this.PLEX_API}/library/sections/${movieKey}/${mediaType === 'audiobooks' ? 'albums' : 'all'}`;
+    fetchMediaData = async (mediaType: TMediaType, sectionKey: string): Promise<IPlexMediaContainer[]> => {
+        const url = `${this.PLEX_API}/library/sections/${sectionKey}/${mediaType === 'audiobooks' ? 'albums' : 'all'}`;
         try {
             const response = await axios.get(url, {
                 params: { 'X-Plex-Token': this.PLEX_API_KEY },

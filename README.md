@@ -4,16 +4,7 @@ A Node.js narrowcasting application designed to serve your media library images 
 Currently compatible with the following API's
 - Komga
 - Plex
-
-## CQRS Pattern
-
-This project implements ```CQRS``` (Command Query Responsibility Segregation), separating ```Commands``` (write operations) and ```Queries``` (read operations). Clients send GET (Queries) or POST (Commands) requests to the ```Backend For Frontend``` ```(BFF)```, which translates them into appropriate actions. The server can also generate internal ```Commands```.
-
-```Commands``` are processed by ```CommandHandlers``` and ```Aggregates```.
-```Queries``` are resolved using ```ReadModels```, updated through ```DomainEvents``` emitted after ```Command``` processing.
-```DomainEvents``` capture business state changes and ensure ```ReadModels``` stay consistent. ```Commands``` and ```DomainEvents``` enforce ```Domain Logic``` and are not a CRUD substitute.
-
-A ```Broker``` decouples the ```BFF``` and the domain components, ensuring flexibility and scalability.
+- Playnite
 
 ## Installation
 
@@ -73,6 +64,18 @@ http://localhost:3001/api-docs
 
 # Project Structure
 
+## CQRS Pattern
+
+This project implements ```CQRS``` (Command Query Responsibility Segregation), separating ```Commands``` (write operations) and ```Queries``` (read operations). Clients send GET (Queries) or POST (Commands) requests to the ```Backend For Frontend``` ```(BFF)```, which translates them into appropriate actions. The server can also generate internal ```Commands```.
+
+```Commands``` are processed by ```CommandHandlers``` and ```Aggregates```.
+```Queries``` are resolved using ```ReadModels```, updated through ```DomainEvents``` emitted after ```Command``` processing.
+```DomainEvents``` capture business state changes and ensure ```ReadModels``` stay consistent. ```Commands``` and ```DomainEvents``` enforce ```Domain Logic``` and are not a CRUD substitute.
+
+A ```Broker``` decouples the ```BFF``` and the domain components, ensuring flexibility and scalability.
+
+## Structure
+
 - **deploy/**: Production-specific variables and compose files.
 - **dist/**: Automatically created on build for runtime files.
 - **scripts/**: Scripts and Dockerfiles for CI/CD.
@@ -82,7 +85,7 @@ http://localhost:3001/api-docs
 - **.dev.env**: Environment variables for development.
 - **docker-compose.dev.yml**: Development compose file.
 
-## Server structure
+### Server structure
   - `application/`: Backend application logic.
   - `domain/`: Domain-specific logic.
     - `[DOMAIN]/`
@@ -102,10 +105,10 @@ http://localhost:3001/api-docs
   - `swagger.js`: Swagger implementation.
   - `utils.js`: Utility functions for the server.
 
-## Client structure
+### Client structure
 TBD
 
-## Environment Variables
+### Environment Variables
 
 ```plaintext
 # .secrets/private.env

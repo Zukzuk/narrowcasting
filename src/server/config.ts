@@ -25,3 +25,5 @@ export const PLEX_ORIGIN: string = process.env.PLEX_ORIGIN as string;
 export const PLEX_API: string = PLEX_ORIGIN+process.env.PLEX_API_PATH as string;
 export const PLEX_API_KEY: string = process.env.PLEX_API_KEY as string;
 export const PLEX_MACHINE_IDENTIFIER: string = process.env.PLEX_MACHINE_IDENTIFIER as string;
+export const PLAYNITE_BACKUP_ORIGIN: string = process.env.PLAYNITE_BACKUP_ORIGIN as string;
+export const PLAYNITE_BACKUP_IMAGE_FOLDER: string = process.env.PLAYNITE_BACKUP_IMAGE_FOLDER as string;

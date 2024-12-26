@@ -1,20 +1,23 @@
-import { KOMGA_API, KOMGA_AUTH, PLEX_API, PLEX_API_KEY } from '../../config.js';
+import { KOMGA_API, KOMGA_AUTH, PLAYNITE_BACKUP_ORIGIN, PLEX_API, PLEX_API_KEY } from '../../config.js';
+import { mediaTypesKomga, mediaTypesPlex, mediaTypesPlaynite, TMediaType } from '../shared/types/index.js';
 import MediaImageService from '../../domain/media/services/MediaImageService.js';
 import ComicsImageService from '../../domain/comics/services/ComicsImageService.js';
+import GamesImageService from '../../domain/games/services/GamesImageService.js';
 import SelectRandomImageCommand from './commands/SelectRandomImageCommand.js';
 import RandomImageSelectedEvent from './events/RandomImageSelectedEvent.js';
 import RandomImageSelectionFailedEvent from './events/RandomImageSelectionFailedEvent.js';
 import ImageIndexRepository from '../../infrastructure/repositories/ImageIndexRepository.js';
-import { mediaTypesKomga, mediaTypesPlex, TMediaType } from '../shared/types/index.js';
 
 export default class SelectRandomImageAggregateRoot {
 
     private mediaImageService: MediaImageService;
     private comicsImageService: ComicsImageService;
+    private gamesImageService: GamesImageService;
 
     constructor(private imageIndexRepository: ImageIndexRepository) {
         this.mediaImageService = new MediaImageService(PLEX_API, PLEX_API_KEY);
         this.comicsImageService = new ComicsImageService(KOMGA_API, KOMGA_AUTH);
+        this.gamesImageService = new GamesImageService(PLAYNITE_BACKUP_ORIGIN);
     }
 
     async consume(command: SelectRandomImageCommand): Promise<RandomImageSelectedEvent | RandomImageSelectionFailedEvent> {
@@ -31,20 +34,26 @@ export default class SelectRandomImageAggregateRoot {
 
                 if (mediaTypesKomga.some(type => invalidCaches.includes(type))) {
                     // Fetch comics totals (no data, because needs to be crawled per page)
-                    const response = await this.comicsImageService.fetchTotalBooks();
-                    cache["comics"] = this.imageIndexRepository.save("comics", { total: response });
+                    const total = await this.comicsImageService.fetchTotalBooks();
+                    cache["comics"] = this.imageIndexRepository.save("comics", { total });
+                }
+
+                if (mediaTypesPlaynite.some(type => invalidCaches.includes(type))) {
+                    // Fetch games data (recieves full contents data)
+                    const data = await this.gamesImageService.fetchGamesData();
+                    cache["games"] = this.imageIndexRepository.save("games", { data });
                 }
 
                 if (mediaTypesPlex.some(type => invalidCaches.includes(type))) {
-                    // Fetch media totals and data (recieves full section contents data)
+                    // Fetch media data (recieves full contents data)
                     const sections = await this.mediaImageService.fetchSections();
                     sections.forEach(async (section) => {
                         // Fetch media for each section
                         const key = section.key;
                         const mediaType = section.title.toLowerCase().replace(/ /g, '-') as TMediaType;
                         // Fill set with mediaType
-                        const response = await this.mediaImageService.fetchSectionMedia(mediaType, key);
-                        cache[mediaType] = this.imageIndexRepository.save(mediaType, { data: response });
+                        const data = await this.mediaImageService.fetchMediaData(mediaType, key);
+                        cache[mediaType] = this.imageIndexRepository.save(mediaType, { data });
                     });
                 }
             }
@@ -57,7 +66,7 @@ export default class SelectRandomImageAggregateRoot {
             const probabilityMap = Object.entries(cache).reduce(
                 (acc, [mediaType, cacheItem], i, array) => {
                     const probability = cacheItem.remaining / totalWeight;
-                    const threshold = (!i) ? probability : (i === array.length -1) ? 1 : (acc[i - 1].threshold + probability);
+                    const threshold = (!i) ? probability : (i === array.length - 1) ? 1 : (acc[i - 1].threshold + probability);
                     acc.push({ threshold, mediaType: mediaType as TMediaType });
                     return acc;
                 },
@@ -79,10 +88,9 @@ export default class SelectRandomImageAggregateRoot {
             return new RandomImageSelectedEvent({ index, mediaType, page, interval, startTime });
         } catch (error: any) {
             // Return failure event
-            const event = new RandomImageSelectionFailedEvent(error.message);
+            const event = new RandomImageSelectionFailedEvent(error.message, error.url);
             error.event = event;
             return event;
-            // throw error;
         }
     }
 }

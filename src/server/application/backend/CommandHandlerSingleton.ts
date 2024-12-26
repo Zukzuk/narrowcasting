@@ -19,6 +19,7 @@ class CommandHandlerSingleton {
             [RETRIEVE_IMAGE_COMMAND]: async (command: RetrieveImageCommand) => {
                 let aggregateRoot;
                 if (command.payload.mediaType === "comics") aggregateRoot = aggregateFactory.createRetrieveComicImage();
+                else if (command.payload.mediaType === "games") aggregateRoot = aggregateFactory.createRetrieveGamesImage();
                 else aggregateRoot = aggregateFactory.createRetrieveMediaCover();
                 return await aggregateRoot.consume(command);
             },
