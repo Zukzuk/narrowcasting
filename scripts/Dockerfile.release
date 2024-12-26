@@ -9,8 +9,8 @@ ENV NODE_ENV=development
 
 # Set up the working directory
 WORKDIR /usr/src/app
-COPY package.json ./
-RUN npm install --include=optional sharp
+COPY package*.json ./
+RUN npm install
 
 # Copy application code
 COPY . .
@@ -29,7 +29,7 @@ ENV NODE_ENV=production
 
 # Set up the working directory and install prd dependencies
 WORKDIR /usr/src/app
-COPY package-lock.json ./
+COPY package*.json ./
 RUN npm install --only=production
 
 # Copy compiled application code from the build stage
