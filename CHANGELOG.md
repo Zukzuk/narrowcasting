@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.9.0](https://github.com/Zukzuk/narrowcasting/compare/v4.8.0...v4.9.0) (2024-12-27)
+
+
+### Features
+
+* added dummy login, session logic for image selection and updated some logging ([a4b4026](https://github.com/Zukzuk/narrowcasting/commit/a4b40268550fa4e6bad189eb6c87006514d4a29e))
+
 ## [4.8.0](https://github.com/Zukzuk/narrowcasting/compare/v4.7.1...v4.8.0) (2024-12-27)
 
 
