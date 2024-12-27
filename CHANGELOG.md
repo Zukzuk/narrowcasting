@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.8.0](https://github.com/Zukzuk/narrowcasting/compare/v4.7.1...v4.8.0) (2024-12-27)
+
+
+### Features
+
+* added first draft to read filesystem into json structure ([37e0025](https://github.com/Zukzuk/narrowcasting/commit/37e0025290b8f1b96bad06256023447a45e97078))
+
 ### [4.7.1](https://github.com/Zukzuk/narrowcasting/compare/v4.7.0...v4.7.1) (2024-12-26)
 
 
