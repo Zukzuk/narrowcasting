@@ -3,6 +3,7 @@ import { Timestamped } from "../annotations/index.js";
 export const SELECT_RANDOM_IMAGE_COMMAND = 'SELECT_RANDOM_IMAGE_COMMAND' as const;
 
 export interface ISelectRandomImagePayload {
+    userId: string;
     page: number;
     interval: number;
     startTime: number;

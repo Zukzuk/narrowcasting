@@ -1,42 +1,63 @@
+import { log } from "../../utils.js";
 import { TMediaType } from "../../domain/shared/types/index.js";
-import ImageRetrievedEvent, { TImageRetrievedPayload } from "../../domain/shared/events/ImageRetrievedEvent.js";
+import { IImageRetrievedPayload, IMAGE_RETRIEVED_EVENT } from "../../domain/shared/events/ImageRetrievedEvent.js";
 
 import broker from "../../infrastructure/broker/Broker.js";
 
+interface ICacheData {
+    [mediaType: string]: IImageRetrievedPayload[],
+    latest: IImageRetrievedPayload[]
+};
+
+export interface IImageQuery {
+    userId: string,
+    mediaType: TMediaType | 'latest'
+};
+
 export default class ImageReadModel {
-    
-    private cache: Record<string, any> = {
-        latest: [],
-    };
+
+    private cache: { [userId: string]: ICacheData } = {};
 
     constructor() {
         // subscribe to events
-        broker.sub(ImageRetrievedEvent.type, event => {
-            console.log('ImageReadModel: listen ->', event.type, event.mediaType);
-            this.#denormalize(event);
+        broker.sub(IMAGE_RETRIEVED_EVENT, event => {
+            console.log('ImageReadModel:: logging: listen ->', event.type, event.payload.mediaType);
+            this.#denormalize(event.payload);
         });
     }
 
-    query(mediaType: TMediaType | 'latest' = 'latest'): TImageRetrievedPayload | null {
-        if (!this.cache[mediaType]) return null;
-        const payload = this.cache[mediaType][this.#last(mediaType)];
+    query({ userId, mediaType }: IImageQuery): IImageRetrievedPayload | null {
+        const userCache = this.#getUserCache(userId);
 
-        console.log('ImageReadModel: query ->', mediaType);
+        if (!userCache[mediaType]) return null;
+        const payload = userCache[mediaType][this.#last(userCache, mediaType)];
+
+        log(userId, 'ImageReadModel', 'query', 'read', mediaType);
 
         return payload;
     }
 
-    #denormalize(event: ImageRetrievedEvent) {
-        if (!this.cache[event.mediaType]) this.cache[event.mediaType] = [];
+    #denormalize(payload: IImageRetrievedPayload) {
+        const userCache = this.#getUserCache(payload.userId);
 
-        this.cache[event.mediaType].push(event.payload);
-        if (this.cache[event.mediaType].length > 20) this.cache[event.mediaType].shift();
+        // push to that user's mediaType array
+        if (!userCache[payload.mediaType]) userCache[payload.mediaType] = [];
+        userCache[payload.mediaType].push(payload);
+        if (userCache[payload.mediaType].length > 20) userCache[payload.mediaType].shift();
 
-        this.cache.latest.push(event.payload);
-        if (this.cache.latest.length > 20) this.cache.all.shift();
+        // also push to 'latest'
+        userCache.latest.push(payload);
+        if (userCache.latest.length > 20) userCache.latest.shift();
     }
 
-    #last(mediaType: TMediaType | 'latest'): number {
-        return this.cache[mediaType].length - 1;
+    #last(userCache: ICacheData, mediaType: TMediaType | 'latest'): number {
+        return userCache[mediaType].length - 1;
+    }
+
+    #getUserCache(userId: string): ICacheData {
+        if (!this.cache[userId]) {
+            this.cache[userId] = { latest: [] };
+        }
+        return this.cache[userId];
     }
 }

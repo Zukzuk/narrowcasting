@@ -11,7 +11,7 @@ class Broker extends EventEmitter {
      */
     pub(unit: BrokerTypes) {
         if (unit) {
-            console.log('Broker: pub ->', unit.type);
+            console.log('Broker:: logging: publish ->', unit.type);
             super.emit(unit.type, unit);
         }
     }
@@ -26,7 +26,7 @@ class Broker extends EventEmitter {
         type: K,
         listener: (unit: Extract<BrokerTypes, { type: K }>) => void
     ) {
-        console.log('Broker: sub ->', type);
+        console.log('Broker:: logging: subscribe ->', type);
         this.on(type, listener);
     }
 }

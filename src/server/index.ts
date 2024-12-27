@@ -5,7 +5,7 @@ import swaggerUi from 'swagger-ui-express';
 import session from 'express-session';
 import { getPort, doServerLogging } from './utils.js';
 import {
-    APP_SESSION_SECRET,
+    USER_SESSION_SECRET,
     APP_CACHE_DURATION,
     APP_API_DOCS_PATH,
     APP_STATIC_SERVE_PATH,
@@ -25,7 +25,7 @@ server.use(cors({
 
 // session
 server.use(session({
-    secret: APP_SESSION_SECRET,
+    secret: USER_SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: APP_CACHE_DURATION },

@@ -1,4 +1,4 @@
-import { APP_API_PATH } from '../config.js';
+import { APP_API_PATH, APP_SESSION_SECRET, USER_SESSION_SECRET } from '../config.js';
 
 import bffNarrowcasting from './bff/NarrowcastingSingleton.js'; // Singleton instance
 import commandHandler from './backend/CommandHandlerSingleton.js'; // Singleton instance
@@ -11,7 +11,7 @@ class OrchestratorSingleton {
     init = (server: any) => {
         commandHandler.bootstrap();
         eventToCommandHandler.bootstrap();
-        bffNarrowcasting.bootstrap(server, { APP_API_PATH });
+        bffNarrowcasting.bootstrap(server, { APP_API_PATH, APP_SESSION_SECRET, USER_SESSION_SECRET });
     }
 }
 

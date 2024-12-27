@@ -3,6 +3,8 @@ using System.IO;
 using LiteDB;
 using Newtonsoft.Json;
 
+// TODO: Should be using the Playnite SDK for this
+
 class Program
 {
     static void Main(string[] args)

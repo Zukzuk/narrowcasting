@@ -19,11 +19,11 @@ export default class RetrieveMediaCoverAggregateRoot {
 
     async consume(command: RetrieveImageCommand): Promise<ImageRetrievedEvent | RetryImageRetrievalEvent | ImageRetrievalFailedEvent> {
 
-        const { index, mediaType, interval, startTime } = command.payload;
+        const { userId, index, mediaType, interval, startTime } = command.payload;
 
         try {
             // Get media
-            const data = this.imageSetRepository.retrieveData(mediaType, index) as IPlexMediaContainer;
+            const data = this.imageSetRepository.retrieveData(userId, mediaType, index) as IPlexMediaContainer;
             const url = `${PLEX_ORIGIN}/web/index.html#!/server/${PLEX_MACHINE_IDENTIFIER}/details?key=/library/metadata/${data.ratingKey}`;
 
             // Fetch image
@@ -33,14 +33,14 @@ export default class RetrieveMediaCoverAggregateRoot {
             const { optimizedImage, contentType } = await this.imageOptimizeService.webp(response as Buffer, 90);
 
             // Return a business event
-            return new ImageRetrievedEvent({ image: optimizedImage, contentType, url }, mediaType);
+            return new ImageRetrievedEvent({ userId, mediaType, image: optimizedImage, contentType, url }, mediaType);
         } catch (error: any) {
             // Retry image retrieval if image format is not supported
             if (error.message.contains('Unsupported image format')) {
                 const elapsedTime = Date.now() - startTime;
                 const remainingTime = interval - elapsedTime;
                 if (remainingTime > 5000) {
-                    const payload = { page: 0, interval, startTime };
+                    const payload = { userId, page: 0, interval, startTime };
                     const event = new RetryImageRetrievalEvent(payload);
                     return event;
                 }

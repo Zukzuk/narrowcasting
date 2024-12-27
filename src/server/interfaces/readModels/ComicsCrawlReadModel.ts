@@ -1,24 +1,33 @@
+import { log } from "../../utils.js";
 import CrawlCompletedEvent from "../../domain/shared/events/CrawlCompletedEvent.js";
 
 import broker from "../../infrastructure/broker/Broker.js";
 
+export interface IComicsCrawlQuery { 
+    userId: string, 
+    endpoint: string, 
+    search: string 
+};
+
 export default class ComicsCrawlReadModel {
-    
+
     private cache: Record<string, any> = {};
 
     constructor() {
         // subscribe to events
         broker.sub(CrawlCompletedEvent.type, event => {
-            console.log('ComicsCrawlReadModel: listen ->', event.type, event.endpoint, event.mediaType);
+            console.log('ComicsCrawlReadModel:: logging: listen ->', event.type, event.endpoint, event.mediaType);
             this.#denormalize(event);
         });
     }
 
-    query({ endpoint, search }: { endpoint: string, search: string }): Record<string, any> {
+    // TODO: Implement userId cache
+
+    query({ userId, endpoint, search }: IComicsCrawlQuery): Record<string, any> {
         const payload = this.cache[endpoint] || {};
         if (!search) return payload;
 
-        console.log('ComicsCrawlReadModel: query ->', endpoint, search);
+        log(userId, 'ComicsCrawlReadModel', 'query', 'read', `${ endpoint } with search '${ search }'`);
 
         // Create a case-insensitive fuzzy matching pattern allowing for variations
         const pattern = new RegExp(search.split(" ").join(".*"), "i");

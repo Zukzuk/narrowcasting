@@ -1,4 +1,4 @@
-import { shuffleArray } from "../../utils.js";
+import { shuffleArray, log } from "../../utils.js";
 import { mediaTypes, TMediaType } from "../../domain/shared/types/index.js";
 import { IPlexMediaContainer } from "../../domain/media/services/MediaImageService.js";
 import { IPlayniteGamesContainer } from "../../domain/games/services/GamesImageService.js";
@@ -6,90 +6,107 @@ import { IPlayniteGamesContainer } from "../../domain/games/services/GamesImageS
 type TCacheData = IPlayniteGamesContainer[] | IPlexMediaContainer[];
 
 interface IImageSet {
-    total: number;
-    remaining: number;
-    expiration: number;
-    uniqueIndexes: number[];
-    data: TCacheData;
+  total: number;
+  remaining: number;
+  expiration: number;
+  uniqueIndexes: number[];
+  data: TCacheData;
 }
 
 export default class ImageIndexRepository {
+  
+  private cache: { [userId: string]: Record<string, IImageSet> } = {};
 
-    private cache: Record<string, IImageSet> = {};
+  constructor(private APP_CACHE_DURATION: number) { }
 
-    constructor(private APP_CACHE_DURATION: number) { }
-
-    save(
-        mediaType: TMediaType,
-        { data, total }: { data?: TCacheData; total?: number }
-    ): IImageSet {
-        const resolvedTotal = total ?? data?.length;
-
-        if (typeof resolvedTotal !== 'number' || isNaN(resolvedTotal)) {
-            throw new Error(`Invalid parameters for saving ${mediaType}. Either 'total' or 'data' with length must be provided.`);
-        }
-
-        this.cache[mediaType] = {
-            total: resolvedTotal,
-            remaining: resolvedTotal,
-            uniqueIndexes: Array.from({ length: resolvedTotal }, (_, i) => i),
-            expiration: Date.now() + this.APP_CACHE_DURATION,
-            data: data ?? [],
-        };
-
-        this.#log('save', `${mediaType} with length ${this.cache[mediaType].remaining}`);
-
-        return this.cache[mediaType];
+  save(
+    userId: string,
+    mediaType: TMediaType,
+    { data, total }: { data?: TCacheData; total?: number }
+  ): IImageSet {
+    const resolvedTotal = total ?? data?.length;
+    if (typeof resolvedTotal !== 'number' || isNaN(resolvedTotal)) {
+      throw new Error(`Invalid parameters for saving ${mediaType}.`);
     }
 
-    retrieve(): Record<string, IImageSet> {
-        const payload = this.cache;
+    const userCache = this.#getUserCache(userId);
+    userCache[mediaType] = {
+      total: resolvedTotal,
+      remaining: resolvedTotal,
+      uniqueIndexes: Array.from({ length: resolvedTotal }, (_, i) => i),
+      expiration: Date.now() + this.APP_CACHE_DURATION,
+      data: data ?? [],
+    };
 
-        this.#log('retrieve', 'full cache');
+    log(userId, 'ImageIndexRepository', 'save', 'write', `data of '${mediaType}' with length ${userCache[mediaType].remaining}`);
+    return userCache[mediaType];
+  }
 
-        return payload;
+  retrieve(userId: string): Record<string, IImageSet> {
+    const userCache = this.#getUserCache(userId);
+
+    log(userId, 'ImageIndexRepository', 'retrieve', 'read', 'full cache');
+
+    return userCache;
+  }
+
+  retrieveData(
+    userId: string,
+    mediaType: TMediaType,
+    index: number
+  ): IPlexMediaContainer | IPlayniteGamesContainer {
+    const userCache = this.#getUserCache(userId);
+
+    const payload = userCache[mediaType].data[index];
+
+    log(userId, 'ImageIndexRepository', 'retrieveData', 'read', `${mediaType} with index '${index}'`);
+
+    return payload;
+  }
+
+  popUniqueIndex(userId: string, mediaType: TMediaType): number {
+    const userCache = this.#getUserCache(userId);
+    const imageSet = userCache[mediaType];
+
+    const randomIndex = Math.floor(Math.random() * imageSet.remaining);
+    imageSet.uniqueIndexes = shuffleArray(imageSet.uniqueIndexes);
+    const value = imageSet.uniqueIndexes.splice(randomIndex, 1)[0];
+    imageSet.remaining = imageSet.uniqueIndexes.length;
+
+    log(userId, 'ImageIndexRepository', 'popUniqueIndex', 'pop', `'${value}' from '${mediaType}', ${imageSet.remaining} remaining is set`);
+
+    return value;
+  }
+
+  hasValidCache(userId: string): boolean {
+    const userCache = this.#getUserCache(userId);
+
+    // TODO: you can do more robust checks here, e.g. check expiration times
+    const result = mediaTypes.every((mediaType) => {
+      return !!userCache[mediaType]?.remaining;
+    });
+
+    log(userId, 'ImageIndexRepository', 'hasValidCache', 'read', result.toString());
+
+    return result;
+  }
+
+  getInvalidCacheHits(userId: string): TMediaType[] {
+    const userCache = this.#getUserCache(userId);
+
+    const result = mediaTypes.filter((mediaType) => {
+      return !userCache[mediaType]?.remaining;
+    });
+
+    log(userId, 'ImageIndexRepository', 'getInvalidCacheHits', 'read', result.toString());
+    
+    return result;
+  }
+
+  #getUserCache(userId: string): Record<string, IImageSet> {
+    if (!this.cache[userId]) {
+      this.cache[userId] = {};
     }
-
-    retrieveData(mediaType: TMediaType, index: number): IPlexMediaContainer | IPlayniteGamesContainer {
-        const payload = this.cache[mediaType].data[index];
-
-        this.#log('retrieveData', `${mediaType} with index '${index}'`);
-
-        return payload;
-    }
-
-    popUniqueIndex(mediaType: TMediaType): number {
-        const index = Math.floor(Math.random() * this.cache[mediaType].remaining);
-        this.cache[mediaType].uniqueIndexes = shuffleArray(this.cache[mediaType].uniqueIndexes);
-        const value = this.cache[mediaType].uniqueIndexes.splice(index, 1)[0];
-        this.cache[mediaType].remaining = this.cache[mediaType].uniqueIndexes.length;
-
-        this.#log('popUniqueIndex', `${value} from '${mediaType}' cache with length ${this.cache[mediaType].remaining}`);
-
-        return value;
-    }
-
-    hasValidCache(): boolean {
-        const result = mediaTypes.every(mediaType => {
-            return !!this.cache[mediaType]?.remaining;
-        });
-
-        this.#log('hasValidCache', result.toString());
-
-        return result;
-    }
-
-    getInvalidCacheHits(): TMediaType[] {
-        const result = mediaTypes.filter(mediaType => {
-            return !this.cache[mediaType]?.remaining;
-        });
-        
-        this.#log('getInvalidCacheHits', result.toString());
-
-        return result;
-    }
-
-    #log(action: string, message: string) {
-        console.log(`ImageIndexRepository: ${action} -> ${message}`);
-    }
+    return this.cache[userId];
+  }
 }

@@ -1,3 +1,4 @@
+import { log } from '../../utils.js';
 import { KOMGA_API, KOMGA_AUTH, PLAYNITE_BACKUP_ORIGIN, PLEX_API, PLEX_API_KEY } from '../../config.js';
 import { mediaTypesKomga, mediaTypesPlex, mediaTypesPlaynite, TMediaType } from '../shared/types/index.js';
 import MediaImageService from '../../domain/media/services/MediaImageService.js';
@@ -22,26 +23,26 @@ export default class SelectRandomImageAggregateRoot {
 
     async consume(command: SelectRandomImageCommand): Promise<RandomImageSelectedEvent | RandomImageSelectionFailedEvent> {
 
-        const { page, interval, startTime } = command.payload;
+        const { userId, page, interval, startTime } = command.payload;
 
         try {
             // Check if library indexes cache is filled
-            let cache = this.imageIndexRepository.retrieve();
-            const hasValidCache = this.imageIndexRepository.hasValidCache();
+            let cache = this.imageIndexRepository.retrieve(userId);
+            const hasValidCache = this.imageIndexRepository.hasValidCache(userId);
 
             if (!hasValidCache) {
-                const invalidCaches = this.imageIndexRepository.getInvalidCacheHits();
-
+                const invalidCaches = this.imageIndexRepository.getInvalidCacheHits(userId);
+                
                 if (mediaTypesKomga.some(type => invalidCaches.includes(type))) {
                     // Fetch comics totals (no data, because needs to be crawled per page)
                     const total = await this.comicsImageService.fetchTotalBooks();
-                    cache["comics"] = this.imageIndexRepository.save("comics", { total });
+                    cache['comics'] = this.imageIndexRepository.save(userId, 'comics', { total });
                 }
 
                 if (mediaTypesPlaynite.some(type => invalidCaches.includes(type))) {
                     // Fetch games data (recieves full contents data)
                     const data = await this.gamesImageService.fetchGamesData();
-                    cache["games"] = this.imageIndexRepository.save("games", { data });
+                    cache['games'] = this.imageIndexRepository.save(userId, 'games', { data });
                 }
 
                 if (mediaTypesPlex.some(type => invalidCaches.includes(type))) {
@@ -51,9 +52,9 @@ export default class SelectRandomImageAggregateRoot {
                         // Fetch media for each section
                         const key = section.key;
                         const mediaType = section.title.toLowerCase().replace(/ /g, '-') as TMediaType;
-                        // Fill set with mediaType
+                        // Fill set with mediaType data
                         const data = await this.mediaImageService.fetchMediaData(mediaType, key);
-                        cache[mediaType] = this.imageIndexRepository.save(mediaType, { data });
+                        cache[mediaType] = this.imageIndexRepository.save(userId, mediaType, { data });
                     });
                 }
             }
@@ -79,13 +80,13 @@ export default class SelectRandomImageAggregateRoot {
             if (!mediaType) throw new Error("Failed to select a random media type (this should not happen).");
             const cacheItem = cache[mediaType];
             if (!cacheItem) throw new Error(`Media type "${mediaType}" not found in cache (this should not happen).`);
-            console.log(`SelectRandomImageAggregateRoot: threshold ${randomValue} -> ${mediaType}`);
+            log(userId, 'SelectRandomImageAggregateRoot', 'threshold', 'evaluate', `${randomValue} is '${mediaType}'`);
 
             // Pick random index from the random mediaType
-            const index = this.imageIndexRepository.popUniqueIndex(mediaType);
+            const index = this.imageIndexRepository.popUniqueIndex(userId, mediaType);
 
             // Return a business event
-            return new RandomImageSelectedEvent({ index, mediaType, page, interval, startTime });
+            return new RandomImageSelectedEvent({ userId, index, mediaType, page, interval, startTime });
         } catch (error: any) {
             // Return failure event
             const event = new RandomImageSelectionFailedEvent(error.message, error.url);

@@ -18,7 +18,7 @@ export default class RetrieveComicImageAggregateRoot {
 
     async consume(command: RetrieveImageCommand): Promise<ImageRetrievedEvent | RetryImageRetrievalEvent | ImageRetrievalFailedEvent> {
         
-        const { index, mediaType, page, interval, startTime } = command.payload;
+        const { userId, index, mediaType, page, interval, startTime } = command.payload;
 
         try {
             // Get random comic
@@ -32,14 +32,14 @@ export default class RetrieveComicImageAggregateRoot {
             const { optimizedImage, contentType } = await this.imageOptimizeService.webp(response as Buffer, 90);
 
             // Return a business event
-            return new ImageRetrievedEvent({ image: optimizedImage, contentType, url }, mediaType);
+            return new ImageRetrievedEvent({userId, mediaType, image: optimizedImage, contentType, url });
         } catch (error: any) {     
             // Retry image retrieval if image format is not supported
             if (error.message.contains('Unsupported image format')) {
                 const elapsedTime = Date.now() - startTime;
                 const remainingTime = interval - elapsedTime;
                 if (remainingTime > 5000) {
-                    const payload = { page, interval, startTime };
+                    const payload = { userId, page, interval, startTime };
                     const event = new RetryImageRetrievalEvent(payload);
                     return event;
                 }

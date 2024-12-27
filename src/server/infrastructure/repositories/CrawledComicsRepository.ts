@@ -5,6 +5,8 @@ export default class CrawledComicsRepository {
         this.cache = {};
     }
 
+    // TODO: Add userId logic
+
     save(endpoint: string, data: any): Record<string, string> {
         if (!this.cache[endpoint]) this.cache[endpoint] = {};
         data.forEach((item: any) => {
@@ -26,6 +28,6 @@ export default class CrawledComicsRepository {
     }
 
     log(action: string, endpoint: string, payload: Record<string, string>) {
-        console.log(`CrawledComicsRepository: ${action} -> ${Object.keys(payload).length} items for '${endpoint}'`);
+        console.log(`CrawledComicsRepository (old logging): ${action} -> ${Object.keys(payload).length} items for '${endpoint}'`);
     }
 }

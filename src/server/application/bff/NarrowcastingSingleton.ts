@@ -1,6 +1,7 @@
 import AppApi from '../../interfaces/apis/AppApi.js';
 import ComicsApi from '../../interfaces/apis/ComicsApi.js';
 import MediaApi from '../../interfaces/apis/MediaApi.js';
+import GamesApi from '../../interfaces/apis/GamesApi.js';
 import VersionReadModel from '../../interfaces/readmodels/VersionReadModel.js';
 import ErrorReadModel from '../../interfaces/readmodels/ErrorReadModel.js';
 import ComicsCrawlReadModel from '../../interfaces/readmodels/ComicsCrawlReadModel.js';
@@ -19,23 +20,26 @@ class NarrowcastingSingleton {
     ) { }
     
     bootstrap(
-        app: any,
-        { APP_API_PATH }: { APP_API_PATH: string },
+        server: any,
+        { APP_API_PATH, APP_SESSION_SECRET, USER_SESSION_SECRET }: { APP_API_PATH: string, APP_SESSION_SECRET: string, USER_SESSION_SECRET: string },
     ) {
         // implement apis
-        app.use(APP_API_PATH, AppApi({
+        server.use(APP_API_PATH, AppApi(USER_SESSION_SECRET, {
             versionReadModel: this.versionReadModel,
+            errorReadModel: this.errorReadModel,
             imageReadModel: this.imageReadModel,
         }));
-        app.use(APP_API_PATH, ComicsApi({
+        server.use(APP_API_PATH, ComicsApi({
             comicsCrawlReadModel: this.comicsCrawlReadModel,
         }));
-        app.use(APP_API_PATH, MediaApi({
+        server.use(APP_API_PATH, MediaApi({
+        }));
+        server.use(APP_API_PATH, GamesApi({
         }));
 
         // eager commands
-        broker.pub(new CrawlCommand({ endpoint: 'series' }));
-        broker.pub(new CrawlCommand({ endpoint: 'collections' }));
+        // broker.pub(new CrawlCommand({ userId: APP_SESSION_SECRET, endpoint: 'series' }));
+        // broker.pub(new CrawlCommand({ userId: APP_SESSION_SECRET, endpoint: 'collections' }));
     }
 }
 

@@ -34,13 +34,13 @@ async function getGatewayAddress() {
 function doAxiosLogging(logReq = true, logResp = true) {
     if (logReq) {
         axios.interceptors.request.use(request => {
-            console.log('Axios: request ->', request.url);
+            console.log('Axios:: logging: request ->', request.url);
             return request;
         });
     }
     if (logResp) {
         axios.interceptors.response.use(response => {
-            console.log('Axios: response ->', response);
+            console.log('Axios:: logging: response ->', response);
             return response;
         });
     }
@@ -79,4 +79,8 @@ export function shuffleArray(array: number[]): number[] {
         [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
+}
+
+export function log(userId: string, inst:string, method:string, action: string, message: string) {
+    console.log(`${userId}::: ${inst}:: ${method}: ${action} -> ${message}`);
 }

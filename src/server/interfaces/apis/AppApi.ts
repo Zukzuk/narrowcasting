@@ -2,19 +2,23 @@ import express from 'express';
 import { handleError } from '../../utils.js';
 import SelectRandomImageCommand from '../../domain/shared/commands/SelectRandomImageCommand.js';
 import VersionReadModel from '../../interfaces/readmodels/VersionReadModel.js';
+import ErrorReadModel from '../../interfaces/readmodels/ErrorReadModel.js';
 import ImageReadModel from '../../interfaces/readmodels/ImageReadModel.js';
 
 import broker from '../../infrastructure/broker/Broker.js';
 const router = express.Router();
 
 export default function AppApi(
+    USER_SESSION_SECRET: string,
     models: {
         versionReadModel: VersionReadModel,
+        errorReadModel: ErrorReadModel,
         imageReadModel: ImageReadModel,
     }
 ) {
     const {
         versionReadModel,
+        errorReadModel,
         imageReadModel,
     } = models;
 
@@ -54,23 +58,61 @@ export default function AppApi(
      *         description: Internal Server Error or no valid image found
      */
     router.post('/command/SelectRandomImageCommand', async (req: any, res: any) => {
-        const {
-            page = 0,
-            interval = 10000
-        }: {
-            page: number,
-            interval: number
-        } = req.query;
+        const { page = 0, interval = 10000 }: { page: number, interval: number } = req.query;
 
         try {
-            broker.pub(new SelectRandomImageCommand({ page, interval, startTime: Date.now() }));
+            broker.pub(new SelectRandomImageCommand({ userId: req.session.userId, page, interval, startTime: Date.now() }));
             res.status(202).type('text').send('ok');
         } catch (error: any) {
-            handleError(error, res, "Error publishing RandomImageCommand");
+            handleError(error, res, "Error publishing SelectRandomImageCommand");
         }
     });
 
     /////////// QUERIES /////////////
+
+        /**
+     * @openapi
+     * /api/query/login:
+     *   get:
+     *     tags: 
+     *       - query
+     *     summary: Dummy login
+     *     description: ...
+     *     responses:
+     *       200:
+     *        description: Dummy login success
+     *        headers:
+     *         Set-Cookie:
+     *         description: >
+     *             Session cookie (if using express-session or similar).  
+     *             For example: `connect.sid=...; Path=/; HttpOnly`.
+     *         schema:
+     *             type: string
+     *         content:
+     *             application/json:
+     *             schema:
+     *                 type: object
+     *                 properties:
+     *                 message:
+     *                     type: string
+     *                     description: A simple status message.
+     *                 userId:
+     *                     type: string
+     *                     description: The generated/assigned dummy user ID.
+     *                 required:
+     *                 - message
+     *                 - userId
+     *       500:
+     *         description: Internal server error
+     */
+    router.get('/query/login', (req, res) => {
+        // TODO: Should add authorization to the app
+        // Once a user has authenticated/identified themselves,
+        // we assign a userId to their session:
+        req.session.userId = USER_SESSION_SECRET; // e.g. "abc123" or a database ID
+      
+        res.send('User is now logged in with session userId = ' + req.session.userId);
+      });
 
     /**
      * @openapi
@@ -104,6 +146,36 @@ export default function AppApi(
 
     /**
      * @openapi
+     * /api/query/errors:
+     *   get:
+     *     tags: 
+     *       - query
+     *     summary: Get the application's errors
+     *     description: Returns all currently aggregated errors of the application as plain text.
+     *     responses:
+     *       200:
+     *         description: Successfully retrieved errors
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "[...errors]"
+     *               description: List of errors of the application
+     *       500:
+     *         description: Internal server error
+     */
+    router.get('/query/errors', async (req: any, res: any) => {
+        try {
+            const response = await errorReadModel.query();
+            if (!response) return res.status(500).json({ error: "No valid content found" });
+            res.type('text').send(JSON.stringify(response, null, 2)); // Send as plain text
+        } catch (error: any) {
+            handleError(error, res, "Error requesting errors");
+        }
+    });
+
+    /**
+     * @openapi
      * /api/query/library/images:
      *   get:
      *     tags: 
@@ -122,7 +194,7 @@ export default function AppApi(
      */
     router.get('/query/library/images', async (req: any, res: any) => {
         try {
-            const response = await imageReadModel.query();
+            const response = await imageReadModel.query({ userId: req.session.userId, mediaType: 'latest' });
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.set('X-Custom-Image-URL', response.url);
             res.set('Content-Type', response.contentType);

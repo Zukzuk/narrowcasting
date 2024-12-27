@@ -3,7 +3,8 @@ import { TMediaType } from "../types/index.js";
 
 export const RANDOM_IMAGE_SELECTED_EVENT = 'RANDOM_IMAGE_SELECTED_EVENT' as const;
 
-export type TRandomImageSelectedPayload = {
+export interface IRandomImageSelectedPayload {
+    userId: string;
     index: number;
     mediaType: TMediaType; 
     page: number;
@@ -17,7 +18,7 @@ export default class RandomImageSelectedEvent {
     type = RANDOM_IMAGE_SELECTED_EVENT;
 
     constructor(
-        public payload: TRandomImageSelectedPayload,
+        public payload: IRandomImageSelectedPayload,
         public timestamp?: string
     ) {}
 }

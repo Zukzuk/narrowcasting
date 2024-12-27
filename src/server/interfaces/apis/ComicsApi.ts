@@ -59,7 +59,7 @@ export default function ComicsApi(
     router.get('/query/comics/series', async (req: any, res: any) => {
         const { search } = req.query;
         try {
-            const response = await comicsCrawlReadModel.query({ endpoint: 'series', search });
+            const response = await comicsCrawlReadModel.query({ userId: req.session.userId, endpoint: 'series', search });
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.json(response);
         } catch (error: any) {
@@ -94,7 +94,7 @@ export default function ComicsApi(
     router.get('/query/comics/collections', async (req: any, res: any) => {
         const { search } = req.query;
         try {
-            const response = await comicsCrawlReadModel.query({ endpoint: 'collections', search });
+            const response = await comicsCrawlReadModel.query({ userId: req.session.userId, endpoint: 'collections', search });
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.json(response);
         } catch (error: any) {
@@ -119,6 +119,8 @@ export default function ComicsApi(
      * @openapi
      * /api/query/comics/json:
      *   get:
+     *     tags: 
+     *       - experimental
      *     summary: Retrieve the JSON representation of a comics directory
      *     description: Returns a JSON representation of a directory containing `.cbr` and `.cbz` files, organized hierarchically.
      *     parameters:

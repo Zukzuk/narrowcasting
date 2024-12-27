@@ -19,11 +19,11 @@ export const mediaTypes = [
 export type TMediaType = (typeof mediaTypes)[number]; // Union type of all media types
 
 import CrawlCommand from '../commands/CrawlCommand.js';
-import RandomImageCommand from '../commands/SelectRandomImageCommand.js';
+import SelectRandomImageCommand from '../commands/SelectRandomImageCommand.js';
 import RetrieveImageCommand from '../commands/RetrieveImageCommand.js';
 export type TCommand =
     CrawlCommand |
-    RandomImageCommand |
+    SelectRandomImageCommand |
     RetrieveImageCommand;
 
 import CrawlCompletedEvent from '../events/CrawlCompletedEvent.js';

@@ -3,7 +3,9 @@ import { TMediaType } from "../types/index.js";
 
 export const IMAGE_RETRIEVED_EVENT = 'IMAGE_RETRIEVED_EVENT' as const;
 
-export type TImageRetrievedPayload = {
+export interface IImageRetrievedPayload {
+    userId: string;
+    mediaType: TMediaType;
     url: string;
     image: Buffer;
     contentType: string;
@@ -15,8 +17,7 @@ export default class ImageRetrievedEvent {
     type = IMAGE_RETRIEVED_EVENT;
 
     constructor(
-        public payload: TImageRetrievedPayload,
-        public mediaType: TMediaType,
+        public payload: IImageRetrievedPayload,
         public timestamp?: string,
     ) {}
 }
