@@ -1,0 +1,34 @@
+# Stage 1: Build the application
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /app
+
+# Create a new console project
+RUN dotnet new console -n LiteDBReader
+
+# Set the working directory to the generated project
+WORKDIR /app/LiteDBReader
+
+# Copy Program.cs into the project directory
+COPY ./Program.cs ./Program.cs
+
+# Add NuGet packages
+RUN dotnet add package LiteDB && dotnet add package Newtonsoft.Json
+
+# Build the project
+RUN dotnet publish -c Release -o out
+
+# Debug: Check output
+RUN ls -l /app/LiteDBReader/out
+
+# Stage 2: Runtime image
+FROM mcr.microsoft.com/dotnet/runtime:6.0
+WORKDIR /app
+
+# Copy built files from the build stage
+COPY --from=build /app/LiteDBReader/out .
+
+# Debug: Check runtime files
+RUN ls -l /app
+
+# Run the application
+CMD ["dotnet", "LiteDBReader.dll"]

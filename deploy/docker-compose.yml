@@ -7,7 +7,8 @@ services:
       - public.env
       - private.env
     volumes:
-      - ../../Games/Playnite:/usr/src/app/mounts
+      - /volume1/Games/Playnite:/usr/src/app/mounts/playnite
+      - /volume1/Comics:/usr/src/app/mounts/comics
     restart: always
     networks:
       - narrowcasting

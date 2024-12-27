@@ -1,0 +1,13 @@
+services:
+  dotnet:
+    build:
+      context: .
+      dockerfile: Dockerfile.litedb
+    container_name: dotnet_cli
+    volumes:
+      - ./playnite/library:/app/library
+      - ./playnite/output:/app/output
+    working_dir: /app
+    stdin_open: true
+    tty: true
+    entrypoint: ["dotnet", "LiteDBReader.dll"]  # Explicitly define the entrypoint
