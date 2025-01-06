@@ -1,7 +1,7 @@
 import { shuffleArray, log } from "../../utils.js";
 import { mediaTypes, TMediaType } from "../../domain/shared/types/index.js";
-import { IPlexMediaContainer } from "../../domain/media/services/MediaImageService.js";
-import { IPlayniteGamesContainer } from "../../domain/games/services/GamesImageService.js";
+import { IPlexMediaContainer } from "../../domain/adapters/plex/services/MediaImageService.js";
+import { IPlayniteGamesContainer } from "../../domain/adapters/playnite/services/GamesImageService.js";
 
 type TCacheData = IPlayniteGamesContainer[] | IPlexMediaContainer[];
 
@@ -66,14 +66,14 @@ export default class ImageIndexRepository {
 
   popUniqueIndex(userId: string, mediaType: TMediaType): number {
     const userCache = this.#getUserCache(userId);
-    const imageSet = userCache[mediaType];
+    const imageIndex = userCache[mediaType];
 
-    const randomIndex = Math.floor(Math.random() * imageSet.remaining);
-    imageSet.uniqueIndexes = shuffleArray(imageSet.uniqueIndexes);
-    const value = imageSet.uniqueIndexes.splice(randomIndex, 1)[0];
-    imageSet.remaining = imageSet.uniqueIndexes.length;
+    const randomIndex = Math.floor(Math.random() * imageIndex.remaining);
+    imageIndex.uniqueIndexes = shuffleArray(imageIndex.uniqueIndexes);
+    const value = imageIndex.uniqueIndexes.splice(randomIndex, 1)[0];
+    imageIndex.remaining = imageIndex.uniqueIndexes.length;
 
-    log(userId, 'ImageIndexRepository', 'popUniqueIndex', 'pop', `'${value}' from '${mediaType}', ${imageSet.remaining} remaining is set`);
+    log(userId, 'ImageIndexRepository', 'popUniqueIndex', 'pop', `'${value}' from '${mediaType}', ${imageIndex.remaining} remaining is set`);
 
     return value;
   }

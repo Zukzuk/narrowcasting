@@ -1,10 +1,10 @@
-import { KOMGA_API, KOMGA_AUTH, KOMGA_ORIGIN } from '../../config.js';
-import RetrieveImageCommand from '../shared/commands/RetrieveImageCommand.js';
-import ImageRetrievedEvent from '../shared/events/ImageRetrievedEvent.js';
-import ImageRetrievalFailedEvent from '../shared/events/ImageRetrievalFailedEvent.js';
+import { KOMGA_API, KOMGA_AUTH, KOMGA_ORIGIN } from '../../../config.js';
+import RetrieveImageCommand from '../../shared/commands/RetrieveImageCommand.js';
+import ImageRetrievedEvent from '../../shared/events/ImageRetrievedEvent.js';
+import ImageRetrievalFailedEvent from '../../shared/events/ImageRetrievalFailedEvent.js';
 import ComicsImageService from './services/ComicsImageService.js';
-import ImageOptimizeService from '../shared/services/ImageOptimizeService.js';
-import RetryImageRetrievalEvent from '../shared/events/RetryImageRetrievalEvent.js';
+import ImageOptimizeService from '../../shared/services/ImageOptimizeService.js';
+import RetryImageRetrievalEvent from '../../shared/events/RetryImageRetrievalEvent.js';
 
 export default class RetrieveComicImageAggregateRoot {
     

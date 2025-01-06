@@ -1,12 +1,12 @@
 import { log } from '../../utils.js';
 import { KOMGA_API, KOMGA_AUTH, PLAYNITE_BACKUP_ORIGIN, PLEX_API, PLEX_API_KEY } from '../../config.js';
 import { mediaTypesKomga, mediaTypesPlex, mediaTypesPlaynite, TMediaType } from '../shared/types/index.js';
-import MediaImageService from '../../domain/media/services/MediaImageService.js';
-import ComicsImageService from '../../domain/comics/services/ComicsImageService.js';
-import GamesImageService from '../../domain/games/services/GamesImageService.js';
-import SelectRandomImageCommand from './commands/SelectRandomImageCommand.js';
-import RandomImageSelectedEvent from './events/RandomImageSelectedEvent.js';
-import RandomImageSelectionFailedEvent from './events/RandomImageSelectionFailedEvent.js';
+import MediaImageService from '../adapters/plex/services/MediaImageService.js';
+import ComicsImageService from '../adapters/komga/services/ComicsImageService.js';
+import GamesImageService from '../adapters/playnite/services/GamesImageService.js';
+import SelectRandomImageCommand from '../shared/commands/SelectRandomImageCommand.js';
+import RandomImageSelectedEvent from '../shared/events/RandomImageSelectedEvent.js';
+import RandomImageSelectionFailedEvent from '../shared/events/RandomImageSelectionFailedEvent.js';
 import ImageIndexRepository from '../../infrastructure/repositories/ImageIndexRepository.js';
 
 export default class SelectRandomImageAggregateRoot {

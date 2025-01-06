@@ -1,5 +1,5 @@
 import axios, { AxiosBasicCredentials } from 'axios';
-import { UrlError } from '../../../utils.js';
+import { UrlError } from '../../../../utils.js';
 
 export default class CrawlComicsEndpointService {
 

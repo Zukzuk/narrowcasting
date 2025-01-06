@@ -109,9 +109,8 @@ export default function AppApi(
         // TODO: Should add authorization to the app
         // Once a user has authenticated/identified themselves,
         // we assign a userId to their session:
-        req.session.userId = USER_SESSION_SECRET; // e.g. "abc123" or a database ID
-      
-        res.send('User is now logged in with session userId = ' + req.session.userId);
+        req.session.userId = USER_SESSION_SECRET;
+        res.send(`Dummy session userId provided: ${ req.session.userId }`);
       });
 
     /**

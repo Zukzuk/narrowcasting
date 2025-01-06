@@ -1,18 +1,18 @@
-import { PLEX_API_KEY, PLEX_MACHINE_IDENTIFIER, PLEX_API, PLEX_ORIGIN } from '../../config.js';
-import RetrieveImageCommand from '../shared/commands/RetrieveImageCommand.js';
-import RetryImageRetrievalEvent from '../shared/events/RetryImageRetrievalEvent.js';
-import ImageRetrievedEvent from '../../domain/shared/events/ImageRetrievedEvent.js';
-import ImageRetrievalFailedEvent from '../../domain/shared/events/ImageRetrievalFailedEvent.js';
-import MediaImageService, { IPlexMediaContainer } from '../../domain/media/services/MediaImageService.js';
-import ImageOptimizeService from '../../domain/shared/services/ImageOptimizeService.js';
-import ImageSetRepository from '../../infrastructure/repositories/ImageIndexRepository.js';
+import { PLEX_API_KEY, PLEX_MACHINE_IDENTIFIER, PLEX_API, PLEX_ORIGIN } from '../../../config.js';
+import RetrieveImageCommand from '../../shared/commands/RetrieveImageCommand.js';
+import RetryImageRetrievalEvent from '../../shared/events/RetryImageRetrievalEvent.js';
+import ImageRetrievedEvent from '../../../domain/shared/events/ImageRetrievedEvent.js';
+import ImageRetrievalFailedEvent from '../../../domain/shared/events/ImageRetrievalFailedEvent.js';
+import MediaImageService, { IPlexMediaContainer } from './services/MediaImageService.js';
+import ImageOptimizeService from '../../../domain/shared/services/ImageOptimizeService.js';
+import ImageIndexRepository from '../../../infrastructure/repositories/ImageIndexRepository.js';
 
 export default class RetrieveMediaCoverAggregateRoot {
 
     private mediaImageService: MediaImageService;
     private imageOptimizeService: ImageOptimizeService;
 
-    constructor(private imageSetRepository: ImageSetRepository) {
+    constructor(private imageIndexRepository: ImageIndexRepository) {
         this.mediaImageService = new MediaImageService(PLEX_API, PLEX_API_KEY);
         this.imageOptimizeService = new ImageOptimizeService();
     }
@@ -23,7 +23,7 @@ export default class RetrieveMediaCoverAggregateRoot {
 
         try {
             // Get media
-            const data = this.imageSetRepository.retrieveData(userId, mediaType, index) as IPlexMediaContainer;
+            const data = this.imageIndexRepository.retrieveData(userId, mediaType, index) as IPlexMediaContainer;
             const url = `${PLEX_ORIGIN}/web/index.html#!/server/${PLEX_MACHINE_IDENTIFIER}/details?key=/library/metadata/${data.ratingKey}`;
 
             // Fetch image

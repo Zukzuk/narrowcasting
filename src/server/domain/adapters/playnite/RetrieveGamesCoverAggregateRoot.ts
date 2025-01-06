@@ -1,18 +1,18 @@
-import { PLAYNITE_BACKUP_ORIGIN } from '../../config.js';
-import RetrieveImageCommand from '../shared/commands/RetrieveImageCommand.js';
-import ImageRetrievedEvent from '../shared/events/ImageRetrievedEvent.js';
-import ImageRetrievalFailedEvent from '../shared/events/ImageRetrievalFailedEvent.js';
+import { PLAYNITE_BACKUP_ORIGIN } from '../../../config.js';
+import RetrieveImageCommand from '../../shared/commands/RetrieveImageCommand.js';
+import ImageRetrievedEvent from '../../shared/events/ImageRetrievedEvent.js';
+import ImageRetrievalFailedEvent from '../../shared/events/ImageRetrievalFailedEvent.js';
 import GamesImageService, { IPlayniteGamesContainer } from './services/GamesImageService.js';
-import ImageOptimizeService from '../shared/services/ImageOptimizeService.js';
-import RetryImageRetrievalEvent from '../shared/events/RetryImageRetrievalEvent.js';
-import ImageIndexRepository from 'server/infrastructure/repositories/ImageIndexRepository.js';
+import ImageOptimizeService from '../../shared/services/ImageOptimizeService.js';
+import RetryImageRetrievalEvent from '../../shared/events/RetryImageRetrievalEvent.js';
+import ImageIndexRepository from '../../../infrastructure/repositories/ImageIndexRepository.js';
 
 export default class RetrieveComicImageAggregateRoot {
     
     private gamesImageService: GamesImageService;
     private imageOptimizeService: ImageOptimizeService;
 
-    constructor(private imageSetRepository: ImageIndexRepository) {
+    constructor(private imageIndexRepository: ImageIndexRepository) {
         this.gamesImageService = new GamesImageService(PLAYNITE_BACKUP_ORIGIN);
         this.imageOptimizeService = new ImageOptimizeService();
     }
@@ -23,7 +23,7 @@ export default class RetrieveComicImageAggregateRoot {
 
         try {
             // Get media
-            const data = this.imageSetRepository.retrieveData(userId, mediaType, index) as IPlayniteGamesContainer;
+            const data = this.imageIndexRepository.retrieveData(userId, mediaType, index) as IPlayniteGamesContainer;
 
             // Fetch image
             const response = await this.gamesImageService.fetchImage(data.folderPath);

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
-import { UrlError } from '../../../utils.js';
+import { UrlError } from '../../../../utils.js';
 
 export interface IPlayniteGamesContainer {
     name: string;

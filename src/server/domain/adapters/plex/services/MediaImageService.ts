@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { UrlError } from '../../../utils.js';
-import { TMediaType } from '../../shared/types/index.js';
+import { UrlError } from '../../../../utils.js';
+import { TMediaType } from '../../../shared/types/index.js';
 
 export interface IPlexMediaSections {
     key: string,

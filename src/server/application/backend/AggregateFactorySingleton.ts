@@ -1,21 +1,21 @@
 import { APP_CACHE_DURATION } from '../../config.js';
 import CrawledComicsRepository from '../../infrastructure/repositories/CrawledComicsRepository.js';
-import ImageSetRepository from '../../infrastructure/repositories/ImageIndexRepository.js';
-import CrawlComicsAggregateRoot from '../../domain/comics/CrawlComicsAggregateRoot.js';
-import RetrieveComicImageAggregateRoot from '../../domain/comics/RetrieveComicImageAggregateRoot.js';
-import RetrieveMediaCoverAggregateRoot from '../../domain/media/RetrieveMediaCoverAggregateRoot.js';
-import SelectRandomImageAggregateRoot from '../../domain/shared/SelectRandomImageAggregateRoot.js';
-import RetrieveGamesCoverAggregateRoot from '../../domain/games/RetrieveGamesCoverAggregateRoot.js';
+import ImageIndexRepository from '../../infrastructure/repositories/ImageIndexRepository.js';
+import CrawlComicsAggregateRoot from '../../domain/adapters/komga/CrawlComicsAggregateRoot.js';
+import RetrieveComicImageAggregateRoot from '../../domain/adapters/komga/RetrieveComicImageAggregateRoot.js';
+import RetrieveMediaCoverAggregateRoot from '../../domain/adapters/plex/RetrieveMediaCoverAggregateRoot.js';
+import RetrieveGamesCoverAggregateRoot from '../../domain/adapters/playnite/RetrieveGamesCoverAggregateRoot.js';
+import SelectRandomImageAggregateRoot from '../../domain/narrowcasting/SelectRandomImageAggregateRoot.js';
 
 class AggregateFactorySingleton {
     
     constructor(
         private crawledComicsRepository: CrawledComicsRepository,
-        private imageSetRepository: ImageSetRepository,
+        private imageIndexRepository: ImageIndexRepository,
     ) { }
     
     createSelectRandomImage(): SelectRandomImageAggregateRoot {
-        return new SelectRandomImageAggregateRoot(this.imageSetRepository);
+        return new SelectRandomImageAggregateRoot(this.imageIndexRepository);
     }
 
     createRetrieveComicImage(): RetrieveComicImageAggregateRoot {
@@ -23,11 +23,11 @@ class AggregateFactorySingleton {
     }
 
     createRetrieveMediaCover(): RetrieveMediaCoverAggregateRoot {
-        return new RetrieveMediaCoverAggregateRoot(this.imageSetRepository);
+        return new RetrieveMediaCoverAggregateRoot(this.imageIndexRepository);
     }
    
     createRetrieveGamesImage(): RetrieveGamesCoverAggregateRoot {        
-        return new RetrieveGamesCoverAggregateRoot(this.imageSetRepository);
+        return new RetrieveGamesCoverAggregateRoot(this.imageIndexRepository);
     }
     
     createCrawlComics(): CrawlComicsAggregateRoot {        
@@ -37,5 +37,5 @@ class AggregateFactorySingleton {
 
 export default new AggregateFactorySingleton(
     new CrawledComicsRepository(),
-    new ImageSetRepository(APP_CACHE_DURATION),
+    new ImageIndexRepository(APP_CACHE_DURATION),
 ); // Singleton instance through ES6 module caching
