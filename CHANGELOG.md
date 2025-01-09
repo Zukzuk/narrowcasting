@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.10.0](https://github.com/Zukzuk/narrowcasting/compare/v4.9.2...v4.10.0) (2025-01-09)
+
+
+### Features
+
+* added traverse directory to json output scaffolding, also added alot of docs ([bd8da0f](https://github.com/Zukzuk/narrowcasting/commit/bd8da0f9c29db190df2cde21979592d8fd788357))
+
 ### [4.9.2](https://github.com/Zukzuk/narrowcasting/compare/v4.9.1...v4.9.2) (2025-01-09)
 
 ### [4.9.1](https://github.com/Zukzuk/narrowcasting/compare/v4.9.0...v4.9.1) (2025-01-06)
