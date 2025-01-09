@@ -1,6 +1,12 @@
 import axios, { AxiosBasicCredentials } from 'axios';
 import { UrlError } from '../../../../utils.js';
 
+/**
+ * Service for fetching comic images from Komga.
+ * 
+ * @class ComicsImageService
+ * @export
+ */
 export default class ComicsImageService {
 
     constructor(
@@ -8,6 +14,12 @@ export default class ComicsImageService {
         private KOMGA_AUTH: AxiosBasicCredentials
     ) {}
 
+    /**
+     * Fetch the total number of books.
+     * 
+     * @returns {Promise<number>}
+     * @memberof ComicsImageService
+     */
     fetchTotalBooks = async (): Promise<number> => {
         const url = `${this.KOMGA_API}/books`;
         try {
@@ -23,6 +35,13 @@ export default class ComicsImageService {
         }
     }
 
+    /**
+     * Fetch a random book ID.
+     * 
+     * @param {number} randomIndex
+     * @returns {Promise<string>}
+     * @memberof ComicsImageService
+     */
     fetchBookId = async (randomIndex: number): Promise<string> => {
         const url = `${this.KOMGA_API}/books`;
         try {
@@ -38,6 +57,14 @@ export default class ComicsImageService {
         }
     }
 
+    /**
+     * Fetch a comic image.
+     * 
+     * @param {string} bookId
+     * @param {number} page
+     * @returns {Promise<Buffer>}
+     * @memberof ComicsImageService
+     */
     fetchImage = async (
         bookId: string,
         page: number,

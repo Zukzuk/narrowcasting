@@ -14,6 +14,12 @@ export interface IImageQuery {
     mediaType: TMediaType | 'latest'
 };
 
+/**
+ * This class is responsible for handling the read model of the Image domain.
+ * 
+ * @export
+ * @class ImageReadModel
+ */
 export default class ImageReadModel {
 
     private cache: { [userId: string]: ICacheData } = {};
@@ -26,6 +32,13 @@ export default class ImageReadModel {
         });
     }
 
+    /**
+     * This method queries the read model for the Image domain.
+     * 
+     * @param {IImageQuery} { userId, mediaType }
+     * @returns {IImageRetrievedPayload | null}
+     * @memberof ImageReadModel
+     */
     query({ userId, mediaType }: IImageQuery): IImageRetrievedPayload | null {
         const userCache = this.#getUserCache(userId);
 
@@ -37,6 +50,14 @@ export default class ImageReadModel {
         return payload;
     }
 
+    /**
+     * This method queries the read model for the Image domain.
+     * 
+     * @private
+     * @param {IImageQuery} { userId, mediaType }
+     * @returns {IImageRetrievedPayload[] | null}
+     * @memberof ImageReadModel
+     */
     #denormalize(payload: IImageRetrievedPayload) {
         const userCache = this.#getUserCache(payload.userId);
 
@@ -50,10 +71,27 @@ export default class ImageReadModel {
         if (userCache.latest.length > 20) userCache.latest.shift();
     }
 
+    /**
+     * This method returns the last index of the userCache.
+     * 
+     * @private
+     * @param {ICacheData} userCache
+     * @param {(TMediaType | 'latest')} mediaType
+     * @returns {number}
+     * @memberof ImageReadModel
+     */
     #last(userCache: ICacheData, mediaType: TMediaType | 'latest'): number {
         return userCache[mediaType].length - 1;
     }
 
+    /**
+     * This method returns the userCache.
+     * 
+     * @private
+     * @param {string} userId
+     * @returns {ICacheData}
+     * @memberof ImageReadModel
+     */
     #getUserCache(userId: string): ICacheData {
         if (!this.cache[userId]) {
             this.cache[userId] = { latest: [] };

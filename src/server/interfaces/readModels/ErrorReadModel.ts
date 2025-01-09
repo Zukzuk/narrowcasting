@@ -4,6 +4,12 @@ import CrawlFailedEvent from "../../domain/shared/events/CrawlFailedEvent.js";
 
 import broker from "../../infrastructure/broker/Broker.js";
 
+/**
+ * This class is responsible for handling the read model of the Error domain.
+ * 
+ * @export
+ * @class ErrorReadModel
+ */
 export default class ErrorReadModel {
     
     private errors: any[] = [];
@@ -25,17 +31,34 @@ export default class ErrorReadModel {
         });
     }
 
+    /**
+     * This method queries the read model for the Error domain.
+     * 
+     * @returns {any[]}
+     * @memberof ErrorReadModel
+     */
     query(): any[] {
         console.log('ErrorReadModel:: query: read -> errors');
 
         return this.errors;
     }
     
-    // Method to clear logged errors
+    /**
+     * This method clears the read model for the Error domain.
+     * 
+     * @memberof ErrorReadModel
+     */
     clear() {
         this.errors = [];
     }
 
+    /**
+     * This method denormalizes the Error domain events.
+     * 
+     * @private
+     * @param {CrawlFailedEvent | ImageRetrievalFailedEvent | RandomImageSelectionFailedEvent} event
+     * @memberof ErrorReadModel
+     */
     #denormalize(
         event: 
             CrawlFailedEvent | 

@@ -6,6 +6,12 @@ import ComicsImageService from './services/ComicsImageService.js';
 import ImageOptimizeService from '../../shared/services/ImageOptimizeService.js';
 import RetryImageRetrievalEvent from '../../shared/events/RetryImageRetrievalEvent.js';
 
+/**
+ * Aggregate root for retrieving comic images from Komga.
+ * 
+ * @class RetrieveComicImageAggregateRoot
+ * @export
+ */
 export default class RetrieveComicImageAggregateRoot {
     
     private comicsImageService: ComicsImageService;
@@ -16,6 +22,13 @@ export default class RetrieveComicImageAggregateRoot {
         this.imageOptimizeService = new ImageOptimizeService();
     }
 
+    /**
+     * Consume a retrieve image command.
+     * 
+     * @param {RetrieveImageCommand} command
+     * @returns {Promise<ImageRetrievedEvent | RetryImageRetrievalEvent | ImageRetrievalFailedEvent>}
+     * @memberof RetrieveComicImageAggregateRoot
+     */
     async consume(command: RetrieveImageCommand): Promise<ImageRetrievedEvent | RetryImageRetrievalEvent | ImageRetrievalFailedEvent> {
         
         const { userId, index, mediaType, page, interval, startTime } = command.payload;

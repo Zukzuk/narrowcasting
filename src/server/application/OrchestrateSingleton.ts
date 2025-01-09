@@ -4,10 +4,22 @@ import bffNarrowcasting from './bff/NarrowcastingSingleton.js'; // Singleton ins
 import commandHandler from './backend/CommandHandlerSingleton.js'; // Singleton instance
 import eventToCommandHandler from './backend/EventToCommandHandlerSingleton.js'; // Singleton instance
 
+/**
+ * Singleton class that orchestrates the application.
+ * 
+ * It initializes the application by bootstrapping the command handler, event to command handler and BFF narrowcasting.
+ */
 class OrchestratorSingleton {
     
     constructor() { }
 
+    /**
+     * Bootstraps the application.
+     * 
+     * It initializes the command handler, event to command handler and BFF narrowcasting.
+     * 
+     * @param server The server to bootstrap the application on.
+     */
     init = (server: any) => {
         commandHandler.bootstrap();
         eventToCommandHandler.bootstrap();

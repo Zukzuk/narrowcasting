@@ -8,6 +8,16 @@ import ImageReadModel from '../../interfaces/readmodels/ImageReadModel.js';
 import broker from '../../infrastructure/broker/Broker.js';
 const router = express.Router();
 
+/**
+ * This is the main API for the application.
+ * 
+ * @param {string} USER_SESSION_SECRET - The user session secret
+ * @param {Object} models - The models object
+ * @param {VersionReadModel} models.versionReadModel - The VersionReadModel instance
+ * @param {ErrorReadModel} models.errorReadModel - The ErrorReadModel instance
+ * @param {ImageReadModel} models.imageReadModel - The ImageReadModel instance
+ * @returns {Object} - The router object
+ */
 export default function AppApi(
     USER_SESSION_SECRET: string,
     models: {
@@ -70,7 +80,7 @@ export default function AppApi(
 
     /////////// QUERIES /////////////
 
-        /**
+    /**
      * @openapi
      * /api/query/login:
      *   get:
@@ -110,8 +120,8 @@ export default function AppApi(
         // Once a user has authenticated/identified themselves,
         // we assign a userId to their session:
         req.session.userId = USER_SESSION_SECRET;
-        res.send(`Dummy session userId provided: ${ req.session.userId }`);
-      });
+        res.send(`Dummy session userId provided: ${req.session.userId}`);
+    });
 
     /**
      * @openapi
@@ -178,7 +188,7 @@ export default function AppApi(
      * /api/query/library/images:
      *   get:
      *     tags: 
-     *       - query
+     *       - query/library
      *     summary: Fetch last retrieved image
      *     description: Initiates fetch of last retrieved image data
      *     responses:

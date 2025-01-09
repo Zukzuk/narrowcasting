@@ -9,6 +9,12 @@ export interface IComicsCrawlQuery {
     search: string 
 };
 
+/**
+ * This class is responsible for handling the read model of the ComicsCrawl domain.
+ * 
+ * @export
+ * @class ComicsCrawlReadModel
+ */
 export default class ComicsCrawlReadModel {
 
     private cache: Record<string, any> = {};
@@ -23,6 +29,13 @@ export default class ComicsCrawlReadModel {
 
     // TODO: Implement userId cache
 
+    /**
+     * This method queries the read model for the ComicsCrawl domain.
+     * 
+     * @param {IComicsCrawlQuery} { userId, endpoint, search }
+     * @returns {Record<string, any>}
+     * @memberof ComicsCrawlReadModel
+     */
     query({ userId, endpoint, search }: IComicsCrawlQuery): Record<string, any> {
         const payload = this.cache[endpoint] || {};
         if (!search) return payload;
@@ -40,6 +53,13 @@ export default class ComicsCrawlReadModel {
             }, {});
     }
 
+    /**
+     * This method denormalizes the ComicsCrawl domain events.
+     * 
+     * @private 
+     * @param {CrawlCompletedEvent} event
+     * @memberof ComicsCrawlReadModel
+     */
     #denormalize(event: CrawlCompletedEvent) {
         this.cache[event.endpoint] = event.payload;
     }

@@ -19,6 +19,12 @@ export interface IPlexMediaContainer {
     primaryExtraKey: string;    // '/library/metadata/622'
 }
 
+/**
+ * Service to fetch media cover images from a Plex server.
+ * 
+ * @export
+ * @class MediaImageService
+ */
 export default class MediaImageService {
 
     constructor(
@@ -26,6 +32,12 @@ export default class MediaImageService {
         private PLEX_API_KEY: string,
     ) { }
 
+    /**
+     * Fetches the sections from the Plex server.
+     * 
+     * @returns {Promise<IPlexMediaSections[]>}
+     * @memberof MediaImageService
+     */
     fetchSections = async (): Promise<IPlexMediaSections[]> => {
         const url = `${this.PLEX_API}/library/sections`;
         try {
@@ -40,6 +52,14 @@ export default class MediaImageService {
         }
     }
 
+    /**
+     * Fetches the media data from a given section.
+     * 
+     * @param {TMediaType} mediaType
+     * @param {string} sectionKey
+     * @returns {Promise<IPlexMediaContainer[]>}
+     * @memberof MediaImageService
+     */
     fetchMediaData = async (mediaType: TMediaType, sectionKey: string): Promise<IPlexMediaContainer[]> => {
         const url = `${this.PLEX_API}/library/sections/${sectionKey}/${mediaType === 'audiobooks' ? 'albums' : 'all'}`;
         try {
@@ -54,6 +74,13 @@ export default class MediaImageService {
         }
     }
 
+    /**
+     * Fetches the image from a given thumb URL.
+     * 
+     * @param {string} thumb
+     * @returns {Promise<Buffer>}
+     * @memberof MediaImageService
+     */
     fetchImage = async (thumb: string): Promise<Buffer> => {
         const url = `${this.PLEX_API}${thumb}`;
         try {

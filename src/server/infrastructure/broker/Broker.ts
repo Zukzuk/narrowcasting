@@ -3,11 +3,18 @@ import { TCommand, TEvent } from '../../domain/shared/types/index.js';
 
 type BrokerTypes = TCommand | TEvent;
 
+/**
+ * The broker is a simple event emitter that allows for the pub/sub pattern.
+ * 
+ * @class Broker
+ */
 class Broker extends EventEmitter {
+    
     /**
-     * Publish a command or event.
-     *
+     * Publish a command or event to the broker.
+     * 
      * @param unit - The command or event to publish.
+     * @memberof Broker
      */
     pub(unit: BrokerTypes) {
         if (unit) {
@@ -18,9 +25,10 @@ class Broker extends EventEmitter {
 
     /**
      * Subscribe to a command or event type.
-     *
-     * @param type - The type of the command or event to listen for.
-     * @param listener - The function to handle the command or event.
+     * 
+     * @param type - The type of command or event to subscribe to.
+     * @param listener - The callback function to execute when the command or event is published.
+     * @memberof Broker
      */
     sub<K extends BrokerTypes['type']>(
         type: K,

@@ -9,6 +9,13 @@ import RandomImageSelectedEvent from '../shared/events/RandomImageSelectedEvent.
 import RandomImageSelectionFailedEvent from '../shared/events/RandomImageSelectionFailedEvent.js';
 import ImageIndexRepository from '../../infrastructure/repositories/ImageIndexRepository.js';
 
+/**
+ * Aggregate root for selecting a random image from a media library.
+ * 
+ * This aggregate root is responsible for selecting a random image from a media library.
+ * @exports
+ * @class SelectRandomImageAggregateRoot
+ */
 export default class SelectRandomImageAggregateRoot {
 
     private mediaImageService: MediaImageService;
@@ -21,6 +28,13 @@ export default class SelectRandomImageAggregateRoot {
         this.gamesImageService = new GamesImageService(PLAYNITE_BACKUP_ORIGIN);
     }
 
+    /**
+     * Consumes a command to select a random image from a media library.
+     * 
+     * @param command The command to consume.
+     * @returns A business event.
+     * @memberof SelectRandomImageAggregateRoot
+     */
     async consume(command: SelectRandomImageCommand): Promise<RandomImageSelectedEvent | RandomImageSelectionFailedEvent> {
 
         const { userId, page, interval, startTime } = command.payload;

@@ -6,18 +6,19 @@ import RandomImageSelectedEvent, { RANDOM_IMAGE_SELECTED_EVENT } from '../../dom
 
 import broker from '../../infrastructure/broker/Broker.js'; // Singleton instance
 
+/**
+ * Singleton class that orchestrates the application backend event to command handler.
+ * 
+ * It initializes the application backend event to command handler by bootstrapping the event handlers.
+ */
 class EventToCommandHandlerSingleton {
 
     eventToCommandHandler: any;
 
     constructor() {
         this.eventToCommandHandler = {
-            [RANDOM_IMAGE_SELECTED_EVENT]: async (event: RandomImageSelectedEvent) => {
-                return new RetrieveImageCommand(event.payload);
-            },
-            [RETRY_IMAGE_RETRIEVAL_EVENT]: async (event: RetryImageRetrievalEvent) => {
-                return new SelectRandomImageCommand(event.payload);
-            },
+            [RANDOM_IMAGE_SELECTED_EVENT]: (event: RandomImageSelectedEvent) => new RetrieveImageCommand(event.payload),
+            [RETRY_IMAGE_RETRIEVAL_EVENT]: (event: RetryImageRetrievalEvent) => new SelectRandomImageCommand(event.payload),
         };
     }
 
@@ -32,7 +33,7 @@ class EventToCommandHandlerSingleton {
         }
     
         try {
-            let commands = await this.eventToCommandHandler[event.type](event);
+            let commands = this.eventToCommandHandler[event.type](event);
             if (!Array.isArray(commands)) commands = [commands];
             for (const command of commands) broker.pub(command);
         } catch (error: any) {

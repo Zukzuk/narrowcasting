@@ -7,6 +7,12 @@ import ImageOptimizeService from '../../shared/services/ImageOptimizeService.js'
 import RetryImageRetrievalEvent from '../../shared/events/RetryImageRetrievalEvent.js';
 import ImageIndexRepository from '../../../infrastructure/repositories/ImageIndexRepository.js';
 
+/**
+ * Aggregate root to retrieve a comic image from a given index
+ * 
+ * @export
+ * @class RetrieveComicImageAggregateRoot
+ */
 export default class RetrieveComicImageAggregateRoot {
     
     private gamesImageService: GamesImageService;
@@ -17,6 +23,13 @@ export default class RetrieveComicImageAggregateRoot {
         this.imageOptimizeService = new ImageOptimizeService();
     }
 
+    /**
+     * Consume a command to retrieve a comic image
+     * 
+     * @param {RetrieveImageCommand} command
+     * @returns {(Promise<ImageRetrievedEvent | RetryImageRetrievalEvent | ImageRetrievalFailedEvent>)}
+     * @memberof RetrieveComicImageAggregateRoot
+     */
     async consume(command: RetrieveImageCommand): Promise<ImageRetrievedEvent | RetryImageRetrievalEvent | ImageRetrievalFailedEvent> {
         
         const { userId, index, mediaType, interval, startTime } = command.payload;

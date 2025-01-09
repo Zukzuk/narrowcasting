@@ -8,6 +8,12 @@ export interface IPlayniteGamesContainer {
     folderPath: string;
 }
 
+/**
+ * Service to fetch game cover images from a Playnite backup folder.
+ * 
+ * @export
+ * @class GamesImageService
+ */
 export default class GamesImageService {
 
     constructor(
@@ -17,8 +23,10 @@ export default class GamesImageService {
     // TODO: Should read from .zip file instead of the extracted folder
 
     /**
-     * Fetches immediate subfolders in the given directory.
-     * @returns An array of immediate subfolder metadata (name and path).
+     * Fetches the games data from the Playnite backup folder.
+     * 
+     * @returns {IPlayniteGamesContainer[]}
+     * @memberof GamesImageService
      */
     fetchGamesData = (): IPlayniteGamesContainer[] => {
         const resolvedPath = path.resolve(this.PLAYNITE_BACKUP_ORIGIN);
@@ -43,9 +51,11 @@ export default class GamesImageService {
     };
 
     /**
-     * Extracts the cover image (portrait-sized image) from the given GameFolder path and returns it as a Buffer.
-     * @param folderPath - The folder path inside the zip.
-     * @returns The Buffer of the selected cover image or null if no portrait image is found.
+     * Fetches the largest portrait image from a given folder.
+     * 
+     * @param {string} folderPath
+     * @returns {Promise<Buffer>}
+     * @memberof GamesImageService
      */
     fetchImage = async (folderPath: string): Promise<Buffer> => {
         const resolvedPath = path.resolve(folderPath);

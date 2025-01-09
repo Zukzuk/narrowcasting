@@ -1,3 +1,9 @@
+/**
+ * This repository is used to store the crawled comics data.
+ * 
+ * @export
+ * @class CrawledComicsRepository
+ */
 export default class CrawledComicsRepository {
     private cache: Record<string, Record<string, string>>;
 
@@ -7,6 +13,14 @@ export default class CrawledComicsRepository {
 
     // TODO: Add userId logic
 
+    /**
+     * Save the data in the cache.
+     * 
+     * @param {string} endpoint
+     * @param {*} data
+     * @returns {Record<string, string>}
+     * @memberof CrawledComicsRepository
+     */
     save(endpoint: string, data: any): Record<string, string> {
         if (!this.cache[endpoint]) this.cache[endpoint] = {};
         data.forEach((item: any) => {
@@ -19,6 +33,13 @@ export default class CrawledComicsRepository {
         return payload;
     }
 
+    /**
+     * Retrieve the data from the cache.
+     * 
+     * @param {string} endpoint
+     * @returns {Record<string, string>}
+     * @memberof CrawledComicsRepository
+     */
     retrieve(endpoint: string): Record<string, string> {
         const payload = this.cache[endpoint] || null;
 

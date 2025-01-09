@@ -7,6 +7,12 @@ import MediaImageService, { IPlexMediaContainer } from './services/MediaImageSer
 import ImageOptimizeService from '../../../domain/shared/services/ImageOptimizeService.js';
 import ImageIndexRepository from '../../../infrastructure/repositories/ImageIndexRepository.js';
 
+/**
+ * Aggregate root to retrieve a media cover image from a given index
+ * 
+ * @export
+ * @class RetrieveMediaCoverAggregateRoot
+ */
 export default class RetrieveMediaCoverAggregateRoot {
 
     private mediaImageService: MediaImageService;
@@ -17,6 +23,13 @@ export default class RetrieveMediaCoverAggregateRoot {
         this.imageOptimizeService = new ImageOptimizeService();
     }
 
+    /**
+     * Consume a command to retrieve a media cover image
+     * 
+     * @param {RetrieveImageCommand} command
+     * @returns {(Promise<ImageRetrievedEvent | RetryImageRetrievalEvent | ImageRetrievalFailedEvent>)}
+     * @memberof RetrieveMediaCoverAggregateRoot
+     */
     async consume(command: RetrieveImageCommand): Promise<ImageRetrievedEvent | RetryImageRetrievalEvent | ImageRetrievalFailedEvent> {
 
         const { userId, index, mediaType, interval, startTime } = command.payload;

@@ -1,10 +1,9 @@
 import express from 'express';
 import { handleError } from '../../utils.js';
 import ComicsCrawlReadModel from '../../interfaces/readmodels/ComicsCrawlReadModel.js';
+import TraverseLibraryCommand from '../../domain/shared/commands/TraverseLibraryCommand.js';
 
-import { promises as fs } from 'fs';
-import path from 'path';
-
+import broker from '../../infrastructure/broker/Broker.js';
 const router = express.Router();
 
 /**
@@ -23,6 +22,13 @@ try {
 }
 */
 
+/**
+ * This is the API for the Comics domain
+ * 
+ * @param {Object} models - The models object
+ * @param {ComicsCrawlReadModel} models.comicsCrawlReadModel - The ComicsCrawlReadModel instance
+ * @returns {Object} - The router object
+ */
 export default function ComicsApi(
     models: {
         comicsCrawlReadModel: ComicsCrawlReadModel,
@@ -32,12 +38,54 @@ export default function ComicsApi(
         comicsCrawlReadModel,
     } = models;
 
+    /////////// COMMANDS /////////////
+
+    /**
+     * @openapi
+     * /api/command/TraverseLibraryCommand:
+     *   post:
+     *     tags: 
+     *       - command
+     *     summary: Command the traversal of a directory
+     *     description: Commands the system to traverse a library directory
+     *     parameters:
+     *       - in: query
+     *         name: startDir
+     *         schema:
+     *           type: string
+     *           default: "/mounts/comics"
+     *         description: Start directory for traversing
+     *     responses:
+     *       200:
+     *         description: Command accepted
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "ok"
+     *               description: Command accepted
+     *       500:
+     *         description: Internal Server Error or no valid image found
+     */
+    router.post('/command/TraverseLibraryCommand', async (req: any, res: any) => {
+        const { startDir } = req.query;
+
+        try {
+            broker.pub(new TraverseLibraryCommand({ userId: req.session.userId, library: startDir }));
+            res.status(202).type('text').send('ok');
+        } catch (error: any) {
+            handleError(error, res, "Error publishing TraverseLibraryCommand");
+        }
+    });
+
+    /////////// QUERIES /////////////
+
     /**
      * @openapi
      * /api/query/comics/series:
      *   get:
      *     tags: 
-     *       - query
+     *       - query/comics
      *     summary: Crawl series
      *     description: Initiates fetch of series data
      *     parameters:
@@ -72,7 +120,7 @@ export default function ComicsApi(
      * /api/query/comics/collections:
      *   get:
      *     tags: 
-     *       - query
+     *       - query/comics
      *     summary: Crawl collections
      *     description: Initiates a fetch of collections data
      *     parameters:
@@ -99,115 +147,6 @@ export default function ComicsApi(
             res.json(response);
         } catch (error: any) {
             handleError(error, res, "Error requesting crawled collections");
-        }
-    });
-
-    // Define the type for the JSON structure
-    interface FileNode {
-        file: string;
-    }
-
-    interface DirectoryNode {
-        dir: string;
-        children: (FileNode | DirectoryNode)[];
-    }
-
-    // Define system folders or files to exclude
-    const SYSTEM_FOLDERS = ['Recycle Bin', '.DS_Store', 'Thumbs.db'];
-
-    /**
-     * @openapi
-     * /api/query/comics/json:
-     *   get:
-     *     tags: 
-     *       - experimental
-     *     summary: Retrieve the JSON representation of a comics directory
-     *     description: Returns a JSON representation of a directory containing `.cbr` and `.cbz` files, organized hierarchically.
-     *     parameters:
-     *       - name: startDir
-     *         in: query
-     *         description: The root directory path to start the crawl.
-     *         required: true
-     *         schema:
-     *           type: string
-     *           example: "mounts/comics"
-     *     responses:
-     *       '200':
-     *         description: Successfully retrieved the comics directory structure.
-     *         content:
-     *           application/json:
-     *             schema:
-     *               type: object
-     *               properties:
-     *                 dir:
-     *                   type: string
-     *                   description: The absolute path of the directory.
-     *                 children:
-     *                   type: array
-     *                   items:
-     *                     type: object
-     *                     description: A file or a nested directory.
-     *                     properties:
-     *                       file:
-     *                         type: string
-     *                         description: The name of the file (only present if type is `file`).
-     *       '500':
-     *         description: Internal server error (e.g., file system issues).
-     *         content:
-     *           application/json:
-     *             schema:
-     *               type: object
-     *               properties:
-     *                 error:
-     *                   type: string
-     *                   description: Error message describing what went wrong.
-     */
-    router.get('/query/comics/json', async (req: any, res: any) => {
-        const { startDir } = req.query;
-
-        try {
-            async function dirToJson(dirPath: string): Promise<DirectoryNode | null> {
-                const stats = await fs.stat(dirPath);
-                if (!stats.isDirectory()) return null;
-
-                const dir = await fs.opendir(dirPath);
-                const directories: DirectoryNode[] = [];
-                const files: FileNode[] = [];
-
-                for await (const entry of dir) {
-                    // Skip system folders or files
-                    if (SYSTEM_FOLDERS.includes(entry.name)) continue;
-                    const fullPath = path.join(dirPath, entry.name);
-
-                    if (entry.isDirectory()) {
-                        const nested = await dirToJson(fullPath);
-                        if (nested) directories.push(nested);
-                    } else if (entry.isFile() && /\.(cbr|cbz)$/i.test(entry.name)) {
-                        files.push({ file: entry.name });
-                    }
-                }
-
-                if (files.length > 0 || directories.length > 0) {
-                    return {
-                        dir: dirPath,
-                        children: [
-                            ...directories.sort((a, b) => a.dir.localeCompare(b.dir)),
-                            ...files.sort((a, b) => a.file.localeCompare(b.file)),
-                        ],
-                    };
-                }
-
-                return null;
-            }
-
-            const result = await dirToJson(startDir);
-            res.json(result);
-        } catch (error: any) {
-            console.error('Error requesting comics directory structure:', error);
-            res.status(500).json({
-                error: 'Error requesting comics directory structure',
-                details: error.message,
-            });
         }
     });
 

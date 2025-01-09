@@ -7,6 +7,12 @@ import CrawlFailedEvent from '../../../domain/shared/events/CrawlFailedEvent.js'
 import CrawlComicsEndpointService from './services/CrawlComicsEndpointService.js';
 import { TMediaType } from '../../shared/types/index.js';
 
+/**
+ * Aggregate root for crawling comics from Komga.
+ * 
+ * @export
+ * @class CrawlComicsAggregateRoot
+ */
 export default class CrawlComicsAggregateRoot {
     
     private crawlComicsEndpointService: CrawlComicsEndpointService;
@@ -16,6 +22,13 @@ export default class CrawlComicsAggregateRoot {
         this.crawlComicsEndpointService = new CrawlComicsEndpointService(KOMGA_API, KOMGA_AUTH, APP_CRAWL_PAGE_SIZE);
     }
 
+    /**
+     * Consume a crawl command.
+     * 
+     * @param {CrawlCommand} command
+     * @returns {Promise<CrawlCompletedEvent | CrawlFailedEvent>}
+     * @memberof CrawlComicsAggregateRoot
+     */
     async consume(command: CrawlCommand): Promise<CrawlCompletedEvent | CrawlFailedEvent> {
         const { endpoint } = command.payload;
 

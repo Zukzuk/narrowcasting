@@ -13,12 +13,27 @@ interface IImageSet {
   data: TCacheData;
 }
 
+/**
+ * This repository is used to store the image indexes.
+ * 
+ * @export
+ * @class ImageIndexRepository
+ */
 export default class ImageIndexRepository {
   
   private cache: { [userId: string]: Record<string, IImageSet> } = {};
 
   constructor(private APP_CACHE_DURATION: number) { }
 
+  /**
+   * Save the data in the cache.
+   * 
+   * @param {string} userId
+   * @param {TMediaType} mediaType
+   * @param {{ data?: TCacheData; total?: number }} { data, total }
+   * @returns {IImageSet}
+   * @memberof ImageIndexRepository
+   */
   save(
     userId: string,
     mediaType: TMediaType,
@@ -42,6 +57,13 @@ export default class ImageIndexRepository {
     return userCache[mediaType];
   }
 
+  /**
+   * Retrieve the data from the cache.
+   * 
+   * @param {string} userId
+   * @returns {Record<string, IImageSet>}
+   * @memberof ImageIndexRepository
+   */
   retrieve(userId: string): Record<string, IImageSet> {
     const userCache = this.#getUserCache(userId);
 
@@ -50,6 +72,15 @@ export default class ImageIndexRepository {
     return userCache;
   }
 
+  /**
+   * Retrieve the data from the cache.
+   * 
+   * @param {string} userId
+   * @param {TMediaType} mediaType
+   * @param {number} index
+   * @returns {(IPlexMediaContainer | IPlayniteGamesContainer)}
+   * @memberof ImageIndexRepository
+   */
   retrieveData(
     userId: string,
     mediaType: TMediaType,
@@ -64,6 +95,14 @@ export default class ImageIndexRepository {
     return payload;
   }
 
+  /**
+   * Pop a unique index from the cache.
+   * 
+   * @param {string} userId
+   * @param {TMediaType} mediaType
+   * @returns {number}
+   * @memberof ImageIndexRepository
+   */
   popUniqueIndex(userId: string, mediaType: TMediaType): number {
     const userCache = this.#getUserCache(userId);
     const imageIndex = userCache[mediaType];
@@ -78,6 +117,13 @@ export default class ImageIndexRepository {
     return value;
   }
 
+  /**
+   * Check if the cache has valid data.
+   * 
+   * @param {string} userId
+   * @returns {boolean}
+   * @memberof ImageIndexRepository
+   */
   hasValidCache(userId: string): boolean {
     const userCache = this.#getUserCache(userId);
 
@@ -91,6 +137,13 @@ export default class ImageIndexRepository {
     return result;
   }
 
+  /**
+   * Get the invalid cache hits.
+   * 
+   * @param {string} userId
+   * @returns {TMediaType[]}
+   * @memberof ImageIndexRepository
+   */
   getInvalidCacheHits(userId: string): TMediaType[] {
     const userCache = this.#getUserCache(userId);
 
@@ -103,6 +156,14 @@ export default class ImageIndexRepository {
     return result;
   }
 
+  /**
+   * Get the user cache.
+   * 
+   * @private
+   * @param {string} userId
+   * @returns {Record<string, IImageSet>}
+   * @memberof ImageIndexRepository
+   */
   #getUserCache(userId: string): Record<string, IImageSet> {
     if (!this.cache[userId]) {
       this.cache[userId] = {};
