@@ -14,6 +14,8 @@ export default class GamesImageService {
         private PLAYNITE_BACKUP_ORIGIN: string,
     ) { }
 
+    // TODO: Should read from .zip file instead of the extracted folder
+
     /**
      * Fetches immediate subfolders in the given directory.
      * @returns An array of immediate subfolder metadata (name and path).
