@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.11.0](https://github.com/Zukzuk/narrowcasting/compare/v4.10.0...v4.11.0) (2025-01-10)
+
+
+### Features
+
+* updated randomization strategy to be way more fair to small libraries ([547e1cf](https://github.com/Zukzuk/narrowcasting/commit/547e1cf5f0f3377a36be736993c7c8f0138036af))
+
 ## [4.10.0](https://github.com/Zukzuk/narrowcasting/compare/v4.9.2...v4.10.0) (2025-01-09)
 
 
