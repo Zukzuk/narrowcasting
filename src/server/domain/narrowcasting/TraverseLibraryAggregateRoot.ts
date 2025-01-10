@@ -14,6 +14,8 @@ export default class TraverseLibraryAggregateRoot {
     
     private traverseDirectoryService: TraverseDirectoryService;
 
+    // TODO: Finish implemeting
+
     constructor(private traversalRepository: TraversalRepository) {
         this.traverseDirectoryService = new TraverseDirectoryService();
     }

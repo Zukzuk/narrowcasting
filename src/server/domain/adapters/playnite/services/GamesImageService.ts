@@ -20,7 +20,7 @@ export default class GamesImageService {
         private PLAYNITE_BACKUP_ORIGIN: string,
     ) { }
 
-    // TODO: Should read from .zip file instead of the extracted folder
+    // TODO: !! Should read from .zip file instead of the extracted folder
 
     /**
      * Fetches the games data from the Playnite backup folder.

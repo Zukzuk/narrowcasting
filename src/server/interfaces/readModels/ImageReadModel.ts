@@ -24,6 +24,8 @@ export default class ImageReadModel {
 
     private cache: { [userId: string]: ICacheData } = {};
 
+    // TODO: Implement userId cache
+
     constructor() {
         // subscribe to events
         broker.sub(IMAGE_RETRIEVED_EVENT, event => {

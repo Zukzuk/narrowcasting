@@ -116,7 +116,9 @@ export default function AppApi(
      *         description: Internal server error
      */
     router.get('/query/login', (req, res) => {
+
         // TODO: Should add authorization to the app
+        
         // Once a user has authenticated/identified themselves,
         // we assign a userId to their session:
         req.session.userId = USER_SESSION_SECRET;
