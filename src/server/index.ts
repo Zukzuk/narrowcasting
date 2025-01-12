@@ -3,7 +3,7 @@ import compression from 'compression';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import session from 'express-session';
-import { getPort, doServerLogging } from './utils.js';
+import { getPort, doServerLogging, doAxiosLogging } from './utils.js';
 import {
     USER_SESSION_SECRET,
     APP_CACHE_DURATION,
@@ -41,9 +41,12 @@ server.use(express.static(APP_STATIC_SERVE_PATH));
 import swaggerSpec from './swagger.js'; // Singleton instance
 server.use(APP_API_DOCS_PATH, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+// axios logging
+doAxiosLogging(true, false);
+
 // start server
 server.listen(getPort(), async () => {
-    // logging
+    // server logging
     await doServerLogging();  
 });
 

@@ -22,7 +22,6 @@ export interface IPlexMediaContainer {
 /**
  * Service to fetch media cover images from a Plex server.
  * 
- * @export
  * @class MediaImageService
  */
 export default class MediaImageService {

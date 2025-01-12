@@ -5,7 +5,6 @@ import { UrlError } from '../../../../utils.js';
  * Service for crawling comics from Komga.
  * 
  * @class CrawlComicsEndpointService
- * @export
  */
 export default class CrawlComicsEndpointService {
 

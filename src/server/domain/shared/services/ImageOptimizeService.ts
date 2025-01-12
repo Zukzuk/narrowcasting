@@ -3,7 +3,6 @@ import sharp from 'sharp';
 /**
  * Service to optimize images
  * 
- * @export
  * @class ImageOptimizeService
  */
 export default class ImageOptimizeService {

@@ -1,4 +1,5 @@
 import { DirectoryNode } from "../../domain/shared/services/TraverseDirectoryService.js";
+import { log } from "../../utils.js";
 
 /**
  * This class is responsible for storing and retrieving the directory structure of a library.
@@ -27,7 +28,7 @@ export default class TraversalRepository {
         this.cache[library] = json;
         const payload = this.cache[library];
 
-        this.log('save', library, payload);
+        // log('TraversalRepository.save', library, payload);
 
         return payload;
     }
@@ -41,12 +42,8 @@ export default class TraversalRepository {
     retrieve(library: string): DirectoryNode {
         const payload = this.cache[library] || null;
 
-        if (payload) this.log('retrieve', library, payload);
+        // if (payload) log('TraversalRepository.retrieve', library, payload);
 
         return payload;
-    }
-
-    log(action: string, endpoint: string, payload: DirectoryNode) {
-        console.log(`TraversalRepository (old logging): ${action} -> `);
     }
 }

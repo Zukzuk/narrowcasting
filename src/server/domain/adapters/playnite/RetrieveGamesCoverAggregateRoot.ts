@@ -10,11 +10,10 @@ import ImageIndexRepository from '../../../infrastructure/repositories/ImageInde
 /**
  * Aggregate root to retrieve a comic image from a given index
  * 
- * @export
  * @class RetrieveComicImageAggregateRoot
  */
 export default class RetrieveComicImageAggregateRoot {
-    
+
     private gamesImageService: GamesImageService;
     private imageOptimizeService: ImageOptimizeService;
 
@@ -31,7 +30,7 @@ export default class RetrieveComicImageAggregateRoot {
      * @memberof RetrieveComicImageAggregateRoot
      */
     async consume(command: RetrieveImageCommand): Promise<ImageRetrievedEvent | RetryImageRetrievalEvent | ImageRetrievalFailedEvent> {
-        
+
         const { userId, index, mediaType, interval, startTime } = command.payload;
 
         try {
@@ -45,24 +44,23 @@ export default class RetrieveComicImageAggregateRoot {
             const { optimizedImage, contentType } = await this.imageOptimizeService.webp(response as Buffer, 90);
 
             // Return a business event
-            return new ImageRetrievedEvent({userId, mediaType, image: optimizedImage, contentType, url: data.folderPath });
-        } catch (error: any) {     
-            // Retry image retrieval if image format is not supported
-            if (error.message.contains('Unsupported image format')) {
-                const elapsedTime = Date.now() - startTime;
-                const remainingTime = interval - elapsedTime;
-                if (remainingTime > 5000) {
-                    const payload = { userId, page: 0, interval, startTime };
-                    const event = new RetryImageRetrievalEvent(payload);
-                    return event;
-                }
-                console.log(`No retry attempt because remaining time in interval (${remainingTime}ms) is too short...`);
+            return new ImageRetrievedEvent({ userId, mediaType, image: optimizedImage, contentType, url: data.folderPath });
+        } catch (error: any) {
+            // Retry image retrieval if there is enough time left in the interval
+            const elapsedTime = Date.now() - startTime;
+            const remainingTime = interval - elapsedTime;
+            if (remainingTime > 5000) {
+                const payload = { userId, page: 0, interval, startTime };
+                const event = new RetryImageRetrievalEvent(payload);
+                return event;
             }
-            
+            console.warn(`No retry attempted, not enough time remaining time in interval (${remainingTime}ms).`);
+
             // Return failure event
             const event = new ImageRetrievalFailedEvent(error.message, error.url, error.mediaType);
             error.event = event;
             return event;
+            // throw error;
         }
     }
 }

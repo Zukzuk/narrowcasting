@@ -1,5 +1,5 @@
 import express from 'express';
-import { handleError } from '../../utils.js';
+import { handleError, log } from '../../utils.js';
 import ComicsCrawlReadModel from '../../interfaces/readmodels/ComicsCrawlReadModel.js';
 import TraverseLibraryCommand from '../../domain/shared/commands/TraverseLibraryCommand.js';
 
@@ -15,7 +15,7 @@ try {
     // do something  
 } catch (error: any) {
     if (axios.isCancel(error)) {
-        console.log("Request canceled:", error.message);
+        console.warn("Request canceled:", error.message);
         return;
     }
     handleError(error, res, "Some error occurred");
@@ -25,11 +25,13 @@ try {
 /**
  * This is the API for the Comics domain
  * 
+ * @param {string} APP_SESSION_SECRET - The user session secret
  * @param {Object} models - The models object
  * @param {ComicsCrawlReadModel} models.comicsCrawlReadModel - The ComicsCrawlReadModel instance
  * @returns {Object} - The router object
  */
 export default function ComicsApi(
+    APP_SESSION_SECRET: string,
     models: {
         comicsCrawlReadModel: ComicsCrawlReadModel,
     }
@@ -71,7 +73,9 @@ export default function ComicsApi(
         const { startDir } = req.query;
 
         try {
-            broker.pub(new TraverseLibraryCommand({ userId: req.session.userId, library: startDir }));
+            const payload = { userId: req.session.userId || APP_SESSION_SECRET, library: startDir };
+            log('ComicsApi.post', 'publish', TraverseLibraryCommand.type);
+            broker.pub(new TraverseLibraryCommand(payload));
             res.status(202).type('text').send('ok');
         } catch (error: any) {
             handleError(error, res, "Error publishing TraverseLibraryCommand");
@@ -107,7 +111,8 @@ export default function ComicsApi(
     router.get('/query/comics/series', async (req: any, res: any) => {
         const { search } = req.query;
         try {
-            const response = await comicsCrawlReadModel.query({ userId: req.session.userId, endpoint: 'series', search });
+            log('ComicsApi.get', 'query', 'series from comicsCrawlReadModel');
+            const response = await comicsCrawlReadModel.query({ userId: req.session.userId || APP_SESSION_SECRET, endpoint: 'series', search });
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.json(response);
         } catch (error: any) {
@@ -142,7 +147,8 @@ export default function ComicsApi(
     router.get('/query/comics/collections', async (req: any, res: any) => {
         const { search } = req.query;
         try {
-            const response = await comicsCrawlReadModel.query({ userId: req.session.userId, endpoint: 'collections', search });
+            log('ComicsApi.get', 'query', 'collections from comicsCrawlReadModel');
+            const response = await comicsCrawlReadModel.query({ userId: req.session.userId || APP_SESSION_SECRET, endpoint: 'collections', search });
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.json(response);
         } catch (error: any) {

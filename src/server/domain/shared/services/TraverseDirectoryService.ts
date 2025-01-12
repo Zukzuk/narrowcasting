@@ -16,7 +16,6 @@ const SYSTEM_FOLDERS = ['Recycle Bin', '.DS_Store', 'Thumbs.db'];
 /**
  * Service to traverse a directory and return a JSON representation of its contents
  * 
- * @export
  * @class TraverseDirectoryService
  */
 export default class TraverseDirectoryService {

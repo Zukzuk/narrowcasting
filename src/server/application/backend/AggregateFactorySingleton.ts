@@ -3,16 +3,14 @@ import CrawledComicsRepository from '../../infrastructure/repositories/CrawledCo
 import ImageIndexRepository from '../../infrastructure/repositories/ImageIndexRepository.js';
 import TraversalRepository from '../../infrastructure/repositories/TraversalRepository.js';
 import CrawlComicsAggregateRoot from '../../domain/adapters/komga/CrawlComicsAggregateRoot.js';
-import RetrieveComicImageAggregateRoot from '../../domain/adapters/komga/RetrieveComicImageAggregateRoot.js';
+import RetrieveComicsImageAggregateRoot from '../../domain/adapters/komga/RetrieveComicsImageAggregateRoot.js';
 import RetrieveMediaCoverAggregateRoot from '../../domain/adapters/plex/RetrieveMediaCoverAggregateRoot.js';
 import RetrieveGamesCoverAggregateRoot from '../../domain/adapters/playnite/RetrieveGamesCoverAggregateRoot.js';
-import SelectRandomImageAggregateRoot from '../../domain/narrowcasting/SelectRandomImageAggregateRoot.js';
+import SelectFromRandomizedListAggregateRoot from '../../domain/narrowcasting/SelectFromRandomizedListAggregateRoot.js';
 import TraverseLibraryAggregateRoot from '../../domain/narrowcasting/TraverseLibraryAggregateRoot.js';
 
 /**
  * Singleton class that orchestrates the application backend aggregates.
- * 
- * It initializes the application backend aggregates by bootstrapping the repositories.
  */
 class AggregateFactorySingleton {
     
@@ -22,12 +20,12 @@ class AggregateFactorySingleton {
         private imageIndexRepository: ImageIndexRepository,
     ) {}
     
-    createSelectRandomImage(): SelectRandomImageAggregateRoot {
-        return new SelectRandomImageAggregateRoot(this.imageIndexRepository);
+    createSelectFromRandomizedList(): SelectFromRandomizedListAggregateRoot {
+        return new SelectFromRandomizedListAggregateRoot(this.imageIndexRepository);
     }
 
-    createRetrieveComicImage(): RetrieveComicImageAggregateRoot {
-        return new RetrieveComicImageAggregateRoot();
+    createRetrieveComicsImage(): RetrieveComicsImageAggregateRoot {
+        return new RetrieveComicsImageAggregateRoot();
     }
 
     createRetrieveMediaCover(): RetrieveMediaCoverAggregateRoot {

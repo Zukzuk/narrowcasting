@@ -1,5 +1,5 @@
 import { log } from "../../utils.js";
-import CrawlCompletedEvent from "../../domain/shared/events/CrawlCompletedEvent.js";
+import CrawlCompletedEvent, { CRAWL_COMPLETED_EVENT } from "../../domain/shared/events/CrawlCompletedEvent.js";
 
 import broker from "../../infrastructure/broker/Broker.js";
 
@@ -12,7 +12,6 @@ export interface IComicsCrawlQuery {
 /**
  * This class is responsible for handling the read model of the ComicsCrawl domain.
  * 
- * @export
  * @class ComicsCrawlReadModel
  */
 export default class ComicsCrawlReadModel {
@@ -21,8 +20,11 @@ export default class ComicsCrawlReadModel {
 
     constructor() {
         // subscribe to events
-        broker.sub(CrawlCompletedEvent.type, event => {
-            console.log('ComicsCrawlReadModel:: logging: listen ->', event.type, event.endpoint, event.mediaType);
+        log('ComicsCrawlReadModel.constructor', 'subscribe', `
+            \t${CRAWL_COMPLETED_EVENT}
+        `);
+        broker.sub(CRAWL_COMPLETED_EVENT, event => {
+            log('ComicsCrawlReadModel.listen', event.type, `'${event.endpoint}' in '${event.mediaType}'`);
             this.#denormalize(event);
         });
     }
@@ -32,7 +34,7 @@ export default class ComicsCrawlReadModel {
     /**
      * This method queries the read model for the ComicsCrawl domain.
      * 
-     * @param {IComicsCrawlQuery} { userId, endpoint, search }
+     * @param {IComicsCrawlQuery}
      * @returns {Record<string, any>}
      * @memberof ComicsCrawlReadModel
      */
@@ -40,7 +42,7 @@ export default class ComicsCrawlReadModel {
         const payload = this.cache[endpoint] || {};
         if (!search) return payload;
 
-        log(userId, 'ComicsCrawlReadModel', 'query', 'read', `${ endpoint } with search '${ search }'`);
+        log('ComicsCrawlReadModel.query', 'read', `${ endpoint } with search '${ search }'`, userId);
 
         // Create a case-insensitive fuzzy matching pattern allowing for variations
         const pattern = new RegExp(search.split(" ").join(".*"), "i");

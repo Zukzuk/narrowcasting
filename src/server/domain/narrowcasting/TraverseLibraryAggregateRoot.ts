@@ -7,7 +7,6 @@ import LibraryTraversedEvent from '../shared/events/LibraryTraversedEvent.js';
 /**
  * Aggregate root for traversing a library
  * 
- * @export
  * @class TraverseLibraryAggregateRoot
  */
 export default class TraverseLibraryAggregateRoot {

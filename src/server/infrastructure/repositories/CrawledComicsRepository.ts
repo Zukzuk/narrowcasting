@@ -1,7 +1,8 @@
+import { log } from '../../utils.js';
+
 /**
  * This repository is used to store the crawled comics data.
  * 
- * @export
  * @class CrawledComicsRepository
  */
 export default class CrawledComicsRepository {
@@ -28,7 +29,7 @@ export default class CrawledComicsRepository {
         });
         const payload = this.cache[endpoint];
 
-        this.log('save', endpoint, payload);
+        log('CrawledComicsRepository.save', endpoint, `${Object.keys(payload).length} items`);
 
         return payload;
     }
@@ -43,12 +44,8 @@ export default class CrawledComicsRepository {
     retrieve(endpoint: string): Record<string, string> {
         const payload = this.cache[endpoint] || null;
 
-        if (payload) this.log('retrieve', endpoint, payload);
+        if (payload) log('CrawledComicsRepository.retrieve', endpoint, `${Object.keys(payload).length} items`);
 
         return payload;
-    }
-
-    log(action: string, endpoint: string, payload: Record<string, string>) {
-        console.log(`CrawledComicsRepository (old logging): ${action} -> ${Object.keys(payload).length} items for '${endpoint}'`);
     }
 }

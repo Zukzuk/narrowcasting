@@ -17,19 +17,19 @@ export interface IImageQuery {
 /**
  * This class is responsible for handling the read model of the Image domain.
  * 
- * @export
  * @class ImageReadModel
  */
 export default class ImageReadModel {
 
     private cache: { [userId: string]: ICacheData } = {};
 
-    // TODO: Implement userId cache
-
     constructor() {
         // subscribe to events
+        log('ImageReadModel.constructor', 'subscribe', `
+            \t${IMAGE_RETRIEVED_EVENT}
+        `);
         broker.sub(IMAGE_RETRIEVED_EVENT, event => {
-            console.log('ImageReadModel:: logging: listen ->', event.type, event.payload.mediaType);
+            log('ImageReadModel.listen', event.type, event.payload.mediaType);
             this.#denormalize(event.payload);
         });
     }
@@ -37,7 +37,7 @@ export default class ImageReadModel {
     /**
      * This method queries the read model for the Image domain.
      * 
-     * @param {IImageQuery} { userId, mediaType }
+     * @param {IImageQuery}
      * @returns {IImageRetrievedPayload | null}
      * @memberof ImageReadModel
      */
@@ -47,7 +47,7 @@ export default class ImageReadModel {
         if (!userCache[mediaType]) return null;
         const payload = userCache[mediaType][this.#last(userCache, mediaType)];
 
-        log(userId, 'ImageReadModel', 'query', 'read', mediaType);
+        log('ImageReadModel.query', 'read', mediaType, userId);
 
         return payload;
     }
@@ -56,8 +56,7 @@ export default class ImageReadModel {
      * This method queries the read model for the Image domain.
      * 
      * @private
-     * @param {IImageQuery} { userId, mediaType }
-     * @returns {IImageRetrievedPayload[] | null}
+     * @param {IImageQuery}
      * @memberof ImageReadModel
      */
     #denormalize(payload: IImageRetrievedPayload) {
@@ -77,8 +76,8 @@ export default class ImageReadModel {
      * This method returns the last index of the userCache.
      * 
      * @private
-     * @param {ICacheData} userCache
-     * @param {(TMediaType | 'latest')} mediaType
+     * @param {ICacheData}
+     * @param {(TMediaType | 'latest')}
      * @returns {number}
      * @memberof ImageReadModel
      */

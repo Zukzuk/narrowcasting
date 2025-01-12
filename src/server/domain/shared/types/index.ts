@@ -21,10 +21,12 @@ export type TMediaType = (typeof mediaTypes)[number]; // Union type of all media
 import CrawlCommand from '../commands/CrawlCommand.js';
 import TraverseLibraryCommand from '../commands/TraverseLibraryCommand.js';
 import SelectRandomImageCommand from '../commands/SelectRandomImageCommand.js';
+import CreateRandomizedListCommand from '../commands/CreateRandomizedListCommand.js';
 import RetrieveImageCommand from '../commands/RetrieveImageCommand.js';
 export type TCommand =
     CrawlCommand |
     TraverseLibraryCommand |
+    CreateRandomizedListCommand |
     SelectRandomImageCommand |
     RetrieveImageCommand;
 

@@ -21,7 +21,6 @@ export interface IWeightedCache {
 /**
  * This repository is used to store the image indexes.
  * 
- * @export
  * @class ImageIndexRepository
  */
 export default class ImageIndexRepository {
@@ -59,7 +58,7 @@ export default class ImageIndexRepository {
       data: data ?? [],
     };
 
-    log(userId, 'ImageIndexRepository', 'save', 'write', `data of '${mediaType}' with length ${userCache[mediaType].remaining}`);
+    log('ImageIndexRepository.save', 'write', `'${mediaType}' data with length ${userCache[mediaType].total}`, userId);
 
     return userCache[mediaType];
   }
@@ -67,7 +66,7 @@ export default class ImageIndexRepository {
   saveWeighted(userId: string, weightedCache: IWeightedCache[]): IWeightedCache[] {
     this.weightedCache[userId] = weightedCache;
 
-    log(userId, 'ImageIndexRepository', 'saveWeighted', 'write', `weighted cache with length ${weightedCache.length}`);
+    log('ImageIndexRepository.saveWeighted', 'write', `weighted list with length ${weightedCache.length}`, userId);
 
     return weightedCache;
   }
@@ -82,7 +81,7 @@ export default class ImageIndexRepository {
   retrieve(userId: string): Record<string, IImageSet> {
     const userCache = this.#getUserCache(userId);
 
-    log(userId, 'ImageIndexRepository', 'retrieve', 'read', 'full cache');
+    log('ImageIndexRepository.retrieve', 'read', 'full userCache', userId);
 
     return userCache;
   }
@@ -105,7 +104,7 @@ export default class ImageIndexRepository {
 
     const payload = userCache[mediaType].data[index];
 
-    log(userId, 'ImageIndexRepository', 'retrieveData', 'read', `${mediaType} with index '${index}'`);
+    log('ImageIndexRepository.retrieveData', 'read', `'${mediaType}' data with index '${index}'`, userId);
 
     return payload;
   }
@@ -120,25 +119,25 @@ export default class ImageIndexRepository {
   retrieveWeighted(userId: string): IWeightedCache[] {
     const userCache = this.#getUserWeightedCache(userId);
 
-    log(userId, 'ImageIndexRepository', 'retrieve', 'read', 'full cache');
+    log('ImageIndexRepository.retrieveWeighted', 'read', 'full userWeightedCache', userId);
 
     return userCache;
   }
 
   /**
-   * Shift an index from the weighted cache.
+   * Shift an item from the weighted cache.
    * 
    * @param {string} mediaType
    * @returns {number}
    * @memberof ImageIndexRepository
    */
-  getWeightedIndex(userId: string): IWeightedCache {
+  getWeightedItem(userId: string): IWeightedCache {
     const userWeightedCache = this.#getUserWeightedCache(userId);
-    const item = userWeightedCache.shift();
+    const item = userWeightedCache.shift() as IWeightedCache;
 
-    log(userId, 'ImageIndexRepository', 'getWeightedIndex', 'shift', `${userWeightedCache.length} remaining.`);
+    log('ImageIndexRepository.getWeightedItem', 'shift', `{mediaType:${item.mediaType}, index:${item.index}}, ${userWeightedCache.length} remaining.`, userId);
 
-    return item as IWeightedCache;
+    return item;
   }
 
   /**
@@ -157,7 +156,7 @@ export default class ImageIndexRepository {
       return !!userCache[mediaType]?.remaining;
     });
 
-    log(userId, 'ImageIndexRepository', 'hasValidCache', 'read', result.toString());
+    log('ImageIndexRepository.hasValidCache', 'read', result.toString(), userId);
 
     return result;
   }
@@ -174,7 +173,7 @@ export default class ImageIndexRepository {
 
     const result = userWeightedCache.length > 0;
 
-    log(userId, 'ImageIndexRepository', 'hasValidWeightedCache', 'read', result.toString());
+    log('ImageIndexRepository.hasValidWeightedCache', 'read', result.toString(), userId);
 
     return result;
   }
@@ -193,7 +192,7 @@ export default class ImageIndexRepository {
       return !userCache[mediaType]?.remaining;
     });
 
-    log(userId, 'ImageIndexRepository', 'getInvalidCacheHits', 'read', result.toString());
+    log('ImageIndexRepository.getInvalidCacheHits', 'read', result.toString(), userId);
 
     return result;
   }

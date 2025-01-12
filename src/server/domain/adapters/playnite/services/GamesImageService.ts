@@ -11,7 +11,6 @@ export interface IPlayniteGamesContainer {
 /**
  * Service to fetch game cover images from a Playnite backup folder.
  * 
- * @export
  * @class GamesImageService
  */
 export default class GamesImageService {

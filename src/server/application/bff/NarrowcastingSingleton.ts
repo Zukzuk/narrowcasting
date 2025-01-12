@@ -1,3 +1,4 @@
+import { log } from '../../utils.js';
 import AppApi from '../../interfaces/apis/AppApi.js';
 import ComicsApi from '../../interfaces/apis/ComicsApi.js';
 import MediaApi from '../../interfaces/apis/MediaApi.js';
@@ -7,28 +8,26 @@ import ErrorReadModel from '../../interfaces/readmodels/ErrorReadModel.js';
 import ComicsCrawlReadModel from '../../interfaces/readmodels/ComicsCrawlReadModel.js';
 import ImageReadModel from '../../interfaces/readmodels/ImageReadModel.js';
 import TraverseLibraryCommand from '../../domain/shared/commands/TraverseLibraryCommand.js';
+import CreateRandomizedListCommand from '../../domain/shared/commands/CreateRandomizedListCommand.js';
 import CrawlCommand from '../../domain/shared/commands/CrawlCommand.js';
 
 import broker from '../../infrastructure/broker/Broker.js'; // Singleton instance
+import SelectRandomImageCommand from 'server/domain/shared/commands/SelectRandomImageCommand.js';
 
 /**
  * Singleton class that orchestrates the BFF narrowcasting.
- * 
- * It initializes the BFF narrowcasting by bootstrapping the BFF APIs.
  */
 class NarrowcastingSingleton {
-    
+
     constructor(
         private versionReadModel: VersionReadModel,
         private errorReadModel: ErrorReadModel,
         private comicsCrawlReadModel: ComicsCrawlReadModel,
         private imageReadModel: ImageReadModel,
     ) { }
-    
+
     /**
      * Bootstraps the BFF narrowcasting.
-     * 
-     * It initializes the BFF APIs.
      * 
      * @param server The server to bootstrap the BFF narrowcasting on.
      * @param APP_API_PATH The API path.
@@ -37,26 +36,48 @@ class NarrowcastingSingleton {
      */
     bootstrap(
         server: any,
-        { APP_API_PATH, APP_SESSION_SECRET, USER_SESSION_SECRET }: { APP_API_PATH: string, APP_SESSION_SECRET: string, USER_SESSION_SECRET: string },
+        {
+            APP_API_PATH,
+            APP_SESSION_SECRET,
+            USER_SESSION_SECRET
+        }: {
+            APP_API_PATH: string,
+            APP_SESSION_SECRET: string,
+            USER_SESSION_SECRET: string
+        },
     ) {
         // implement apis
-        server.use(APP_API_PATH, AppApi(USER_SESSION_SECRET, {
-            versionReadModel: this.versionReadModel,
-            errorReadModel: this.errorReadModel,
-            imageReadModel: this.imageReadModel,
-        }));
-        server.use(APP_API_PATH, ComicsApi({
-            comicsCrawlReadModel: this.comicsCrawlReadModel,
-        }));
+        server.use(APP_API_PATH, AppApi(
+            USER_SESSION_SECRET,
+            APP_SESSION_SECRET,
+            {
+                versionReadModel: this.versionReadModel,
+                errorReadModel: this.errorReadModel,
+                imageReadModel: this.imageReadModel,
+            }
+        ));
+        server.use(APP_API_PATH, ComicsApi(
+            APP_SESSION_SECRET,
+            {
+                comicsCrawlReadModel: this.comicsCrawlReadModel,
+            }
+        ));
         server.use(APP_API_PATH, MediaApi({
         }));
         server.use(APP_API_PATH, GamesApi({
         }));
 
         // eager commands
+        log('NarrowcastingSingleton.bootstrap', 'publish', `
+            \t${CreateRandomizedListCommand.type}
+            \t${TraverseLibraryCommand.type} of library 'comics'
+            \t${CrawlCommand.type} of endpoint: 'series'
+            \t${CrawlCommand.type} of endpoint: 'collections'
+        `);
+        broker.pub(new CreateRandomizedListCommand({ userId: APP_SESSION_SECRET, page: 0, interval: 0, startTime: 0 }));
         broker.pub(new TraverseLibraryCommand({ userId: APP_SESSION_SECRET, library: 'comics' }));
-        // broker.pub(new CrawlCommand({ userId: APP_SESSION_SECRET, endpoint: 'series' }));
-        // broker.pub(new CrawlCommand({ userId: APP_SESSION_SECRET, endpoint: 'collections' }));
+        broker.pub(new CrawlCommand({ userId: APP_SESSION_SECRET, endpoint: 'series' }));
+        broker.pub(new CrawlCommand({ userId: APP_SESSION_SECRET, endpoint: 'collections' }));
     }
 }
 

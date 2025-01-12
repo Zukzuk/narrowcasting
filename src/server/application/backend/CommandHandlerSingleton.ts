@@ -1,16 +1,16 @@
 import aggregateFactory from './AggregateFactorySingleton.js';
-import { TCommand } from '../../domain/shared/types/index.js';
+import { mediaTypesKomga, mediaTypesPlaynite, mediaTypesPlex, TCommand } from '../../domain/shared/types/index.js';
 import { CRAWL_COMMAND } from '../../domain/shared/commands/CrawlCommand.js';
 import { SELECT_RANDOM_IMAGE_COMMAND } from '../../domain/shared/commands/SelectRandomImageCommand.js';
+import { CREATE_RANDOMIZED_LIST_COMMAND } from '../../domain/shared/commands/CreateRandomizedListCommand.js';
 import RetrieveImageCommand, { RETRIEVE_IMAGE_COMMAND } from '../../domain/shared/commands/RetrieveImageCommand.js';
 import { TRAVERSE_LIBRARY_COMMAND } from '../../domain/shared/commands/TraverseLibraryCommand.js';
+import { log } from '../../utils.js';
 
 import broker from '../../infrastructure/broker/Broker.js'; // Singleton instance
 
 /**
  * Singleton class that orchestrates the application backend command handler.
- * 
- * It initializes the application backend command handler by bootstrapping the event handlers.
  */
 class CommandHandlerSingleton {
 
@@ -18,11 +18,14 @@ class CommandHandlerSingleton {
 
     constructor() {
         this.eventHandlers = {
-            [SELECT_RANDOM_IMAGE_COMMAND]: () => aggregateFactory.createSelectRandomImage(),
+            [CREATE_RANDOMIZED_LIST_COMMAND]: () => aggregateFactory.createSelectFromRandomizedList(),
+            [SELECT_RANDOM_IMAGE_COMMAND]: () => aggregateFactory.createSelectFromRandomizedList(),
             [RETRIEVE_IMAGE_COMMAND]: (command: RetrieveImageCommand) => {
-                if (command.payload.mediaType === "comics") return aggregateFactory.createRetrieveComicImage();
-                else if (command.payload.mediaType === "games") return aggregateFactory.createRetrieveGamesCover();
-                else return aggregateFactory.createRetrieveMediaCover();
+                const { mediaType } = command.payload;
+                if (mediaTypesKomga.some(type => type === mediaType)) return aggregateFactory.createRetrieveComicsImage();
+                else if (mediaTypesPlaynite.some(type => type === mediaType)) return aggregateFactory.createRetrieveGamesCover();
+                else if (mediaTypesPlex.some(type => type === mediaType)) return aggregateFactory.createRetrieveMediaCover();
+                else throw new Error(`Unsupported media type: ${mediaType}`);
             },
             [CRAWL_COMMAND]: () => aggregateFactory.createCrawlComics(),
             [TRAVERSE_LIBRARY_COMMAND]: () => aggregateFactory.createTraverseLibrary(),
@@ -35,6 +38,13 @@ class CommandHandlerSingleton {
      * It subscribes to the broker for the supported command types and handles them.
      */
     bootstrap() {
+        log('CommandHandlerSingleton.bootstrap', 'subscribe', `
+            \t${CREATE_RANDOMIZED_LIST_COMMAND}
+            \t${SELECT_RANDOM_IMAGE_COMMAND}
+            \t${RETRIEVE_IMAGE_COMMAND}
+            \t${CRAWL_COMMAND}
+        `);
+        broker.sub(CREATE_RANDOMIZED_LIST_COMMAND, command => this.#handle(command));
         broker.sub(SELECT_RANDOM_IMAGE_COMMAND, command => this.#handle(command));
         broker.sub(RETRIEVE_IMAGE_COMMAND, command => this.#handle(command));
         broker.sub(CRAWL_COMMAND, command => this.#handle(command));
@@ -50,18 +60,22 @@ class CommandHandlerSingleton {
         if (!this.eventHandlers[command.type]) {
             throw new Error(`Unsupported command type: ${command.type}`);
         }
-    
+
         try {
             const handler = this.eventHandlers[command.type](command);
             let events = await handler.consume(command);
             if (!Array.isArray(events)) events = [events];
-            for (const event of events) broker.pub(event);
+            for (const event of events) {
+                log('CommandHandlerSingleton.#handle', 'publish', event.type);
+                broker.pub(event);
+            }
         } catch (error: any) {
+            log('CommandHandlerSingleton.#handle', 'publish', error.event.type);
             broker.pub(error.event);
             delete error.event;
             // Optionally rethrow or handle the error
         }
-    }    
+    }
 }
 
 export default new CommandHandlerSingleton(); // Singleton instance through ES6 module caching

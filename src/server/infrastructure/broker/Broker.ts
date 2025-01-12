@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 import { TCommand, TEvent } from '../../domain/shared/types/index.js';
+import { log } from '../../utils.js';
 
 type BrokerTypes = TCommand | TEvent;
 
@@ -9,7 +10,7 @@ type BrokerTypes = TCommand | TEvent;
  * @class Broker
  */
 class Broker extends EventEmitter {
-    
+
     /**
      * Publish a command or event to the broker.
      * 
@@ -18,8 +19,8 @@ class Broker extends EventEmitter {
      */
     pub(unit: BrokerTypes) {
         if (unit) {
-            console.log('Broker:: logging: publish ->', unit.type);
             super.emit(unit.type, unit);
+            // log('Broker', 'emit', unit.type);
         }
     }
 
@@ -31,11 +32,14 @@ class Broker extends EventEmitter {
      * @memberof Broker
      */
     sub<K extends BrokerTypes['type']>(
-        type: K,
+        type: K | K[],
         listener: (unit: Extract<BrokerTypes, { type: K }>) => void
     ) {
-        console.log('Broker:: logging: subscribe ->', type);
-        this.on(type, listener);
+        if (!Array.isArray(type)) type = [type];
+        type.forEach(t => {
+            this.on(t, listener);
+            // log('Broker', 'subscribe', t);
+        });
     }
 }
 

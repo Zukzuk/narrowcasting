@@ -1,5 +1,5 @@
 import express from 'express';
-import { handleError } from '../../utils.js';
+import { handleError, log } from '../../utils.js';
 import SelectRandomImageCommand from '../../domain/shared/commands/SelectRandomImageCommand.js';
 import VersionReadModel from '../../interfaces/readmodels/VersionReadModel.js';
 import ErrorReadModel from '../../interfaces/readmodels/ErrorReadModel.js';
@@ -12,6 +12,7 @@ const router = express.Router();
  * This is the main API for the application.
  * 
  * @param {string} USER_SESSION_SECRET - The user session secret
+ * @param {string} APP_SESSION_SECRET - The user session secret
  * @param {Object} models - The models object
  * @param {VersionReadModel} models.versionReadModel - The VersionReadModel instance
  * @param {ErrorReadModel} models.errorReadModel - The ErrorReadModel instance
@@ -20,6 +21,7 @@ const router = express.Router();
  */
 export default function AppApi(
     USER_SESSION_SECRET: string,
+    APP_SESSION_SECRET: string,
     models: {
         versionReadModel: VersionReadModel,
         errorReadModel: ErrorReadModel,
@@ -71,7 +73,9 @@ export default function AppApi(
         const { page = 0, interval = 10000 }: { page: number, interval: number } = req.query;
 
         try {
-            broker.pub(new SelectRandomImageCommand({ userId: req.session.userId, page, interval, startTime: Date.now() }));
+            const payload = { userId: req.session.userId || APP_SESSION_SECRET, page, interval, startTime: Date.now() };
+            log('AppApi.post', 'publish', SelectRandomImageCommand.type);
+            broker.pub(new SelectRandomImageCommand(payload));
             res.status(202).type('text').send('ok');
         } catch (error: any) {
             handleError(error, res, "Error publishing SelectRandomImageCommand");
@@ -147,6 +151,7 @@ export default function AppApi(
      */
     router.get('/query/version', async (req: any, res: any) => {
         try {
+            log('AppApi.get', 'query', 'versionReadModel');
             const response = await versionReadModel.query();
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.type('text').send(response); // Send as plain text
@@ -177,6 +182,7 @@ export default function AppApi(
      */
     router.get('/query/errors', async (req: any, res: any) => {
         try {
+            log('AppApi.get', 'query', 'errorReadModel');
             const response = await errorReadModel.query();
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.type('text').send(JSON.stringify(response, null, 2)); // Send as plain text
@@ -205,7 +211,8 @@ export default function AppApi(
      */
     router.get('/query/library/images', async (req: any, res: any) => {
         try {
-            const response = await imageReadModel.query({ userId: req.session.userId, mediaType: 'latest' });
+            log('AppApi.get', 'query', 'latest from imageReadModel');
+            const response = await imageReadModel.query({ userId: req.session.userId || APP_SESSION_SECRET, mediaType: 'latest' });
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.set('X-Custom-Image-URL', response.url);
             res.set('Content-Type', response.contentType);

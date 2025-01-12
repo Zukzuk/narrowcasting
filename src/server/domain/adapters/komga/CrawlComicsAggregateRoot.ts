@@ -10,7 +10,6 @@ import { TMediaType } from '../../shared/types/index.js';
 /**
  * Aggregate root for crawling comics from Komga.
  * 
- * @export
  * @class CrawlComicsAggregateRoot
  */
 export default class CrawlComicsAggregateRoot {

@@ -10,7 +10,6 @@ import ImageIndexRepository from '../../../infrastructure/repositories/ImageInde
 /**
  * Aggregate root to retrieve a media cover image from a given index
  * 
- * @export
  * @class RetrieveMediaCoverAggregateRoot
  */
 export default class RetrieveMediaCoverAggregateRoot {
@@ -48,17 +47,15 @@ export default class RetrieveMediaCoverAggregateRoot {
             // Return a business event
             return new ImageRetrievedEvent({ userId, mediaType, image: optimizedImage, contentType, url }, mediaType);
         } catch (error: any) {
-            // Retry image retrieval if image format is not supported
-            if (error.message.contains('Unsupported image format')) {
-                const elapsedTime = Date.now() - startTime;
-                const remainingTime = interval - elapsedTime;
-                if (remainingTime > 5000) {
-                    const payload = { userId, page: 0, interval, startTime };
-                    const event = new RetryImageRetrievalEvent(payload);
-                    return event;
-                }
-                console.log(`No retry attempt because remaining time in interval (${remainingTime}ms) is too short...`);
+            // Retry image retrieval if there is enough time left in the interval
+            const elapsedTime = Date.now() - startTime;
+            const remainingTime = interval - elapsedTime;
+            if (remainingTime > 5000) {
+                const payload = { userId, page: 0, interval, startTime };
+                const event = new RetryImageRetrievalEvent(payload);
+                return event;
             }
+            console.warn(`No retry attempted, not enough time remaining time in interval (${remainingTime}ms).`);
 
             // Return failure event
             const event = new ImageRetrievalFailedEvent(error.message, error.url, error.mediaType);

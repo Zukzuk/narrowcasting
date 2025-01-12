@@ -6,8 +6,6 @@ import eventToCommandHandler from './backend/EventToCommandHandlerSingleton.js';
 
 /**
  * Singleton class that orchestrates the application.
- * 
- * It initializes the application by bootstrapping the command handler, event to command handler and BFF narrowcasting.
  */
 class OrchestratorSingleton {
     
@@ -15,8 +13,6 @@ class OrchestratorSingleton {
 
     /**
      * Bootstraps the application.
-     * 
-     * It initializes the command handler, event to command handler and BFF narrowcasting.
      * 
      * @param server The server to bootstrap the application on.
      */

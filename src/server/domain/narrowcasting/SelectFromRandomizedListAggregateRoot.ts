@@ -5,6 +5,7 @@ import MediaImageService from '../adapters/plex/services/MediaImageService.js';
 import ComicsImageService from '../adapters/komga/services/ComicsImageService.js';
 import GamesImageService from '../adapters/playnite/services/GamesImageService.js';
 import SelectRandomImageCommand from '../shared/commands/SelectRandomImageCommand.js';
+import CreateRandomizedListCommand from '../shared/commands/CreateRandomizedListCommand.js';
 import RandomImageSelectedEvent from '../shared/events/RandomImageSelectedEvent.js';
 import RandomImageSelectionFailedEvent from '../shared/events/RandomImageSelectionFailedEvent.js';
 import ImageIndexRepository, { IWeightedCache } from '../../infrastructure/repositories/ImageIndexRepository.js';
@@ -14,9 +15,9 @@ import ImageIndexRepository, { IWeightedCache } from '../../infrastructure/repos
  * 
  * This aggregate root is responsible for selecting a random image from a media library.
  * @exports
- * @class SelectRandomImageAggregateRoot
+ * @class SelectFromRandomizedListAggregateRoot
  */
-export default class SelectRandomImageAggregateRoot {
+export default class SelectFromRandomizedListAggregateRoot {
 
     private mediaImageService: MediaImageService;
     private comicsImageService: ComicsImageService;
@@ -31,35 +32,25 @@ export default class SelectRandomImageAggregateRoot {
     /**
      * Consumes a command to select a random image from a media library.
      * 
-     * @param command The command to consume.
-     * @returns A business event.
-     * @memberof SelectRandomImageAggregateRoot
+     * @param {SelectRandomImageCommand | CreateRandomizedListCommand} command
+     * @returns {Promise<RandomImageSelectedEvent | RandomImageSelectionFailedEvent>}
+     * @memberof SelectFromRandomizedListAggregateRoot
      */
-    async consume(command: SelectRandomImageCommand): Promise<RandomImageSelectedEvent | RandomImageSelectionFailedEvent> {
+    async consume(command: SelectRandomImageCommand | CreateRandomizedListCommand): Promise<RandomImageSelectedEvent | RandomImageSelectionFailedEvent> {
 
         const { userId, page, interval, startTime } = command.payload;
 
         try {
-            // Check if library index caches are filled
+            // Check if library index caches are filled, else fetch data for each media type
             const hasValidCaches = this.imageIndexRepository.hasValidCaches(userId);
+            if (!hasValidCaches) await this.#populateCaches(userId);
 
-            // If not, fetch data for each media type
-            if (!hasValidCaches) {
-                await this.#populateCaches(userId);
-            }
-
-            // Check if weighted cache is filled
+            // Check if weighted cache is filled, else create a weighted cache
             const hasValidWeightedCache = this.imageIndexRepository.hasValidWeightedCache(userId);
-
-            // If not, create a weighted cache
-            if (!hasValidWeightedCache) {
-                this.#createWeightedCache(userId);
-            }
+            if (!hasValidWeightedCache) this.#createWeightedCache(userId);
 
             // Retrieve the weighted index using the repository method
-            const { mediaType, index } = this.imageIndexRepository.getWeightedIndex(userId);
-
-            log(userId, 'SelectRandomImageAggregateRoot', 'weighted', 'select', `Selected '${mediaType}' with index '${index}'`);
+            const { mediaType, index } = this.imageIndexRepository.getWeightedItem(userId);
 
             // Return a business event
             return new RandomImageSelectedEvent({ userId, index, mediaType, page, interval, startTime });
@@ -73,24 +64,25 @@ export default class SelectRandomImageAggregateRoot {
 
     /**
      * Populates the caches for different media types.
-     * @param userId The ID of the user.
+     * 
+     * @param {string} userId The ID of the user.
      */
     async #populateCaches(userId: string): Promise<void> {
         const invalidCaches = this.imageIndexRepository.getInvalidCacheHits(userId);
 
-        // Fetch and save data for Komga (Comics)
+        // Fetch and save data for Komga
         if (mediaTypesKomga.some(type => invalidCaches.includes(type))) {
             const total = await this.comicsImageService.fetchTotalBooks();
             this.imageIndexRepository.save(userId, 'comics', { total });
         }
 
-        // Fetch and save data for Playnite (Games)
+        // Fetch and save data for Playnite
         if (mediaTypesPlaynite.some(type => invalidCaches.includes(type))) {
             const data = await this.gamesImageService.fetchGamesData();
             this.imageIndexRepository.save(userId, 'games', { data });
         }
 
-        // Fetch and save data for Plex (Media)
+        // Fetch and save data for Plex
         if (mediaTypesPlex.some(type => invalidCaches.includes(type))) {
             const sections = await this.mediaImageService.fetchSections();
             await Promise.all(sections.map(async section => {
@@ -104,25 +96,20 @@ export default class SelectRandomImageAggregateRoot {
 
     /**
      * Creates a weighted cache to ensure balanced and random selection across media types.
-     * @param userId The ID of the user.
+     * 
+     * @param {string} userId The ID of the user.
      */
     #createWeightedCache(userId: string): void {
         const caches = this.imageIndexRepository.retrieve(userId);
-        const cacheTotals = Object.values(caches).map(cache => cache.total);
 
-        if (cacheTotals.length === 0) {
-            throw new Error("No media types available in cache.");
-        }
+        const cacheTotals = Object.values(caches).map(cache => cache.total);
+        if (cacheTotals.length === 0) throw new Error("No media types available in cache.");
 
         const numberOfSets = Math.min(...cacheTotals);
-        if (numberOfSets === 0) {
-            throw new Error("One of the media types has no available indexes.");
-        }
-
-        // Initialize an array of sets
-        const weightedSets: IWeightedCache[][] = Array.from({ length: numberOfSets }, () => []);
+        if (numberOfSets === 0) throw new Error("One of the media types has no available indexes.");
 
         // Distribute shuffled indexes into sets in a round-robin fashion
+        const weightedSets: IWeightedCache[][] = Array.from({ length: numberOfSets }, () => []);
         Object.entries(caches).forEach(([mediaType, cache]) => {
             const shuffledIndexes = shuffleArray([...cache.uniqueIndexes]);
             shuffledIndexes.forEach((index, i) => {

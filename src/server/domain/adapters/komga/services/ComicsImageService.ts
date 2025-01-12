@@ -5,7 +5,6 @@ import { UrlError } from '../../../../utils.js';
  * Service for fetching comic images from Komga.
  * 
  * @class ComicsImageService
- * @export
  */
 export default class ComicsImageService {
 

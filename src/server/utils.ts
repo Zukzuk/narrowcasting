@@ -31,16 +31,16 @@ async function getGatewayAddress() {
     }
 }
 
-function doAxiosLogging(logReq = true, logResp = true) {
+export function doAxiosLogging(logReq = true, logResp = true) {
     if (logReq) {
         axios.interceptors.request.use(request => {
-            console.log('Axios:: logging: request ->', request.url);
+            log('Axios', 'request', request!.url!);
             return request;
         });
     }
     if (logResp) {
         axios.interceptors.response.use(response => {
-            console.log('Axios:: logging: response ->', response);
+            log('Axios', 'response', response!.toString());
             return response;
         });
     }
@@ -51,13 +51,12 @@ export function getPort() {
 }
 
 export async function doServerLogging() {
-    doAxiosLogging(true, false);
     const gatewayAddress = await getGatewayAddress();
-    console.log(
+    console.info(
         `Server is running`,
-        `Address='${getLocalIpAddress()}:${getPort()}'`,
+        `localIpAddress='${getLocalIpAddress()}:${getPort()}'`,
         `gatewayAddress='${gatewayAddress}'`,
-        `Hostname='${getHostName()}'`,
+        `hostName='${getHostName()}'`,
     );
 }
 
@@ -86,6 +85,6 @@ export function shuffleArray<T>(array: T[]): T[] {
     return array;
 };
 
-export function log(userId: string, inst:string, method:string, action: string, message: string) {
-    console.log(`${userId}::: ${inst}:: ${method}: ${action} -> ${message}`);
+export function log(method:string, action: string, message: string, userId?: string ) {
+    console.log(`${userId ? userId+': ' : ''}${method}: ${action} -> ${message}`);
 }
