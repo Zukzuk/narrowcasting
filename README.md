@@ -1,10 +1,10 @@
 # Narrowcasting for all your media libraries
 
 A Node.js narrowcasting application designed to serve your media library images with a simple REST API and frontend interface. This app is Docker-ready and includes configurations for both development and production environments.
-Currently compatible with the following API's
-- Komga
-- Plex
-- Playnite
+Currently adapted the following API's
+- [Komga](https://komga.org/)
+- [Plex](https://www.plex.tv/)
+- [Playnite](https://playnite.link/)
 
 ## Installation
 
@@ -59,7 +59,9 @@ showVersion=true
    default = false
 ```
 
-## API Documentation
+## Documentation
+http://localhost:3001/docs
+
 http://localhost:3001/api-docs
 
 # Project Structure
@@ -88,13 +90,19 @@ A ```Broker``` decouples the ```BFF``` and the domain components, ensuring flexi
 ### Server structure
   - `application/`: Backend application logic.
   - `domain/`: Domain-specific logic.
-    - `[DOMAIN]/`
+    - `[ADAPTERS]/`
+      - `services/`
+    - `[DOMAINS]/`
+      - `services/`
+    - `core/`
+      - `annotations/`
       - `commands/`
       - `events/`
+      - `types/`
+    - `shared/`
       - `services/`
   - `infrastructure/`: Infrastructure-related code.
     - `broker/`
-    - `filesystem/`
     - `repositories/`
   - `interfaces/`: Interface definitions.
     - `apis/`
@@ -120,6 +128,7 @@ PLEX_API_KEY=                       # Plex API key
 PLEX_MACHINE_DENTIFIER=             # Plex Server ID
 
 # deploy/public.env
+APP_SHOW_LOGGING=                   # Wether or not to show server logging
 APP_STATIC_SERVE_PATH=              # Path to client's static files
 APP_API_PATH=                       # Api path of the app itself
 APP_API_DOCS_PATH=                  # Api Docs path

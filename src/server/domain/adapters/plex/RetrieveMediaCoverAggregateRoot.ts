@@ -1,10 +1,10 @@
 import { PLEX_API_KEY, PLEX_MACHINE_IDENTIFIER, PLEX_API, PLEX_ORIGIN } from '../../../config.js';
-import RetrieveImageCommand from '../../shared/commands/RetrieveImageCommand.js';
-import RetryImageRetrievalEvent from '../../shared/events/RetryImageRetrievalEvent.js';
-import ImageRetrievedEvent from '../../../domain/shared/events/ImageRetrievedEvent.js';
-import ImageRetrievalFailedEvent from '../../../domain/shared/events/ImageRetrievalFailedEvent.js';
+import RetrieveImageCommand from '../../core/commands/RetrieveImageCommand.js';
+import RetryImageRetrievalEvent from '../../core/events/RetryImageRetrievalEvent.js';
+import ImageRetrievedEvent from '../../core/events/ImageRetrievedEvent.js';
+import ImageRetrievalFailedEvent from '../../core/events/ImageRetrievalFailedEvent.js';
 import MediaImageService, { IPlexMediaContainer } from './services/MediaImageService.js';
-import ImageOptimizeService from '../../../domain/shared/services/ImageOptimizeService.js';
+import ImageOptimizeService from '../../shared/services/ImageOptimizeService.js';
 import ImageIndexRepository from '../../../infrastructure/repositories/ImageIndexRepository.js';
 
 /**

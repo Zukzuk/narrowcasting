@@ -7,12 +7,11 @@ import VersionReadModel from '../../interfaces/readmodels/VersionReadModel.js';
 import ErrorReadModel from '../../interfaces/readmodels/ErrorReadModel.js';
 import ComicsCrawlReadModel from '../../interfaces/readmodels/ComicsCrawlReadModel.js';
 import ImageReadModel from '../../interfaces/readmodels/ImageReadModel.js';
-import TraverseLibraryCommand from '../../domain/shared/commands/TraverseLibraryCommand.js';
-import CreateRandomizedListCommand from '../../domain/shared/commands/CreateRandomizedListCommand.js';
-import CrawlCommand from '../../domain/shared/commands/CrawlCommand.js';
+import TraverseLibraryCommand from '../../domain/core/commands/TraverseLibraryCommand.js';
+import CreateRandomizedListCommand from '../../domain/core/commands/CreateRandomizedListCommand.js';
+import CrawlCommand from '../../domain/core/commands/CrawlCommand.js';
 
 import broker from '../../infrastructure/broker/Broker.js'; // Singleton instance
-import SelectRandomImageCommand from 'server/domain/shared/commands/SelectRandomImageCommand.js';
 
 /**
  * Singleton class that orchestrates the BFF narrowcasting.

@@ -1,6 +1,6 @@
 import { log } from "../../utils.js";
-import { TMediaType } from "../../domain/shared/types/index.js";
-import { IImageRetrievedPayload, IMAGE_RETRIEVED_EVENT } from "../../domain/shared/events/ImageRetrievedEvent.js";
+import { TMediaType } from "../../domain/core/types/index.js";
+import { IImageRetrievedPayload, IMAGE_RETRIEVED_EVENT } from "../../domain/core/events/ImageRetrievedEvent.js";
 
 import broker from "../../infrastructure/broker/Broker.js";
 
@@ -37,7 +37,7 @@ export default class ImageReadModel {
     /**
      * This method queries the read model for the Image domain.
      * 
-     * @param {IImageQuery}
+     * @param {IImageQuery} { userId, mediaType }
      * @returns {IImageRetrievedPayload | null}
      * @memberof ImageReadModel
      */
@@ -56,7 +56,7 @@ export default class ImageReadModel {
      * This method queries the read model for the Image domain.
      * 
      * @private
-     * @param {IImageQuery}
+     * @param {IImageQuery} { userId, mediaType }
      * @memberof ImageReadModel
      */
     #denormalize(payload: IImageRetrievedPayload) {
@@ -76,8 +76,8 @@ export default class ImageReadModel {
      * This method returns the last index of the userCache.
      * 
      * @private
-     * @param {ICacheData}
-     * @param {(TMediaType | 'latest')}
+     * @param {ICacheData} userCache
+     * @param {(TMediaType | 'latest')} mediaType
      * @returns {number}
      * @memberof ImageReadModel
      */

@@ -8,12 +8,17 @@ import {
     USER_SESSION_SECRET,
     APP_CACHE_DURATION,
     APP_API_DOCS_PATH,
+    APP_DOCS_PATH,
     APP_STATIC_SERVE_PATH,
     KOMGA_ORIGIN,
 } from './config.js';
+import staticServeDocs from './staticserve.js';
 
 // server
 const server = express();
+
+// Use helmet for security
+// server.use(helmet());
 
 // cors
 server.use(cors({
@@ -34,8 +39,11 @@ server.use(session({
 // compression
 server.use(compression());
 
-// static files serve
+// public folder serve
 server.use(express.static(APP_STATIC_SERVE_PATH));
+
+// docs folder serve
+staticServeDocs(server, APP_DOCS_PATH);
 
 // api docs
 import swaggerSpec from './swagger.js'; // Singleton instance
@@ -47,7 +55,7 @@ doAxiosLogging(true, false);
 // start server
 server.listen(getPort(), async () => {
     // server logging
-    await doServerLogging();  
+    await doServerLogging();
 });
 
 // orchestrate application

@@ -1,6 +1,6 @@
-import ImageRetrievalFailedEvent, { IMAGE_RETRIEVAL_FAILED_EVENT } from "../../domain/shared/events/ImageRetrievalFailedEvent.js";
-import RandomImageSelectionFailedEvent, { RANDOMIZED_LIST_CREATION_FAILED_EVENT } from "../../domain/shared/events/RandomImageSelectionFailedEvent.js";
-import CrawlFailedEvent, { CRAWL_FAILED_EVENT } from "../../domain/shared/events/CrawlFailedEvent.js";
+import ImageRetrievalFailedEvent, { IMAGE_RETRIEVAL_FAILED_EVENT } from "../../domain/core/events/ImageRetrievalFailedEvent.js";
+import RandomImageSelectionFailedEvent, { RANDOMIZED_LIST_CREATION_FAILED_EVENT } from "../../domain/core/events/RandomImageSelectionFailedEvent.js";
+import CrawlFailedEvent, { CRAWL_FAILED_EVENT } from "../../domain/core/events/CrawlFailedEvent.js";
 import { log } from "../../utils.js";
 
 import broker from "../../infrastructure/broker/Broker.js";

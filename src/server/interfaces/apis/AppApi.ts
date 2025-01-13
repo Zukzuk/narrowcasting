@@ -1,6 +1,6 @@
 import express from 'express';
 import { handleError, log } from '../../utils.js';
-import SelectRandomImageCommand from '../../domain/shared/commands/SelectRandomImageCommand.js';
+import SelectRandomImageCommand from '../../domain/core/commands/SelectRandomImageCommand.js';
 import VersionReadModel from '../../interfaces/readmodels/VersionReadModel.js';
 import ErrorReadModel from '../../interfaces/readmodels/ErrorReadModel.js';
 import ImageReadModel from '../../interfaces/readmodels/ImageReadModel.js';

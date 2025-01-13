@@ -1,11 +1,11 @@
 
 import { KOMGA_API, KOMGA_AUTH, APP_CRAWL_PAGE_SIZE } from '../../../config.js';
 import CrawledComicsRepository from '../../../infrastructure/repositories/CrawledComicsRepository.js';
-import CrawlCommand from '../../../domain/shared/commands/CrawlCommand.js';
-import CrawlCompletedEvent from '../../../domain/shared/events/CrawlCompletedEvent.js';
-import CrawlFailedEvent from '../../../domain/shared/events/CrawlFailedEvent.js';
+import CrawlCommand from '../../core/commands/CrawlCommand.js';
+import CrawlCompletedEvent from '../../core/events/CrawlCompletedEvent.js';
+import CrawlFailedEvent from '../../core/events/CrawlFailedEvent.js';
+import { TMediaType } from '../../core/types/index.js';
 import CrawlComicsEndpointService from './services/CrawlComicsEndpointService.js';
-import { TMediaType } from '../../shared/types/index.js';
 
 /**
  * Aggregate root for crawling comics from Komga.

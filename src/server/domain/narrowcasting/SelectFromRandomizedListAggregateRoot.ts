@@ -1,13 +1,13 @@
 import { log, shuffleArray } from '../../utils.js';
 import { KOMGA_API, KOMGA_AUTH, PLAYNITE_BACKUP_ORIGIN, PLEX_API, PLEX_API_KEY } from '../../config.js';
-import { mediaTypesKomga, mediaTypesPlex, mediaTypesPlaynite, TMediaType } from '../shared/types/index.js';
+import { mediaTypesKomga, mediaTypesPlex, mediaTypesPlaynite, TMediaType } from '../core/types/index.js';
 import MediaImageService from '../adapters/plex/services/MediaImageService.js';
 import ComicsImageService from '../adapters/komga/services/ComicsImageService.js';
 import GamesImageService from '../adapters/playnite/services/GamesImageService.js';
-import SelectRandomImageCommand from '../shared/commands/SelectRandomImageCommand.js';
-import CreateRandomizedListCommand from '../shared/commands/CreateRandomizedListCommand.js';
-import RandomImageSelectedEvent from '../shared/events/RandomImageSelectedEvent.js';
-import RandomImageSelectionFailedEvent from '../shared/events/RandomImageSelectionFailedEvent.js';
+import SelectRandomImageCommand from '../core/commands/SelectRandomImageCommand.js';
+import CreateRandomizedListCommand from '../core/commands/CreateRandomizedListCommand.js';
+import RandomImageSelectedEvent from '../core/events/RandomImageSelectedEvent.js';
+import RandomImageSelectionFailedEvent from '../core/events/RandomImageSelectionFailedEvent.js';
 import ImageIndexRepository, { IWeightedCache } from '../../infrastructure/repositories/ImageIndexRepository.js';
 
 /**

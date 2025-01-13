@@ -1,5 +1,5 @@
 import { log } from "../../utils.js";
-import { mediaTypes, TMediaType } from "../../domain/shared/types/index.js";
+import { mediaTypes, TMediaType } from "../../domain/core/types/index.js";
 import { IPlexMediaContainer } from "../../domain/adapters/plex/services/MediaImageService.js";
 import { IPlayniteGamesContainer } from "../../domain/adapters/playnite/services/GamesImageService.js";
 
@@ -150,10 +150,8 @@ export default class ImageIndexRepository {
   hasValidCaches(userId: string): boolean {
     const userCache = this.#getUserCache(userId);
 
-    // TODO: you can do more robust checks here, e.g. check expiration times
-
     const result = mediaTypes.every((mediaType) => {
-      return !!userCache[mediaType]?.remaining;
+      return !!(userCache[mediaType]?.remaining) || (userCache[mediaType]?.expiration < Date.now());
     });
 
     log('ImageIndexRepository.hasValidCache', 'read', result.toString(), userId);
@@ -189,7 +187,7 @@ export default class ImageIndexRepository {
     const userCache = this.#getUserCache(userId);
 
     const result = mediaTypes.filter((mediaType) => {
-      return !userCache[mediaType]?.remaining;
+      return !(userCache[mediaType]?.remaining) || !(userCache[mediaType]?.expiration > Date.now());
     });
 
     log('ImageIndexRepository.getInvalidCacheHits', 'read', result.toString(), userId);

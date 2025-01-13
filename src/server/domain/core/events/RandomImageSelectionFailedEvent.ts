@@ -1,5 +1,4 @@
 import { Timestamped } from "../annotations/index.js";
-import { TMediaType } from "../types/index.js";
 
 export const RANDOMIZED_LIST_CREATION_FAILED_EVENT = 'RANDOMIZED_LIST_CREATION_FAILED_EVENT' as const;
 

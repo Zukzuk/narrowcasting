@@ -1,6 +1,7 @@
 import os from 'os';
 import defaultGateway from 'default-gateway';
 import axios from 'axios';
+import { APP_SHOW_LOGGING } from './config.js';
 
 function getLocalIpAddress() {
     const networkInterfaces = os.networkInterfaces();
@@ -86,5 +87,5 @@ export function shuffleArray<T>(array: T[]): T[] {
 };
 
 export function log(method:string, action: string, message: string, userId?: string ) {
-    console.log(`${userId ? userId+': ' : ''}${method}: ${action} -> ${message}`);
+    if (APP_SHOW_LOGGING) console.log(`${userId ? userId+': ' : ''}${method}: ${action} -> ${message}`);
 }

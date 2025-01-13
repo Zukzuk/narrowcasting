@@ -1,8 +1,8 @@
 import TraversalRepository from '../../infrastructure/repositories/TraversalRepository.js';
 import TraverseDirectoryService from '../shared/services/TraverseDirectoryService.js';
-import TraverseLibraryCommand from '../shared/commands/TraverseLibraryCommand.js';
-import LibraryTraversalFailedEvent from '../shared/events/LibraryTraversalFailedEvent.js';
-import LibraryTraversedEvent from '../shared/events/LibraryTraversedEvent.js';
+import TraverseLibraryCommand from '../core/commands/TraverseLibraryCommand.js';
+import LibraryTraversalFailedEvent from '../core/events/LibraryTraversalFailedEvent.js';
+import LibraryTraversedEvent from '../core/events/LibraryTraversedEvent.js';
 
 /**
  * Aggregate root for traversing a library
@@ -13,7 +13,7 @@ export default class TraverseLibraryAggregateRoot {
     
     private traverseDirectoryService: TraverseDirectoryService;
 
-    // TODO: Finish implemeting
+    // TODO: ! Finish implementing
 
     constructor(private traversalRepository: TraversalRepository) {
         this.traverseDirectoryService = new TraverseDirectoryService();

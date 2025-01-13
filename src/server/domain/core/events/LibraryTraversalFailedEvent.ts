@@ -1,5 +1,4 @@
 import { Timestamped } from "../annotations/index.js";
-import { TMediaType } from "../types/index.js";
 
 export const LIBRARY_TRAVERSAL_FAILED_EVENT = 'LIBRARY_TRAVERSAL_FAILED_EVENT' as const;
 

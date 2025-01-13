@@ -1,5 +1,5 @@
 import { log } from "../../utils.js";
-import CrawlCompletedEvent, { CRAWL_COMPLETED_EVENT } from "../../domain/shared/events/CrawlCompletedEvent.js";
+import CrawlCompletedEvent, { CRAWL_COMPLETED_EVENT } from "../../domain/core/events/CrawlCompletedEvent.js";
 
 import broker from "../../infrastructure/broker/Broker.js";
 
@@ -34,7 +34,7 @@ export default class ComicsCrawlReadModel {
     /**
      * This method queries the read model for the ComicsCrawl domain.
      * 
-     * @param {IComicsCrawlQuery}
+     * @param {IComicsCrawlQuery} { userId, endpoint, search }
      * @returns {Record<string, any>}
      * @memberof ComicsCrawlReadModel
      */

@@ -1,0 +1,12 @@
+{
+    "entryPoints": ["src/server/**/*"],
+    "out": "./dist/docs",
+    "includeVersion": true,
+    "exclude": ["**/__tests__/**", "**/*.spec.ts"],
+    "tsconfig": "tsconfig.json",
+    "theme": "default",
+    "excludePrivate": false,
+    "excludeProtected": false,
+    "excludeExternals": true,
+    "hideGenerator": true
+  }

@@ -1,7 +1,7 @@
 import express from 'express';
 import { handleError, log } from '../../utils.js';
 import ComicsCrawlReadModel from '../../interfaces/readmodels/ComicsCrawlReadModel.js';
-import TraverseLibraryCommand from '../../domain/shared/commands/TraverseLibraryCommand.js';
+import TraverseLibraryCommand from '../../domain/core/commands/TraverseLibraryCommand.js';
 
 import broker from '../../infrastructure/broker/Broker.js';
 const router = express.Router();

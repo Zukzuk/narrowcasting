@@ -1,5 +1,5 @@
 import { Timestamped } from "../annotations/index.js";
-import { DirectoryNode } from "../services/TraverseDirectoryService.js";
+import { DirectoryNode } from "../../shared/services/TraverseDirectoryService.js";
 
 export const LIBRARY_TRAVERSED_EVENT = 'LIBRARY_TRAVERSED_EVENT' as const;
 

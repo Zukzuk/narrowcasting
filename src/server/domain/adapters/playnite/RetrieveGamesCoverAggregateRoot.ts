@@ -1,10 +1,10 @@
 import { PLAYNITE_BACKUP_ORIGIN } from '../../../config.js';
-import RetrieveImageCommand from '../../shared/commands/RetrieveImageCommand.js';
-import ImageRetrievedEvent from '../../shared/events/ImageRetrievedEvent.js';
-import ImageRetrievalFailedEvent from '../../shared/events/ImageRetrievalFailedEvent.js';
+import RetrieveImageCommand from '../../core/commands/RetrieveImageCommand.js';
+import ImageRetrievedEvent from '../../core/events/ImageRetrievedEvent.js';
+import ImageRetrievalFailedEvent from '../../core/events/ImageRetrievalFailedEvent.js';
 import GamesImageService, { IPlayniteGamesContainer } from './services/GamesImageService.js';
 import ImageOptimizeService from '../../shared/services/ImageOptimizeService.js';
-import RetryImageRetrievalEvent from '../../shared/events/RetryImageRetrievalEvent.js';
+import RetryImageRetrievalEvent from '../../core/events/RetryImageRetrievalEvent.js';
 import ImageIndexRepository from '../../../infrastructure/repositories/ImageIndexRepository.js';
 
 /**

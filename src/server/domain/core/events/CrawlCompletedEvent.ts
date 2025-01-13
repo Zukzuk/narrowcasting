@@ -1,4 +1,4 @@
-import { Timestamped } from "../../shared/annotations/index.js";
+import { Timestamped } from "../annotations/index.js";
 import { TMediaType } from "../types/index.js";
 
 export const CRAWL_COMPLETED_EVENT = 'CRAWL_COMPLETED_EVENT' as const;

@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { TCommand, TEvent } from '../../domain/shared/types/index.js';
+import { TCommand, TEvent } from '../../domain/core/types/index.js';
 import { log } from '../../utils.js';
 
 type BrokerTypes = TCommand | TEvent;
@@ -14,7 +14,7 @@ class Broker extends EventEmitter {
     /**
      * Publish a command or event to the broker.
      * 
-     * @param unit - The command or event to publish.
+     * @param {BrokerTypes} unit - The command or event to publish.
      * @memberof Broker
      */
     pub(unit: BrokerTypes) {
@@ -27,8 +27,8 @@ class Broker extends EventEmitter {
     /**
      * Subscribe to a command or event type.
      * 
-     * @param type - The type of command or event to subscribe to.
-     * @param listener - The callback function to execute when the command or event is published.
+     * @param {K | K[]} type - The type of command or event to subscribe to.
+     * @param {(unit: Extract<BrokerTypes, { type: K }>) => void} listener - The callback function to execute when the command or event is published.
      * @memberof Broker
      */
     sub<K extends BrokerTypes['type']>(

@@ -1,8 +1,8 @@
-import { TEvent } from '../../domain/shared/types/index.js';
-import RetrieveImageCommand from '../../domain/shared/commands/RetrieveImageCommand.js';
-import SelectRandomImageCommand from '../../domain/shared/commands/SelectRandomImageCommand.js';
-import RetryImageRetrievalEvent, { RETRY_IMAGE_RETRIEVAL_EVENT } from '../../domain/shared/events/RetryImageRetrievalEvent.js';
-import RandomImageSelectedEvent, { RANDOM_IMAGE_SELECTED_EVENT } from '../../domain/shared/events/RandomImageSelectedEvent.js';
+import { TEvent } from '../../domain/core/types/index.js';
+import RetrieveImageCommand from '../../domain/core/commands/RetrieveImageCommand.js';
+import SelectRandomImageCommand from '../../domain/core/commands/SelectRandomImageCommand.js';
+import RetryImageRetrievalEvent, { RETRY_IMAGE_RETRIEVAL_EVENT } from '../../domain/core/events/RetryImageRetrievalEvent.js';
+import RandomImageSelectedEvent, { RANDOM_IMAGE_SELECTED_EVENT } from '../../domain/core/events/RandomImageSelectedEvent.js';
 import { log } from '../../utils.js';
 
 import broker from '../../infrastructure/broker/Broker.js'; // Singleton instance
@@ -30,6 +30,11 @@ class EventToCommandHandlerSingleton {
         broker.sub(RETRY_IMAGE_RETRIEVAL_EVENT, event => this.#handle(event));
     }
 
+    /**
+     * Handles the event by delegating it to the appropriate command handler.
+     * 
+     * @param {TEvent} event The event to handle.
+     */
     async #handle(event: TEvent) {
         if (!this.eventToCommandHandler[event.type]) {
             throw new Error(`Unsupported event type: ${event.type}`);

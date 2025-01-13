@@ -15,7 +15,8 @@
     },
     "scripts": {
         "dev": "node scripts/docker-dev.js",
-        "build": "mkdirp dist/public && cpx \"src/public/**/*\" dist/public && tsc",
+        "docs": "typedoc --skipErrorChecking ",
+        "build": "mkdirp dist/public && cpx \"src/public/**/*\" dist/public && npm run docs && tsc",
         "commit": "cz",
         "push": "standard-version && git push --follow-tags origin main && cross-env APP_RUN=false npm run dev",
         "release": "node scripts/docker-release.js",
@@ -31,6 +32,7 @@
         "dotenv": "^16.4.5",
         "express": "^4.21.1",
         "express-session": "^1.18.1",
+        "helmet": "^8.0.0",
         "sharp": "^0.33.5",
         "swagger-jsdoc": "^6.2.8",
         "swagger-ui-express": "^5.0.1"
@@ -55,6 +57,7 @@
         "nodemon": "^3.1.7",
         "standard-version": "^9.5.0",
         "ts-node": "^10.9.2",
+        "typedoc": "^0.27.6",
         "typescript": "5.6"
     },
     "config": {

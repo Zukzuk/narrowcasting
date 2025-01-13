@@ -45,7 +45,7 @@ function getQueryParams() {
 async function displayNextImage(page, interval) {
     const { activeImage, inactiveImage } = getActiveAndInactiveImages();
     nextImageData = await queryImage();
-    commandRetrieveImage(page, interval);
+    if (doCommand) commandRetrieveImage(page, interval);
     setImageSource(inactiveImage, nextImageData);
     inactiveImage.onload = async () => {
         adjustAspectRatio(inactiveImage);
@@ -132,14 +132,10 @@ async function main() {
     requestWakeLock();
     const { page, interval, showVersion } = getQueryParams();
     displayVersion(showVersion);
-    // Command retrieval of the first image
-    await commandRetrieveImage(page, interval);
     // Display the first fetched image
-    setTimeout(() => {
-        displayNextImage(page, interval)
-        // Set interval to display the next images
-        setInterval(() => displayNextImage(page, interval), interval);
-    }, 3000);
+    displayNextImage(page, interval, false);
+    // Set interval to display the next images
+    setInterval(() => displayNextImage(page, interval), interval);
 }
 main();
 
