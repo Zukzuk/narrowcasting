@@ -18,17 +18,17 @@ export const mediaTypes = [
 ] as const; // Combine as a readonly tuple
 export type TMediaType = (typeof mediaTypes)[number]; // Union type of all media types
 
-import CrawlCommand from '../commands/CrawlCommand.js';
+import CrawlEndpointCommand from '../commands/CrawlEndpointCommand.js';
 import TraverseLibraryCommand from '../commands/TraverseLibraryCommand.js';
 import SelectRandomImageCommand from '../commands/SelectRandomImageCommand.js';
 import CreateRandomizedListCommand from '../commands/CreateRandomizedListCommand.js';
 import RetrieveImageCommand from '../commands/RetrieveImageCommand.js';
 export type TCommand =
-    CrawlCommand |
-    TraverseLibraryCommand |
-    CreateRandomizedListCommand |
-    SelectRandomImageCommand |
-    RetrieveImageCommand;
+    | CrawlEndpointCommand
+    | TraverseLibraryCommand
+    | CreateRandomizedListCommand
+    | SelectRandomImageCommand
+    | RetrieveImageCommand;
 
 import CrawlCompletedEvent from '../events/CrawlCompletedEvent.js';
 import CrawlFailedEvent from '../events/CrawlFailedEvent.js';

@@ -5,18 +5,13 @@ FROM node:20-alpine
 ARG APP_VERSION_TAG
 ENV APP_VERSION_TAG=$APP_VERSION_TAG
 # npm will install dependencies and devDependencies
-ENV NODE_ENV=development 
+ENV NODE_ENV=development
 
 # Set up the working directory
 WORKDIR /usr/src/app
-COPY package*.json ./
+COPY *.json ./
+COPY *.env ./
 RUN npm install
-
-# Copy application code
-COPY . .
-
-# Build the project (copies the public folder and compiles TypeScript)
-RUN npm run build
 
 # Expose the port
 EXPOSE 3000

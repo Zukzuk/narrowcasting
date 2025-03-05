@@ -1,10 +1,10 @@
 import aggregateFactory from './AggregateFactorySingleton.js';
 import { mediaTypesKomga, mediaTypesPlaynite, mediaTypesPlex, TCommand } from '../../domain/core/types/index.js';
-import { CRAWL_COMMAND } from '../../domain/core/commands/CrawlCommand.js';
+import { CRAWL_ENDPOINT_COMMAND } from '../../domain/core/commands/CrawlEndpointCommand.js';
 import { SELECT_RANDOM_IMAGE_COMMAND } from '../../domain/core/commands/SelectRandomImageCommand.js';
 import { CREATE_RANDOMIZED_LIST_COMMAND } from '../../domain/core/commands/CreateRandomizedListCommand.js';
-import RetrieveImageCommand, { RETRIEVE_IMAGE_COMMAND } from '../../domain/core/commands/RetrieveImageCommand.js';
 import { TRAVERSE_LIBRARY_COMMAND } from '../../domain/core/commands/TraverseLibraryCommand.js';
+import RetrieveImageCommand, { RETRIEVE_IMAGE_COMMAND } from '../../domain/core/commands/RetrieveImageCommand.js';
 import { log } from '../../utils.js';
 
 import broker from '../../infrastructure/broker/Broker.js'; // Singleton instance
@@ -19,6 +19,7 @@ class CommandHandlerSingleton {
     eventHandlers: any;
 
     constructor() {
+        console.log('CommandHandlerSingleton.constructor')
         this.eventHandlers = {
             [CREATE_RANDOMIZED_LIST_COMMAND]: () => aggregateFactory.createSelectFromRandomizedList(),
             [SELECT_RANDOM_IMAGE_COMMAND]: () => aggregateFactory.createSelectFromRandomizedList(),
@@ -29,7 +30,7 @@ class CommandHandlerSingleton {
                 else if (mediaTypesPlex.some(type => type === mediaType)) return aggregateFactory.createRetrieveMediaCover();
                 else throw new Error(`Unsupported media type: ${mediaType}`);
             },
-            [CRAWL_COMMAND]: () => aggregateFactory.createCrawlComics(),
+            [CRAWL_ENDPOINT_COMMAND]: () => aggregateFactory.createCrawlComics(),
             [TRAVERSE_LIBRARY_COMMAND]: () => aggregateFactory.createTraverseLibrary(),
         };
     }
@@ -42,12 +43,14 @@ class CommandHandlerSingleton {
             \t${CREATE_RANDOMIZED_LIST_COMMAND}
             \t${SELECT_RANDOM_IMAGE_COMMAND}
             \t${RETRIEVE_IMAGE_COMMAND}
-            \t${CRAWL_COMMAND}
+            \t${CRAWL_ENDPOINT_COMMAND}
+            \t${TRAVERSE_LIBRARY_COMMAND}
         `);
         broker.sub(CREATE_RANDOMIZED_LIST_COMMAND, command => this.#handle(command));
         broker.sub(SELECT_RANDOM_IMAGE_COMMAND, command => this.#handle(command));
         broker.sub(RETRIEVE_IMAGE_COMMAND, command => this.#handle(command));
-        broker.sub(CRAWL_COMMAND, command => this.#handle(command));
+        broker.sub(CRAWL_ENDPOINT_COMMAND, command => this.#handle(command));
+        broker.sub(TRAVERSE_LIBRARY_COMMAND, command => this.#handle(command));
     }
 
     /**

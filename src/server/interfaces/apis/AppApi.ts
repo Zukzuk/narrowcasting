@@ -38,7 +38,7 @@ export default function AppApi(
 
     /**
      * @openapi
-     * /api/command/SelectRandomImageCommand:
+     * /api/command/SelectRandomImage:
      *   post:
      *     tags: 
      *       - command
@@ -69,7 +69,7 @@ export default function AppApi(
      *       500:
      *         description: Internal Server Error or no valid image found
      */
-    router.post('/command/SelectRandomImageCommand', async (req: any, res: any) => {
+    router.post('/command/SelectRandomImage', async (req: any, res: any) => {
         const { page = 0, interval = 10000 }: { page: number, interval: number } = req.query;
 
         try {
@@ -213,7 +213,7 @@ export default function AppApi(
         try {
             log('AppApi.get', 'query', 'latest from imageReadModel');
             const response = await imageReadModel.query({ userId: req.session.userId || APP_SESSION_SECRET, mediaType: 'latest' });
-            if (!response) return res.status(500).json({ error: "No valid content found" });
+            if (!response) return res.status(500).json({ error: "No valid content dfsdfsdf" });
             res.set('X-Custom-Image-URL', response.url);
             res.set('Content-Type', response.contentType);
             res.send(response.image);

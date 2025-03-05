@@ -1,6 +1,7 @@
 import ImageRetrievalFailedEvent, { IMAGE_RETRIEVAL_FAILED_EVENT } from "../../domain/core/events/ImageRetrievalFailedEvent.js";
 import RandomImageSelectionFailedEvent, { RANDOMIZED_LIST_CREATION_FAILED_EVENT } from "../../domain/core/events/RandomImageSelectionFailedEvent.js";
 import CrawlFailedEvent, { CRAWL_FAILED_EVENT } from "../../domain/core/events/CrawlFailedEvent.js";
+import LibraryTraversalFailedEvent, { LIBRARY_TRAVERSAL_FAILED_EVENT } from "../../domain/core/events/LibraryTraversalFailedEvent.js";
 import { log } from "../../utils.js";
 
 import broker from "../../infrastructure/broker/Broker.js";
@@ -21,11 +22,13 @@ export default class ErrorReadModel {
             \t${CRAWL_FAILED_EVENT}
             \t${IMAGE_RETRIEVAL_FAILED_EVENT}
             \t${RANDOMIZED_LIST_CREATION_FAILED_EVENT}
+            \t${LIBRARY_TRAVERSAL_FAILED_EVENT}
         `);
         broker.sub([
             CRAWL_FAILED_EVENT, 
             IMAGE_RETRIEVAL_FAILED_EVENT,
-            RANDOMIZED_LIST_CREATION_FAILED_EVENT
+            RANDOMIZED_LIST_CREATION_FAILED_EVENT,
+            LIBRARY_TRAVERSAL_FAILED_EVENT
         ], event => {
             log('ErrorReadModel.listen', event.type, event.url);
             this.#denormalize(event);
@@ -58,17 +61,19 @@ export default class ErrorReadModel {
      * 
      * @private
      * @param {
-     *      CrawlFailedEvent | 
-     *      ImageRetrievalFailedEvent | 
-     *      RandomImageSelectionFailedEvent
+     *      | CrawlFailedEvent 
+     *      | ImageRetrievalFailedEvent
+     *      | RandomImageSelectionFailedEvent
+     *      | LibraryTraversalFailedEvent
      * } event
      * @memberof ErrorReadModel
      */
     #denormalize(
         event: 
-            CrawlFailedEvent | 
-            ImageRetrievalFailedEvent |
-            RandomImageSelectionFailedEvent
+            | CrawlFailedEvent 
+            | ImageRetrievalFailedEvent
+            | RandomImageSelectionFailedEvent
+            | LibraryTraversalFailedEvent
         ) {
         this.errors.push(event);
         console.warn(JSON.stringify(event, null, 2));

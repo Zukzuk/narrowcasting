@@ -1,9 +1,9 @@
-import { Timestamped } from "../annotations/index.js";
+import { WithTimestamp } from "../annotations/index.js";
 import { TMediaType } from "../types/index.js";
 
 export const CRAWL_FAILED_EVENT = 'CRAWL_FAILED_EVENT' as const;
 
-@Timestamped
+@WithTimestamp
 export default class CrawlFailedEvent {
     public static type = CRAWL_FAILED_EVENT;
     type = CRAWL_FAILED_EVENT;

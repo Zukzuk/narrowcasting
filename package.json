@@ -33,9 +33,11 @@
         "express": "^4.21.1",
         "express-session": "^1.18.1",
         "helmet": "^8.0.0",
+        "node-unzip-2": "^0.2.8",
         "sharp": "^0.33.5",
         "swagger-jsdoc": "^6.2.8",
-        "swagger-ui-express": "^5.0.1"
+        "swagger-ui-express": "^5.0.1",
+        "unzipper": "^0.12.3"
     },
     "devDependencies": {
         "@types/compression": "^1.7.5",
@@ -48,6 +50,7 @@
         "@types/sharp": "^0.31.1",
         "@types/swagger-jsdoc": "^6.0.4",
         "@types/swagger-ui-express": "^4.1.7",
+        "@types/unzipper": "^0.10.10",
         "commitizen": "^4.3.1",
         "concurrently": "^9.1.0",
         "cpx": "^1.2.1",

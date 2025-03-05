@@ -1,5 +1,5 @@
 import { log, shuffleArray } from '../../utils.js';
-import { KOMGA_API, KOMGA_AUTH, PLAYNITE_BACKUP_ORIGIN, PLEX_API, PLEX_API_KEY } from '../../config.js';
+import { KOMGA_API, KOMGA_AUTH, PLAYNITE_BACKUP_IMAGE_FOLDER, PLAYNITE_BACKUP_ORIGIN, PLEX_API, PLEX_API_KEY } from '../../config.js';
 import { mediaTypesKomga, mediaTypesPlex, mediaTypesPlaynite, TMediaType } from '../core/types/index.js';
 import MediaImageService from '../adapters/plex/services/MediaImageService.js';
 import ComicsImageService from '../adapters/komga/services/ComicsImageService.js';
@@ -26,7 +26,7 @@ export default class SelectFromRandomizedListAggregateRoot {
     constructor(private imageIndexRepository: ImageIndexRepository) {
         this.mediaImageService = new MediaImageService(PLEX_API, PLEX_API_KEY);
         this.comicsImageService = new ComicsImageService(KOMGA_API, KOMGA_AUTH);
-        this.gamesImageService = new GamesImageService(PLAYNITE_BACKUP_ORIGIN);
+        this.gamesImageService = new GamesImageService(PLAYNITE_BACKUP_ORIGIN, PLAYNITE_BACKUP_IMAGE_FOLDER);
     }
 
     /**

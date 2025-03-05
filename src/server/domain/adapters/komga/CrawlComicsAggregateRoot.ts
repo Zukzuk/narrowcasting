@@ -1,7 +1,7 @@
 
 import { KOMGA_API, KOMGA_AUTH, APP_CRAWL_PAGE_SIZE } from '../../../config.js';
 import CrawledComicsRepository from '../../../infrastructure/repositories/CrawledComicsRepository.js';
-import CrawlCommand from '../../core/commands/CrawlCommand.js';
+import CrawlEndpointCommand from '../../core/commands/CrawlEndpointCommand.js';
 import CrawlCompletedEvent from '../../core/events/CrawlCompletedEvent.js';
 import CrawlFailedEvent from '../../core/events/CrawlFailedEvent.js';
 import { TMediaType } from '../../core/types/index.js';
@@ -24,11 +24,11 @@ export default class CrawlComicsAggregateRoot {
     /**
      * Consume a crawl command.
      * 
-     * @param {CrawlCommand} command
+     * @param {CrawlEndpointCommand} command
      * @returns {Promise<CrawlCompletedEvent | CrawlFailedEvent>}
      * @memberof CrawlComicsAggregateRoot
      */
-    async consume(command: CrawlCommand): Promise<CrawlCompletedEvent | CrawlFailedEvent> {
+    async consume(command: CrawlEndpointCommand): Promise<CrawlCompletedEvent | CrawlFailedEvent> {
         const { endpoint } = command.payload;
 
         try {

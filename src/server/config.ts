@@ -24,6 +24,7 @@ export const KOMGA_AUTH: AxiosBasicCredentials = {
     username: process.env.KOMGA_USERNAME as string,
     password: process.env.KOMGA_PASSWORD as string
 };
+export const KOMGA_TAVERSAL_ORIGIN: string = process.env.KOMGA_TAVERSAL_ORIGIN as string;
 export const PLEX_ORIGIN: string = process.env.PLEX_ORIGIN as string;
 export const PLEX_API: string = PLEX_ORIGIN+process.env.PLEX_API_PATH as string;
 export const PLEX_API_KEY: string = process.env.PLEX_API_KEY as string;

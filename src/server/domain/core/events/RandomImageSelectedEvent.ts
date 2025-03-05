@@ -1,4 +1,4 @@
-import { Timestamped } from "../annotations/index.js";
+import { WithTimestamp } from "../annotations/index.js";
 import { TMediaType } from "../types/index.js";
 
 export const RANDOM_IMAGE_SELECTED_EVENT = 'RANDOM_IMAGE_SELECTED_EVENT' as const;
@@ -12,7 +12,7 @@ export interface IRandomImageSelectedPayload {
     startTime: number; 
 }
 
-@Timestamped
+@WithTimestamp
 export default class RandomImageSelectedEvent {
     public static type = RANDOM_IMAGE_SELECTED_EVENT;
     type = RANDOM_IMAGE_SELECTED_EVENT;

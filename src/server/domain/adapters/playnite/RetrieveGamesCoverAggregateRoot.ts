@@ -1,4 +1,4 @@
-import { PLAYNITE_BACKUP_ORIGIN } from '../../../config.js';
+import { PLAYNITE_BACKUP_IMAGE_FOLDER, PLAYNITE_BACKUP_ORIGIN } from '../../../config.js';
 import RetrieveImageCommand from '../../core/commands/RetrieveImageCommand.js';
 import ImageRetrievedEvent from '../../core/events/ImageRetrievedEvent.js';
 import ImageRetrievalFailedEvent from '../../core/events/ImageRetrievalFailedEvent.js';
@@ -18,7 +18,7 @@ export default class RetrieveComicImageAggregateRoot {
     private imageOptimizeService: ImageOptimizeService;
 
     constructor(private imageIndexRepository: ImageIndexRepository) {
-        this.gamesImageService = new GamesImageService(PLAYNITE_BACKUP_ORIGIN);
+        this.gamesImageService = new GamesImageService(PLAYNITE_BACKUP_ORIGIN, PLAYNITE_BACKUP_IMAGE_FOLDER);
         this.imageOptimizeService = new ImageOptimizeService();
     }
 

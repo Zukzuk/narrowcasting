@@ -45,7 +45,7 @@ function getQueryParams() {
 async function displayNextImage(page, interval) {
     const { activeImage, inactiveImage } = getActiveAndInactiveImages();
     nextImageData = await queryImage();
-    if (doCommand) commandRetrieveImage(page, interval);
+    commandRetrieveImage(page, interval);
     setImageSource(inactiveImage, nextImageData);
     inactiveImage.onload = async () => {
         adjustAspectRatio(inactiveImage);
@@ -102,7 +102,7 @@ async function fetchVersion() {
 }
 
 async function commandRetrieveImage(page, interval) {
-    const url = new URL('/api/command/SelectRandomImageCommand', window.location.origin);
+    const url = new URL('/api/command/SelectRandomImage', window.location.origin);
     url.searchParams.append('page', page);
     url.searchParams.append('interval', interval);
 
@@ -133,7 +133,7 @@ async function main() {
     const { page, interval, showVersion } = getQueryParams();
     displayVersion(showVersion);
     // Display the first fetched image
-    displayNextImage(page, interval, false);
+    displayNextImage(page, interval);
     // Set interval to display the next images
     setInterval(() => displayNextImage(page, interval), interval);
 }

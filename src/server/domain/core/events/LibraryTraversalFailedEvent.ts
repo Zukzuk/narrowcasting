@@ -1,8 +1,8 @@
-import { Timestamped } from "../annotations/index.js";
+import { WithTimestamp } from "../annotations/index.js";
 
 export const LIBRARY_TRAVERSAL_FAILED_EVENT = 'LIBRARY_TRAVERSAL_FAILED_EVENT' as const;
 
-@Timestamped
+@WithTimestamp
 export default class LibraryTraversalFailedEvent {
     public static type = LIBRARY_TRAVERSAL_FAILED_EVENT;
     type = LIBRARY_TRAVERSAL_FAILED_EVENT;

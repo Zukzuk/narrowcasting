@@ -18,13 +18,6 @@
         "allowSyntheticDefaultImports": true // Allow default imports from modules with no default export
     },
     "include": [
-        "src/**/*"
-    ], // Include all files in the src folder
-    "exclude": [
-        "node_modules",
-        "dist",
-        "src/public",
-        "scripts",
-        "deploy"
-    ] // Exclude these directories
+        "src/**/*", "types/**/*"
+    ] // Include all files in the src folder
 }

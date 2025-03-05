@@ -28,7 +28,7 @@ export default class TraversalRepository {
         this.cache[library] = json;
         const payload = this.cache[library];
 
-        // log('TraversalRepository.save', library, payload);
+        // log('TraversalRepository.save', library, JSON.stringify(payload));
 
         return payload;
     }
@@ -42,7 +42,7 @@ export default class TraversalRepository {
     retrieve(library: string): DirectoryNode {
         const payload = this.cache[library] || null;
 
-        // if (payload) log('TraversalRepository.retrieve', library, payload);
+        // if (payload) log('TraversalRepository.retrieve', library, JSON.stringify(payload));
 
         return payload;
     }

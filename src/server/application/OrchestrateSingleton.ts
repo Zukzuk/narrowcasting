@@ -14,7 +14,7 @@ class OrchestratorSingleton {
     /**
      * Bootstraps the application.
      * 
-     * @param server The server to bootstrap the application on.
+     * @param {any} server The server to bootstrap the application on.
      */
     init = (server: any) => {
         commandHandler.bootstrap();

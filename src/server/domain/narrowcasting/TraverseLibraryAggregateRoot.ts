@@ -33,7 +33,7 @@ export default class TraverseLibraryAggregateRoot {
         try {
             // Check if library indexes cache is filled
             let payload = this.traversalRepository.retrieve(library);
-            if (payload) {
+            if (!payload) {
                 payload = await this.traverseDirectoryService.toJson(library);
                 this.traversalRepository.save(library, payload);
             }

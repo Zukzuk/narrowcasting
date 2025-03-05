@@ -13,8 +13,10 @@ services:
       - .secrets/private.env
       - dev.env
     volumes:
-      - .:/usr/src/app                                  # Mounts the current directory into the container
-      - /usr/src/app/node_modules                       # Creates an anonymous volume for node_modules to prevent folder collision
+      - ./dist:/usr/src/app/dist                        # Mounts the dist folder
+      - ./src:/usr/src/app/src                          # Mounts the src folder
+      - ./types:/usr/src/app/types                      # Mounts the types folder
+      - ./deploy:/usr/src/app/deploy                    # Mounts the deploy folder
       - ./mounts/playnite:/usr/src/app/mounts/playnite  # Mounts the playnite backup folder
       - ./mounts/comics:/usr/src/app/mounts/comics      # Mounts the comics server folder
     environment:

@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
+import unzipper from 'unzipper';
 import { UrlError } from '../../../../utils.js';
 
 export interface IPlayniteGamesContainer {
@@ -17,9 +18,31 @@ export default class GamesImageService {
 
     constructor(
         private PLAYNITE_BACKUP_ORIGIN: string,
+        private PLAYNITE_BACKUP_IMAGE_FOLDER: string,
     ) { }
 
     // TODO: !! Should read from .zip file instead of the extracted folder
+    unzip = async (): Promise<void> => {
+        fs.createReadStream('mounts/playnite/PlayniteBackup-2024-12-22-15-37-36.zip')
+            .pipe(unzipper.Parse())
+            .on('entry', function (entry) {
+                const fileName = entry.path;
+                const type = entry.type; // 'Directory' or 'File'
+
+                if (fileName === 'libraryfiles/0a0a55c3-363b-48c3-9e40-52cfbcdf480e/08dd0301-8e8b-4d1d-9dca-24da8ddfb27e.jpg') {
+                    entry.pipe(fs.createWriteStream('output/test.jpg'));
+                } else {
+                    entry.autodrain();
+                }
+            })
+            .promise()
+            .then(() => {
+                console.log('Specific file extracted');
+            })
+            .catch(err => {
+                console.error('Extraction failed:', err);
+            });
+    }
 
     /**
      * Fetches the games data from the Playnite backup folder.
@@ -58,22 +81,22 @@ export default class GamesImageService {
      */
     fetchImage = async (folderPath: string): Promise<Buffer> => {
         const resolvedPath = path.resolve(folderPath);
-    
+
         // Filter for image files
         const imageFiles = fs
             .readdirSync(resolvedPath)
             .filter((file) => /\.(jpg|jpeg|png|webp)$/i.test(file))
             .map((file) => path.join(resolvedPath, file));
-    
+
         let largestImageBuffer: Buffer | null = null;
         let largestImageSize = 0;
-    
+
         for (const filePath of imageFiles) {
             try {
                 // Read the file into a buffer
                 const imageBuffer = fs.readFileSync(filePath);
                 const { width, height } = await sharp(imageBuffer).metadata();
-    
+
                 // Check if it's a portrait image
                 if (width && height && height > width) {
                     // Check if it's the largest so far
@@ -86,7 +109,7 @@ export default class GamesImageService {
                 console.error(`Error processing image file ${filePath}:`, error);
             }
         }
-    
+
         try {
             // Ensure we have a valid buffer to return
             if (!largestImageBuffer) throw new Error("No valid portrait image found.");

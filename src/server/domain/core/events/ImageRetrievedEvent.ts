@@ -1,4 +1,4 @@
-import { Timestamped } from "../annotations/index.js";
+import { WithTimestamp } from "../annotations/index.js";
 import { TMediaType } from "../types/index.js";
 
 export const IMAGE_RETRIEVED_EVENT = 'IMAGE_RETRIEVED_EVENT' as const;
@@ -11,7 +11,7 @@ export interface IImageRetrievedPayload {
     contentType: string;
 };
 
-@Timestamped
+@WithTimestamp
 export default class ImageRetrievedEvent {
     public static type = IMAGE_RETRIEVED_EVENT;
     type = IMAGE_RETRIEVED_EVENT;

@@ -1,9 +1,9 @@
-import { Timestamped } from "../annotations/index.js";
+import { WithTimestamp } from "../annotations/index.js";
 import { DirectoryNode } from "../../shared/services/TraverseDirectoryService.js";
 
 export const LIBRARY_TRAVERSED_EVENT = 'LIBRARY_TRAVERSED_EVENT' as const;
 
-@Timestamped
+@WithTimestamp
 export default class LibraryTraversedEvent {
     public static type = LIBRARY_TRAVERSED_EVENT;
     type = LIBRARY_TRAVERSED_EVENT;

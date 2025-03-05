@@ -19,8 +19,8 @@ class Broker extends EventEmitter {
      */
     pub(unit: BrokerTypes) {
         if (unit) {
-            super.emit(unit.type, unit);
             // log('Broker', 'emit', unit.type);
+            super.emit(unit.type, unit);
         }
     }
 
@@ -37,8 +37,8 @@ class Broker extends EventEmitter {
     ) {
         if (!Array.isArray(type)) type = [type];
         type.forEach(t => {
-            this.on(t, listener);
             // log('Broker', 'subscribe', t);
+            this.on(t, listener);
         });
     }
 }

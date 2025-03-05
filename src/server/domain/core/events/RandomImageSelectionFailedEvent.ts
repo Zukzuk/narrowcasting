@@ -1,8 +1,8 @@
-import { Timestamped } from "../annotations/index.js";
+import { WithTimestamp } from "../annotations/index.js";
 
 export const RANDOMIZED_LIST_CREATION_FAILED_EVENT = 'RANDOMIZED_LIST_CREATION_FAILED_EVENT' as const;
 
-@Timestamped
+@WithTimestamp
 export default class RandomizedListCreationFailedEvent {
     public static type = RANDOMIZED_LIST_CREATION_FAILED_EVENT;
     type = RANDOMIZED_LIST_CREATION_FAILED_EVENT;
