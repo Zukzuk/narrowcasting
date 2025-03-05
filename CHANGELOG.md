@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.12.0](https://github.com/Zukzuk/narrowcasting/compare/v4.11.2...v4.12.0) (2025-03-05)
+
+
+### Features
+
+* added LibraryDirectoryTree endpoint ([5bae08a](https://github.com/Zukzuk/narrowcasting/commit/5bae08a0656c602396964a166dc5d310779ba70a))
+
 ### [4.11.2](https://github.com/Zukzuk/narrowcasting/compare/v4.11.1...v4.11.2) (2025-01-13)
 
 ### [4.11.1](https://github.com/Zukzuk/narrowcasting/compare/v4.11.0...v4.11.1) (2025-01-12)
