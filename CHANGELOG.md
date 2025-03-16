@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.12.5](https://github.com/Zukzuk/narrowcasting/compare/v4.12.4...v4.12.5) (2025-03-16)
+
+
+### Bug Fixes
+
+* added crawling command endpoint ([d781d85](https://github.com/Zukzuk/narrowcasting/commit/d781d8560c7ca1ba1a46c0e747b214b20eb204db))
+
 ### [4.12.4](https://github.com/Zukzuk/narrowcasting/compare/v4.12.3...v4.12.4) (2025-03-16)
 
 
