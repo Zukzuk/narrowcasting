@@ -73,7 +73,7 @@ class NarrowcastingSingleton {
         // eager commands
         log('NarrowcastingSingleton.bootstrap', 'publish', `
             \t${CreateRandomizedListCommand.type}
-            \t${TraverseLibraryCommand.type} of library: './mounts/comics'
+            \t${TraverseLibraryCommand.type} of library: ${KOMGA_TAVERSAL_ORIGIN}
             \t${CrawlEndpointCommand.type} of endpoint: 'series'
             \t${CrawlEndpointCommand.type} of endpoint: 'collections'
         `);

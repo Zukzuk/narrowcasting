@@ -59,7 +59,7 @@ export default function ComicsApi(
      *         name: startDir
      *         schema:
      *           type: string
-     *           default: "/mounts/comics"
+     *           default: "mounts/comics"
      *         description: Start directory for traversing
      *     responses:
      *       200:
@@ -162,10 +162,10 @@ export default function ComicsApi(
 
     /**
      * @openapi
-     * /api/query/comics/library:
+     * /api/query/comics/dirtree:
      *   get:
      *     tags: 
-     *       - query/library
+     *       - query/dirtree
      *     summary: Request library directory tree
      *     description: Initiates a fetch of the comics directory tree
      *     responses:
@@ -178,7 +178,7 @@ export default function ComicsApi(
      *       500:
      *         description: Internal Server Error or no valid content found
      */
-    router.get('/query/comics/library', async (req: any, res: any) => {
+    router.get('/query/comics/dirtree', async (req: any, res: any) => {
         try {
             log('ComicsApi.get', 'query', 'directory tree from comicsDirectoryTreeReadModel');
             const response = await libraryDirectoryTreeReadModel.query({ userId: req.session.userId || APP_SESSION_SECRET });

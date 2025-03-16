@@ -30,7 +30,12 @@ export default class TraverseDirectoryService {
      */
     async toJson(dirPath: string): Promise<DirectoryNode> {
         const stats = await fs.stat(dirPath);
-        if (!stats.isDirectory()) throw new Error('Path is not a directory');
+        console.log('dirPath', dirPath);
+        if (!stats.isDirectory()) throw new Error(`Path '${dirPath}' is not a directory`);
+
+        // console.log('Resolved path:', path.resolve(dirPath));
+        // const result = await fs.readdir(dirPath);
+        // console.log('Read from readdir:', result);
 
         const dir = await fs.opendir(dirPath);
         const directories: DirectoryNode[] = [];
