@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.12.1](https://github.com/Zukzuk/narrowcasting/compare/v4.12.0...v4.12.1) (2025-03-16)
+
+
+### Bug Fixes
+
+* trying to find out why comics don't mount correctly ([ee6cce1](https://github.com/Zukzuk/narrowcasting/commit/ee6cce1077215433201af898e92471c99498cf7e))
+
 ## [4.12.0](https://github.com/Zukzuk/narrowcasting/compare/v4.11.2...v4.12.0) (2025-03-05)
 
 
