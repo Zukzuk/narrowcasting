@@ -11,7 +11,7 @@ export interface DirectoryNode {
 }
 
 // Define system folders or files to exclude
-const SYSTEM_FOLDERS = ['Recycle Bin', '.DS_Store', 'Thumbs.db'];
+const SYSTEM_FOLDERS = ['@eaDir', 'Recycle Bin', '.DS_Store', 'Thumbs.db'];
 
 /**
  * Service to traverse a directory and return a JSON representation of its contents
