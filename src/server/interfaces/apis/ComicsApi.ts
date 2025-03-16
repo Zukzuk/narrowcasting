@@ -165,7 +165,7 @@ export default function ComicsApi(
      * /api/query/comics/dirtree:
      *   get:
      *     tags: 
-     *       - query/dirtree
+     *       - query/comics
      *     summary: Request library directory tree
      *     description: Initiates a fetch of the comics directory tree
      *     responses:
