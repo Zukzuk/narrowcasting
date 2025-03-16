@@ -3,6 +3,7 @@ import { handleError, log } from '../../utils.js';
 import ComicsCrawlReadModel from '../../interfaces/readmodels/ComicsCrawlReadModel.js';
 import LibraryDirectoryTreeReadModel from '../../interfaces/readmodels/LibraryDirectoryTreeReadModel.js';
 import TraverseLibraryCommand from '../../domain/core/commands/TraverseLibraryCommand.js';
+import CrawlEndpointCommand from '../../domain/core/commands/CrawlEndpointCommand.js';
 
 import broker from '../../infrastructure/broker/Broker.js';
 const router = express.Router();
@@ -80,6 +81,50 @@ export default function ComicsApi(
             const payload = { userId: req.session.userId || APP_SESSION_SECRET, library: startDir };
             log('ComicsApi.post', 'publish', TraverseLibraryCommand.type);
             broker.pub(new TraverseLibraryCommand(payload));
+            res.status(202).type('text').send('ok');
+        } catch (error: any) {
+            handleError(error, res, "Error publishing TraverseLibraryCommand");
+        }
+    });
+
+    /**
+     * @openapi
+     * /api/command/CrawlEndpointCommand:
+     *   post:
+     *     tags: 
+     *       - command
+     *     summary: Command the crawling of a comics segment
+     *     description: Commands the system to crawl a ssegment of the comics api
+     *     parameters:
+     *       - in: query
+     *         name: endpoint
+     *         schema:
+     *           type: string
+     *           default: "series"
+     *         description: Start directory for crawling
+     *     responses:
+     *       200:
+     *         description: Command accepted
+     *         content:
+     *           text/plain:
+     *             schema:
+     *               type: string
+     *               example: "ok"
+     *               description: Command accepted
+     *       500:
+     *         description: Internal Server Error or no valid image found
+     */
+    router.post('/command/CrawlEndpointCommand', async (req: any, res: any) => {
+        const { endpoint } = req.query;
+
+        try {
+            const payload = { userId: req.session.userId || APP_SESSION_SECRET, endpoint };
+            log('ComicsApi.post', 'publish', CrawlEndpointCommand.type);
+            broker.pub(new CrawlEndpointCommand(payload));
+            
+            // broker.pub(new CrawlEndpointCommand({ userId: APP_SESSION_SECRET, endpoint: 'series' }));
+            // broker.pub(new CrawlEndpointCommand({ userId: APP_SESSION_SECRET, endpoint: 'collections' }));
+            
             res.status(202).type('text').send('ok');
         } catch (error: any) {
             handleError(error, res, "Error publishing TraverseLibraryCommand");
