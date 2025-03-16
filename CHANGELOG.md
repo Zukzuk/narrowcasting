@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.12.2](https://github.com/Zukzuk/narrowcasting/compare/v4.12.1...v4.12.2) (2025-03-16)
+
+
+### Bug Fixes
+
+* added synology system folder to ignore list for traversal ([0a8a955](https://github.com/Zukzuk/narrowcasting/commit/0a8a955cdfafd4b727ac7be053f460697f3ada09))
+
 ### [4.12.1](https://github.com/Zukzuk/narrowcasting/compare/v4.12.0...v4.12.1) (2025-03-16)
 
 
