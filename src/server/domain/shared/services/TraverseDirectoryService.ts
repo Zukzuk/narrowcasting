@@ -33,10 +33,6 @@ export default class TraverseDirectoryService {
         console.log('dirPath', dirPath);
         if (!stats.isDirectory()) throw new Error(`Path '${dirPath}' is not a directory`);
 
-        // console.log('Resolved path:', path.resolve(dirPath));
-        // const result = await fs.readdir(dirPath);
-        // console.log('Read from readdir:', result);
-
         const dir = await fs.opendir(dirPath);
         const directories: DirectoryNode[] = [];
         const files: FileNode[] = [];
