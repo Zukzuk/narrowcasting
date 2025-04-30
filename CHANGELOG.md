@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.12.8](https://github.com/Zukzuk/narrowcasting/compare/v4.12.7...v4.12.8) (2025-04-30)
+
 ### [4.12.7](https://github.com/Zukzuk/narrowcasting/compare/v4.12.6...v4.12.7) (2025-04-30)
 
 
