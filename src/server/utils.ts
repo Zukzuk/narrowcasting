@@ -48,7 +48,7 @@ export function doAxiosLogging(logReq = true, logResp = true) {
 }
 
 export function getPort() {
-    return 3000;
+    return 3001;
 }
 
 export async function doServerLogging() {
