@@ -21,3 +21,4 @@ services:
       - ./mounts/comics:/usr/src/app/mounts/comics      # Mounts the comics server folder
     environment:
       - APP_VERSION_TAG=${APP_VERSION_TAG}
+      - APP_PORT=${APP_PORT}

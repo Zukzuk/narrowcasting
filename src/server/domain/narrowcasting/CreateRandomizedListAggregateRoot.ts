@@ -36,7 +36,7 @@ export default class CreateRandomizedListAggregateRoot {
      */
     async consume(command: CreateRandomizedListCommand): Promise<RandomizedListCreatedEvent | RandomizedListCreationFailedEvent> {
 
-        const { userId, page, interval, startTime } = command.payload;
+        const { userId, page, interval } = command.payload;
 
         try {
             // Check if library index caches are filled, else fetch data for each media type
@@ -48,7 +48,7 @@ export default class CreateRandomizedListAggregateRoot {
             if (!hasValidWeightedCache) this.#createWeightedCache(userId);
 
             // Return a business event
-            return new RandomizedListCreatedEvent({ userId, page, interval, startTime });
+            return new RandomizedListCreatedEvent({ userId, page, interval, startTime: Date.now() });
         } catch (error: any) {
             // Return failure event
             const event = new RandomizedListCreationFailedEvent(error.message, error.url);

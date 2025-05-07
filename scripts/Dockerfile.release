@@ -1,9 +1,6 @@
 # Stage 1: Build Stage
 FROM node:20-alpine AS build
 
-# Accept args as build arguments
-ARG APP_VERSION_TAG
-ENV APP_VERSION_TAG=$APP_VERSION_TAG
 # npm will install dependencies and devDependencies
 ENV NODE_ENV=development 
 
@@ -24,6 +21,8 @@ FROM node:20-alpine
 # Accept args as build arguments
 ARG APP_VERSION_TAG
 ENV APP_VERSION_TAG=$APP_VERSION_TAG
+ARG APP_PORT
+ENV APP_PORT=$APP_PORT
 # Set environment to production for optimized dependencies
 ENV NODE_ENV=production
 
@@ -36,7 +35,7 @@ RUN npm install --only=production
 COPY --from=build /usr/src/app/dist ./dist
 
 # Expose the application port
-EXPOSE 3001
+EXPOSE $APP_PORT
 
 # Start the application
 CMD ["node", "dist/server/index.js"]

@@ -1,14 +1,14 @@
 import { AxiosBasicCredentials } from 'axios';
 import dotenv from 'dotenv';
 
-// Load environment variables from the .env file
+// load environment variables from the .env file
 dotenv.config();
 
 // constants
+export const APP_PORT: number = Number(process.env.APP_PORT) as number;
 export const APP_SHOW_LOGGING: boolean = process.env.APP_SHOW_LOGGING === 'true';
 export const APP_CRAWL_PAGE_SIZE: number = 200;
-export const APP_CACHE_DURATION: number = 12 * 60 * 60 * 1000; // 12 hours
-// dynamic environment variables
+export const APP_CACHE_DURATION: number = 12 * 60 * 60 * 1000; // 12 hours in milliseconds
 export const APP_VERSION_TAG: string = process.env.APP_VERSION_TAG as string;
 // environment variables
 export const APP_SESSION_SECRET: string = process.env.APP_SESSION_SECRET as string;

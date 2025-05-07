@@ -1,7 +1,7 @@
 import os from 'os';
 import defaultGateway from 'default-gateway';
 import axios from 'axios';
-import { APP_SHOW_LOGGING } from './config.js';
+import { APP_PORT, APP_SHOW_LOGGING } from './config.js';
 
 function getLocalIpAddress() {
     const networkInterfaces = os.networkInterfaces();
@@ -48,7 +48,7 @@ export function doAxiosLogging(logReq = true, logResp = true) {
 }
 
 export function getPort() {
-    return 3001;
+    return APP_PORT || 3001;
 }
 
 export async function doServerLogging() {

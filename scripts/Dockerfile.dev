@@ -4,6 +4,8 @@ FROM node:20-alpine
 # Accept args as build arguments
 ARG APP_VERSION_TAG
 ENV APP_VERSION_TAG=$APP_VERSION_TAG
+ARG APP_PORT
+ENV APP_PORT=$APP_PORT
 # npm will install dependencies and devDependencies
 ENV NODE_ENV=development
 
@@ -14,7 +16,7 @@ COPY *.env ./
 RUN npm install
 
 # Expose the port
-EXPOSE 3001
+EXPOSE $APP_PORT
 
 # Use a script to continuously compile TypeScript and watch for changes
 CMD ["npx", "concurrently", "\"npm run internalscript:npx:tsc\"", "\"npm run internalscript:npx:nodemon\""]
