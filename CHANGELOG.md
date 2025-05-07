@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.13.3](https://github.com/Zukzuk/narrowcasting/compare/v4.13.2...v4.13.3) (2025-05-07)
+
+
+### Bug Fixes
+
+* fixed issue where .env file is not loaded correctly ([7fa7145](https://github.com/Zukzuk/narrowcasting/commit/7fa71450e9ab1b5bfca85ca5bfee5e85e72397a2))
+
 ### [4.13.2](https://github.com/Zukzuk/narrowcasting/compare/v4.13.1...v4.13.2) (2025-05-07)
 
 
