@@ -25,7 +25,7 @@ function buildAndPushDockerImage(APP_VERSION_TAG, APP_PORT) {
   const imageLatestTag = `zukzuk/narrowcasting:latest`;
   try {
     console.log("Building Docker release image...");
-    execSync(`docker build -f scripts/Dockerfile.release --build-arg APP_VERSION_TAG=${APP_VERSION_TAG} APP_PORT=${APP_PORT} -t ${imageVersionTag} -t ${imageLatestTag} .`, { stdio: 'inherit' });
+    execSync(`docker build -f scripts/Dockerfile.release --build-arg APP_VERSION_TAG=${APP_VERSION_TAG} --build-arg APP_PORT=${APP_PORT} -t ${imageVersionTag} -t ${imageLatestTag} .`, { stdio: 'inherit' });
     console.log(`Pushing '${APP_VERSION_TAG}' and 'latest' to Docker registry...`);
     execSync(`docker push ${imageVersionTag}`, { stdio: 'inherit' });
     execSync(`docker push ${imageLatestTag}`, { stdio: 'inherit' });
