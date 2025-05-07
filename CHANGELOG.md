@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.13.2](https://github.com/Zukzuk/narrowcasting/compare/v4.13.1...v4.13.2) (2025-05-07)
+
+
+### Bug Fixes
+
+* added ARGS back to docker build step ([6e678f9](https://github.com/Zukzuk/narrowcasting/commit/6e678f92e17acc83171365ad22455bb7a00001de))
+
 ### [4.13.1](https://github.com/Zukzuk/narrowcasting/compare/v4.13.0...v4.13.1) (2025-05-07)
 
 
