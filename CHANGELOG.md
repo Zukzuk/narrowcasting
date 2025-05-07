@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.13.4](https://github.com/Zukzuk/narrowcasting/compare/v4.13.3...v4.13.4) (2025-05-07)
+
+
+### Bug Fixes
+
+* fixed filename reference ([036666e](https://github.com/Zukzuk/narrowcasting/commit/036666e89ac3f35748c8a8a968081d730231421b))
+
 ### [4.13.3](https://github.com/Zukzuk/narrowcasting/compare/v4.13.2...v4.13.3) (2025-05-07)
 
 
