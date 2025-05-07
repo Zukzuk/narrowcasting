@@ -1,13 +1,13 @@
-import { log, shuffleArray } from '../../utils.js';
-import { KOMGA_API, KOMGA_AUTH, PLAYNITE_BACKUP_IMAGE_FOLDER, PLAYNITE_BACKUP_ORIGIN, PLEX_API, PLEX_API_KEY } from '../../config.js';
-import { mediaTypesKomga, mediaTypesPlex, mediaTypesPlaynite, TMediaType } from '../types/index.js';
-import MediaImageService from '../adapters/plex/services/MediaImageService.js';
-import ComicsImageService from '../adapters/komga/services/ComicsImageService.js';
-import GamesImageService from '../adapters/playnite/services/GamesImageService.js';
-import CreateRandomizedListCommand from '../commands/CreateRandomizedListCommand.js';
-import RandomizedListCreatedEvent from '../events/RandomizedListCreatedEvent.js';
-import RandomizedListCreationFailedEvent from '../events/RandomizedListCreationFailedEvent.js';
-import ImageIndexRepository, { IWeightedCache } from '../repositories/ImageIndexRepository.js';
+import { log, shuffleArray } from '../../../utils.js';
+import { KOMGA_API, KOMGA_AUTH, PLAYNITE_BACKUP_IMAGE_FOLDER, PLAYNITE_BACKUP_ORIGIN, PLEX_API, PLEX_API_KEY } from '../../../config.js';
+import { mediaTypesKomga, mediaTypesPlex, mediaTypesPlaynite, TMediaType } from '../../types/index.js';
+import MediaImageService from '../plex/services/MediaImageService.js';
+import ComicsImageService from '../komga/services/ComicsImageService.js';
+import GamesImageService from '../playnite/services/GamesImageService.js';
+import CreateRandomizedListCommand from '../../commands/CreateRandomizedListCommand.js';
+import RandomizedListCreatedEvent from '../../events/RandomizedListCreatedEvent.js';
+import RandomizedListCreationFailedEvent from '../../events/RandomizedListCreationFailedEvent.js';
+import ImageIndexRepository, { IWeightedCache } from './ImageIndexRepository.js';
 
 /**
  * Aggregate root for creating a randomized and weighted list of images from the complete library.

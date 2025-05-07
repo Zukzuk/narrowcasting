@@ -1,5 +1,6 @@
 import aggregateFactory from './AggregateFactorySingleton.js';
-import { mediaTypesKomga, mediaTypesPlaynite, mediaTypesPlex, TCommand } from '../domain/types/index.js';
+import { mediaTypesKomga, mediaTypesPlaynite, mediaTypesPlex } from '../domain/types/index.js';
+import { TCommand } from '../domain/commands/Commands.js';
 import { CRAWL_ENDPOINT_COMMAND } from '../domain/commands/CrawlEndpointCommand.js';
 import { SELECT_RANDOM_IMAGE_COMMAND } from '../domain/commands/SelectRandomImageCommand.js';
 import { CREATE_RANDOMIZED_LIST_COMMAND } from '../domain/commands/CreateRandomizedListCommand.js';
@@ -38,7 +39,7 @@ class CommandHandlerSingleton {
      * Bootstraps the application backend command handler.
      */
     bootstrap() {
-        log('CommandHandlerSingleton.bootstrap', 'subscribe', `
+        log('CommandHandler.bootstrap', 'subscribe', `
             \t${CREATE_RANDOMIZED_LIST_COMMAND}
             \t${SELECT_RANDOM_IMAGE_COMMAND}
             \t${RETRIEVE_IMAGE_COMMAND}
@@ -67,11 +68,11 @@ class CommandHandlerSingleton {
             let events = await handler.consume(command);
             if (!Array.isArray(events)) events = [events];
             for (const event of events) {
-                log('CommandHandlerSingleton.#handle', 'publish', event.type);
+                log('CommandHandler.#handle', 'publish', event.type);
                 broker.pub(event);
             }
         } catch (error: any) {
-            log('CommandHandlerSingleton.#handle', 'publish', error.event.type);
+            log('CommandHandler.#handle', 'publish', error.event.type);
             broker.pub(error.event);
             delete error.event;
             // Optionally rethrow or handle the error

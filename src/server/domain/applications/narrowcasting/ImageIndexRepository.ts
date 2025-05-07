@@ -1,7 +1,7 @@
-import { log } from "../../utils.js";
-import { mediaTypes, TMediaType } from "../../domain/types/index.js";
-import { IPlexMediaContainer } from "../../domain/adapters/plex/services/MediaImageService.js";
-import { IPlayniteGamesContainer } from "../../domain/adapters/playnite/services/GamesImageService.js";
+import { log } from "../../../utils.js";
+import { mediaTypes, TMediaType } from "../../types/index.js";
+import { IPlexMediaContainer } from "../plex/services/MediaImageService.js";
+import { IPlayniteGamesContainer } from "../playnite/services/GamesImageService.js";
 
 type TCacheData = IPlayniteGamesContainer[] | IPlexMediaContainer[];
 

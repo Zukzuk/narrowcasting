@@ -3,9 +3,9 @@ import RetrieveImageCommand from '../../commands/RetrieveImageCommand.js';
 import ImageRetrievedEvent from '../../events/ImageRetrievedEvent.js';
 import ImageRetrievalFailedEvent from '../../events/ImageRetrievalFailedEvent.js';
 import GamesImageService, { IPlayniteGamesContainer } from './services/GamesImageService.js';
-import ImageOptimizeService from '../../services/ImageOptimizeService.js';
+import ImageOptimizeService from '../services/ImageOptimizeService.js';
 import RetryImageRetrievalEvent from '../../events/RetryImageRetrievalEvent.js';
-import ImageIndexRepository from '../../repositories/ImageIndexRepository.js';
+import ImageIndexRepository from '../narrowcasting/ImageIndexRepository.js';
 
 /**
  * Aggregate root to retrieve a comic image from a given index

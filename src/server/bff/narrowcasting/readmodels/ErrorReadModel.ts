@@ -30,7 +30,7 @@ export default class ErrorReadModel {
             RANDOM_IMAGE_SELECTION_FAILED_EVENT,
             LIBRARY_TRAVERSAL_FAILED_EVENT
         ], event => {
-            log('ErrorReadModel.listen', event.type, event.url);
+            log('ErrorReadModel', 'listen', `${event.type}: ${event.url}`);
             this.#denormalize(event);
         });
     }

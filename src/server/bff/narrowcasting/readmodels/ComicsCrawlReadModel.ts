@@ -24,7 +24,7 @@ export default class ComicsCrawlReadModel {
             \t${CRAWL_COMPLETED_EVENT}
         `);
         broker.sub(CRAWL_COMPLETED_EVENT, event => {
-            log('ComicsCrawlReadModel.listen', event.type, `'${event.endpoint}' in '${event.mediaType}'`);
+            log('ComicsCrawlReadModel', 'listen', `${event.type}: '${event.endpoint}' in '${event.mediaType}'`);
             this.#denormalize(event);
         });
     }

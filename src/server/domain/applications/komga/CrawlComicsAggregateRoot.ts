@@ -1,6 +1,6 @@
 
 import { KOMGA_API, KOMGA_AUTH, APP_CRAWL_PAGE_SIZE } from '../../../config.js';
-import CrawledComicsRepository from '../../repositories/CrawledComicsRepository.js';
+import CrawledComicsRepository from './CrawledComicsRepository.js';
 import CrawlEndpointCommand from '../../commands/CrawlEndpointCommand.js';
 import CrawlCompletedEvent from '../../events/CrawlCompletedEvent.js';
 import CrawlFailedEvent from '../../events/CrawlFailedEvent.js';

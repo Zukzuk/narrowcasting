@@ -1,14 +1,14 @@
 import { APP_CACHE_DURATION } from '../config.js';
-import CrawledComicsRepository from '../domain/repositories/CrawledComicsRepository.js';
-import ImageIndexRepository from '../domain/repositories/ImageIndexRepository.js';
-import TraversalRepository from '../domain/repositories/TraversalRepository.js';
-import CrawlComicsAggregateRoot from '../domain/adapters/komga/CrawlComicsAggregateRoot.js';
-import RetrieveComicsImageAggregateRoot from '../domain/adapters/komga/RetrieveComicsImageAggregateRoot.js';
-import RetrieveMediaCoverAggregateRoot from '../domain/adapters/plex/RetrieveMediaCoverAggregateRoot.js';
-import RetrieveGamesCoverAggregateRoot from '../domain/adapters/playnite/RetrieveGamesCoverAggregateRoot.js';
-import CreateRandomizedListAggregateRoot from '../domain/narrowcasting/CreateRandomizedListAggregateRoot.js';
-import SelectFromRandomizedListAggregateRoot from '../domain/narrowcasting/SelectFromImageListAggregateRoot.js';
-import TraverseLibraryAggregateRoot from '../domain/narrowcasting/TraverseLibraryAggregateRoot.js';
+import CrawlComicsAggregateRoot from '../domain/applications/komga/CrawlComicsAggregateRoot.js';
+import CrawledComicsRepository from '../domain/applications/komga/CrawledComicsRepository.js';
+import RetrieveComicsImageAggregateRoot from '../domain/applications/komga/RetrieveComicsImageAggregateRoot.js';
+import RetrieveMediaCoverAggregateRoot from '../domain/applications/plex/RetrieveMediaCoverAggregateRoot.js';
+import RetrieveGamesCoverAggregateRoot from '../domain/applications/playnite/RetrieveGamesCoverAggregateRoot.js';
+import CreateRandomizedListAggregateRoot from '../domain/applications/narrowcasting/CreateRandomizedListAggregateRoot.js';
+import SelectFromRandomizedListAggregateRoot from '../domain/applications/narrowcasting/SelectFromImageListAggregateRoot.js';
+import ImageIndexRepository from '../domain/applications/narrowcasting/ImageIndexRepository.js';
+import TraverseLibraryAggregateRoot from '../domain/applications/craffic/TraverseLibraryAggregateRoot.js';
+import TraversalRepository from '../domain/applications/craffic/TraversalRepository.js';
 
 /**
  * Singleton class that orchestrates the application backend aggregates.

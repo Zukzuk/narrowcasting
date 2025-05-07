@@ -4,8 +4,8 @@ import RetryImageRetrievalEvent from '../../events/RetryImageRetrievalEvent.js';
 import ImageRetrievedEvent from '../../events/ImageRetrievedEvent.js';
 import ImageRetrievalFailedEvent from '../../events/ImageRetrievalFailedEvent.js';
 import MediaImageService, { IPlexMediaContainer } from './services/MediaImageService.js';
-import ImageOptimizeService from '../../services/ImageOptimizeService.js';
-import ImageIndexRepository from '../../repositories/ImageIndexRepository.js';
+import ImageOptimizeService from '../services/ImageOptimizeService.js';
+import ImageIndexRepository from '../narrowcasting/ImageIndexRepository.js';
 
 /**
  * Aggregate root to retrieve a media cover image from a given index

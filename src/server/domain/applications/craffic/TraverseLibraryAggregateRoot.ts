@@ -1,8 +1,8 @@
-import TraversalRepository from '../repositories/TraversalRepository.js';
+import TraversalRepository from './TraversalRepository.js';
 import TraverseDirectoryService from '../services/TraverseDirectoryService.js';
-import TraverseLibraryCommand from '../commands/TraverseLibraryCommand.js';
-import LibraryTraversalFailedEvent from '../events/LibraryTraversalFailedEvent.js';
-import LibraryTraversedEvent from '../events/LibraryTraversedEvent.js';
+import TraverseLibraryCommand from '../../commands/TraverseLibraryCommand.js';
+import LibraryTraversalFailedEvent from '../../events/LibraryTraversalFailedEvent.js';
+import LibraryTraversedEvent from '../../events/LibraryTraversedEvent.js';
 
 /**
  * Aggregate root for traversing a library

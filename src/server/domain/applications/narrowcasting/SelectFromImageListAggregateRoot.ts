@@ -1,9 +1,9 @@
-import { log } from '../../utils.js';
-import SelectRandomImageCommand from '../commands/SelectRandomImageCommand.js';
-import InvalidRandomListEvent from '../events/InvalidRandomListEvent.js';
-import RandomImageSelectedEvent from '../events/RandomImageSelectedEvent.js';
-import RandomImageSelectionFailedEvent from '../events/RandomImageSelectionFailedEvent.js';
-import ImageIndexRepository, { IWeightedCache } from '../repositories/ImageIndexRepository.js';
+import { log } from '../../../utils.js';
+import SelectRandomImageCommand from '../../commands/SelectRandomImageCommand.js';
+import InvalidRandomListEvent from '../../events/InvalidRandomListEvent.js';
+import RandomImageSelectedEvent from '../../events/RandomImageSelectedEvent.js';
+import RandomImageSelectionFailedEvent from '../../events/RandomImageSelectionFailedEvent.js';
+import ImageIndexRepository from './ImageIndexRepository.js';
 
 /**
  * Aggregate root for selecting a random image from a media library.

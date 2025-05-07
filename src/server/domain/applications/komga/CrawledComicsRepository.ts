@@ -1,4 +1,4 @@
-import { log } from '../../utils.js';
+import { log } from '../../../utils.js';
 
 /**
  * This repository is used to store the crawled comics data.

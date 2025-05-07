@@ -15,7 +15,7 @@ export default class LibraryDirectoryTreeReadModel {
             \t${LIBRARY_TRAVERSED_EVENT}
         `);
         broker.sub(LIBRARY_TRAVERSED_EVENT, event => {
-            log('LibraryDirectoryTreeReadModel.listen', event.type, 'directory tree recieved');
+            log('LibraryDirectoryTreeReadModel', 'listen', `${event.type}: directory tree recieved`);
             this.#denormalize(event);
         });
     }

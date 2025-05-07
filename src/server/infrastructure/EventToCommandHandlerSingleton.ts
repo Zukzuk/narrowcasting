@@ -1,4 +1,4 @@
-import { TEvent } from '../domain/types/index.js';
+import { TEvent } from '../domain/events/Events.js';
 import RetrieveImageCommand from '../domain/commands/RetrieveImageCommand.js';
 import SelectRandomImageCommand from '../domain/commands/SelectRandomImageCommand.js';
 import CreateRandomizedListCommand from '../domain/commands/CreateRandomizedListCommand.js';
@@ -27,7 +27,7 @@ class EventToCommandHandlerSingleton {
     }
 
     bootstrap() {
-        log('EventToCommandHandlerSingleton.bootstrap', 'subscribe', `
+        log('EventToCommandHandler.bootstrap', 'subscribe', `
             \t${INVALID_RANDOMIZED_LIST_EVENT}
             \t${RANDOMIZED_LIST_CREATED_EVENT}
             \t${RANDOM_IMAGE_SELECTED_EVENT}
@@ -53,11 +53,11 @@ class EventToCommandHandlerSingleton {
             let commands = this.eventToCommandHandler[event.type](event);
             if (!Array.isArray(commands)) commands = [commands];
             for (const command of commands) {
-                log('EventToCommandHandlerSingleton.#handle', 'publish', command.type);
+                log('EventToCommandHandler.#handle', 'publish', command.type);
                 broker.pub(command);
             }
         } catch (error: any) {
-            log('EventToCommandHandlerSingleton.#handle', 'publish', error.event.type);
+            log('EventToCommandHandler.#handle', 'publish', error.event.type);
             broker.pub(error.event);
             delete error.event;
             // Optionally rethrow or handle the error

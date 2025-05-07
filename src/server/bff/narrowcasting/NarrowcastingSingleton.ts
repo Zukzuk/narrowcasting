@@ -41,11 +41,11 @@ class NarrowcastingSingleton {
         {
             APP_API_PATH,
             APP_SESSION_SECRET,
-            USER_SESSION_SECRET
+            USER_SESSION_SECRET,
         }: {
             APP_API_PATH: string,
             APP_SESSION_SECRET: string,
-            USER_SESSION_SECRET: string
+            USER_SESSION_SECRET: string,
         },
     ) {
         // implement apis
@@ -69,18 +69,28 @@ class NarrowcastingSingleton {
         }));
         server.use(APP_API_PATH, GamesApi({
         }));
+    }
 
-        // eager commands
-        // log('NarrowcastingSingleton.bootstrap', 'publish', `
-        //     \t${CreateRandomizedListCommand.type}
-        //     \t${TraverseLibraryCommand.type} of library: ${KOMGA_TAVERSAL_ORIGIN}
-        //     \t${CrawlEndpointCommand.type} of endpoint: 'series'
-        //     \t${CrawlEndpointCommand.type} of endpoint: 'collections'
-        // `);
-        // broker.pub(new CreateRandomizedListCommand({ userId: APP_SESSION_SECRET, page: 0, interval: 0, startTime: 0 }));
-        // broker.pub(new TraverseLibraryCommand({ userId: APP_SESSION_SECRET, library: KOMGA_TAVERSAL_ORIGIN }));
-        // broker.pub(new CrawlEndpointCommand({ userId: APP_SESSION_SECRET, endpoint: 'series' }));
-        // broker.pub(new CrawlEndpointCommand({ userId: APP_SESSION_SECRET, endpoint: 'collections' }));
+    /**
+     * Publishes the eager commands to the broker.
+     * 
+     * @param APP_SESSION_SECRET The application session secret.
+     */
+    prewarm({
+        APP_SESSION_SECRET,
+    }: {
+        APP_SESSION_SECRET: string,
+    },) {
+        log('Narrowcasting.prewarm', 'publish', `
+            \t${CreateRandomizedListCommand.type}
+            \t${TraverseLibraryCommand.type} of library: ${KOMGA_TAVERSAL_ORIGIN}
+            \t${CrawlEndpointCommand.type} of endpoint: 'series'
+            \t${CrawlEndpointCommand.type} of endpoint: 'collections'
+        `);
+        broker.pub(new CreateRandomizedListCommand({ userId: APP_SESSION_SECRET, page: 0, interval: 0, startTime: 0 }));
+        broker.pub(new TraverseLibraryCommand({ userId: APP_SESSION_SECRET, library: KOMGA_TAVERSAL_ORIGIN }));
+        broker.pub(new CrawlEndpointCommand({ userId: APP_SESSION_SECRET, endpoint: 'series' }));
+        broker.pub(new CrawlEndpointCommand({ userId: APP_SESSION_SECRET, endpoint: 'collections' }));
     }
 }
 

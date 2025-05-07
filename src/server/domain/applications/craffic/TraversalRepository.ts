@@ -1,5 +1,5 @@
 import { DirectoryNode } from "../services/TraverseDirectoryService.js";
-import { log } from "../../utils.js";
+import { log } from "../../../utils.js";
 
 /**
  * This class is responsible for storing and retrieving the directory structure of a library.
