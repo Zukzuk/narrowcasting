@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.13.1](https://github.com/Zukzuk/narrowcasting/compare/v4.13.0...v4.13.1) (2025-05-07)
+
+
+### Bug Fixes
+
+* fixed docker command ([f5c2f14](https://github.com/Zukzuk/narrowcasting/commit/f5c2f14823aa8944e0b9903246ccd019c3802f2b))
+
 ## [4.13.0](https://github.com/Zukzuk/narrowcasting/compare/v4.12.9...v4.13.0) (2025-05-07)
 
 
