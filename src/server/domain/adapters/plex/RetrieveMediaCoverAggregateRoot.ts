@@ -1,11 +1,11 @@
 import { PLEX_API_KEY, PLEX_MACHINE_IDENTIFIER, PLEX_API, PLEX_ORIGIN } from '../../../config.js';
-import RetrieveImageCommand from '../../core/commands/RetrieveImageCommand.js';
-import RetryImageRetrievalEvent from '../../core/events/RetryImageRetrievalEvent.js';
-import ImageRetrievedEvent from '../../core/events/ImageRetrievedEvent.js';
-import ImageRetrievalFailedEvent from '../../core/events/ImageRetrievalFailedEvent.js';
+import RetrieveImageCommand from '../../commands/RetrieveImageCommand.js';
+import RetryImageRetrievalEvent from '../../events/RetryImageRetrievalEvent.js';
+import ImageRetrievedEvent from '../../events/ImageRetrievedEvent.js';
+import ImageRetrievalFailedEvent from '../../events/ImageRetrievalFailedEvent.js';
 import MediaImageService, { IPlexMediaContainer } from './services/MediaImageService.js';
-import ImageOptimizeService from '../../shared/services/ImageOptimizeService.js';
-import ImageIndexRepository from '../../../infrastructure/repositories/ImageIndexRepository.js';
+import ImageOptimizeService from '../../services/ImageOptimizeService.js';
+import ImageIndexRepository from '../../repositories/ImageIndexRepository.js';
 
 /**
  * Aggregate root to retrieve a media cover image from a given index

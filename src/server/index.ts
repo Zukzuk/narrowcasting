@@ -59,5 +59,5 @@ server.listen(getPort(), async () => {
 });
 
 // orchestrate application
-import orchestrator from './application/OrchestrateSingleton.js'; // Singleton instance
+import orchestrator from './infrastructure/OrchestrateSingleton.js'; // Singleton instance
 orchestrator.init(server);

@@ -1,10 +1,10 @@
 
 import { KOMGA_API, KOMGA_AUTH, APP_CRAWL_PAGE_SIZE } from '../../../config.js';
-import CrawledComicsRepository from '../../../infrastructure/repositories/CrawledComicsRepository.js';
-import CrawlEndpointCommand from '../../core/commands/CrawlEndpointCommand.js';
-import CrawlCompletedEvent from '../../core/events/CrawlCompletedEvent.js';
-import CrawlFailedEvent from '../../core/events/CrawlFailedEvent.js';
-import { TMediaType } from '../../core/types/index.js';
+import CrawledComicsRepository from '../../repositories/CrawledComicsRepository.js';
+import CrawlEndpointCommand from '../../commands/CrawlEndpointCommand.js';
+import CrawlCompletedEvent from '../../events/CrawlCompletedEvent.js';
+import CrawlFailedEvent from '../../events/CrawlFailedEvent.js';
+import { TMediaType } from '../../types/index.js';
 import CrawlComicsEndpointService from './services/CrawlComicsEndpointService.js';
 
 /**

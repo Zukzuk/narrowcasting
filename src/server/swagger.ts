@@ -1,7 +1,7 @@
 import swaggerJSDoc from 'swagger-jsdoc';
 import { fileURLToPath } from 'url';
-import path from 'path';
 import { APP_VERSION_TAG } from './config.js';
+import path from 'path';
 
 // Get the file path of the current module
 const __filename = fileURLToPath(import.meta.url);

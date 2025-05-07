@@ -1,11 +1,11 @@
 import { PLAYNITE_BACKUP_IMAGE_FOLDER, PLAYNITE_BACKUP_ORIGIN } from '../../../config.js';
-import RetrieveImageCommand from '../../core/commands/RetrieveImageCommand.js';
-import ImageRetrievedEvent from '../../core/events/ImageRetrievedEvent.js';
-import ImageRetrievalFailedEvent from '../../core/events/ImageRetrievalFailedEvent.js';
+import RetrieveImageCommand from '../../commands/RetrieveImageCommand.js';
+import ImageRetrievedEvent from '../../events/ImageRetrievedEvent.js';
+import ImageRetrievalFailedEvent from '../../events/ImageRetrievalFailedEvent.js';
 import GamesImageService, { IPlayniteGamesContainer } from './services/GamesImageService.js';
-import ImageOptimizeService from '../../shared/services/ImageOptimizeService.js';
-import RetryImageRetrievalEvent from '../../core/events/RetryImageRetrievalEvent.js';
-import ImageIndexRepository from '../../../infrastructure/repositories/ImageIndexRepository.js';
+import ImageOptimizeService from '../../services/ImageOptimizeService.js';
+import RetryImageRetrievalEvent from '../../events/RetryImageRetrievalEvent.js';
+import ImageIndexRepository from '../../repositories/ImageIndexRepository.js';
 
 /**
  * Aggregate root to retrieve a comic image from a given index
