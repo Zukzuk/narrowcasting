@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.13.0](https://github.com/Zukzuk/narrowcasting/compare/v4.12.9...v4.13.0) (2025-05-07)
+
+
+### Features
+
+* added configurable PORT to app and composition files ([9bfafd9](https://github.com/Zukzuk/narrowcasting/commit/9bfafd98435b52830ddd19caca87c0576c2c0cf2))
+
 ### [4.12.9](https://github.com/Zukzuk/narrowcasting/compare/v4.12.8...v4.12.9) (2025-05-07)
 
 ### [4.12.8](https://github.com/Zukzuk/narrowcasting/compare/v4.12.7...v4.12.8) (2025-04-30)
