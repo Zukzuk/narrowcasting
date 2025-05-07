@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 
 const options = {
     definition: {
-        openapi: "3.0.0",
+        openapi: "3.1.1",
         info: {
             title: "Narrowcasting API",
             version: APP_VERSION_TAG,
@@ -18,9 +18,9 @@ const options = {
         },
     },
     apis: [
-        `${__dirname}/interfaces/apis/AppApi.js`,
-        `${__dirname}/interfaces/apis/ComicsApi.js`,
-        `${__dirname}/interfaces/apis/MediaApi.js`,
+        `${__dirname}/bff/narrowcasting/apis/AppApi.js`,
+        `${__dirname}/bff/narrowcasting/apis/ComicsApi.js`,
+        `${__dirname}/bff/narrowcasting/apis/MediaApi.js`,
     ],
 };
 
