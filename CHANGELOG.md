@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.14.0](https://github.com/Zukzuk/narrowcasting/compare/v4.13.6...v4.14.0) (2025-05-09)
+
+
+### Features
+
+* added Komga crawling as DomainObject ([6755ab5](https://github.com/Zukzuk/narrowcasting/commit/6755ab597a670ecc3379b2c3764a0bcfa9fef230))
+
 ### [4.13.6](https://github.com/Zukzuk/narrowcasting/compare/v4.13.5...v4.13.6) (2025-05-07)
 
 ### [4.13.5](https://github.com/Zukzuk/narrowcasting/compare/v4.13.4...v4.13.5) (2025-05-07)
