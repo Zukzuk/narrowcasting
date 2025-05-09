@@ -1,7 +1,7 @@
-import { log } from "../../../utils.js";
-import CrawlCompletedEvent, { CRAWL_COMPLETED_EVENT } from "../../../domain/events/CrawlCompletedEvent.js";
+import { log } from "../../utils.js";
+import CrawlCompletedEvent, { CRAWL_COMPLETED_EVENT } from "../../domain/events/CrawlCompletedEvent.js";
 
-import broker from "../../../infrastructure/Broker.js";
+import broker from "../../infrastructure/BrokerSingleton.js";
 
 export interface IComicsCrawlQuery { 
     userId: string, 

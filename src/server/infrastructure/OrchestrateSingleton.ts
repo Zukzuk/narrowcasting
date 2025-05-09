@@ -1,6 +1,7 @@
 import { APP_API_PATH, APP_SESSION_SECRET, USER_SESSION_SECRET } from '../config.js';
 
 import commandHandler from './CommandHandlerSingleton.js'; // Singleton instance
+import crawlKomgaCommandHandler from '../domain/applications/komga/crawl/CrawlKomgaCommandhandlerSingleton.js'; // Singleton instance
 import eventToCommandHandler from './EventToCommandHandlerSingleton.js'; // Singleton instance
 import bffNarrowcasting from '../bff/narrowcasting/NarrowcastingSingleton.js'; // Singleton instance
 
@@ -12,12 +13,13 @@ class OrchestratorSingleton {
     constructor() { }
 
     /**
-     * Bootstraps the application.
+     * Bootstraps all infrastructure.
      * 
-     * @param {any} server The server to bootstrap the application on.
+     * @param {any} server The server to bootstrap the infrastructure on.
      */
     init = (server: any) => {
         commandHandler.bootstrap();
+        crawlKomgaCommandHandler.bootstrap();
         eventToCommandHandler.bootstrap();
         bffNarrowcasting.bootstrap(server, { APP_API_PATH, APP_SESSION_SECRET, USER_SESSION_SECRET });
         bffNarrowcasting.prewarm({ APP_SESSION_SECRET });

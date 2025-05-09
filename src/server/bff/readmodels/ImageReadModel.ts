@@ -1,8 +1,8 @@
-import { log } from "../../../utils.js";
-import { TMediaType } from "../../../domain/types/index.js";
-import { IImageRetrievedPayload, IMAGE_RETRIEVED_EVENT } from "../../../domain/events/ImageRetrievedEvent.js";
+import { log } from "../../utils.js";
+import { TMediaType } from "../../domain/types/index.js";
+import { IImageRetrievedPayload, IMAGE_RETRIEVED_EVENT } from "../../domain/events/ImageRetrievedEvent.js";
 
-import broker from "../../../infrastructure/Broker.js";
+import broker from "../../infrastructure/BrokerSingleton.js";
 
 interface ICacheData {
     [mediaType: string]: IImageRetrievedPayload[],

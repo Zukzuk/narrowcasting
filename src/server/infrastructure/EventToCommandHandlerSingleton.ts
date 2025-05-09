@@ -8,7 +8,7 @@ import RetryImageRetrievalEvent, { RETRY_IMAGE_RETRIEVAL_EVENT } from '../domain
 import RandomImageSelectedEvent, { RANDOM_IMAGE_SELECTED_EVENT } from '../domain/events/RandomImageSelectedEvent.js';
 import { log } from '../utils.js';
 
-import broker from './Broker.js'; // Singleton instance
+import broker from './BrokerSingleton.js'; // Singleton instance
 
 /**
  * Singleton class that orchestrates the application backend event to command handler.

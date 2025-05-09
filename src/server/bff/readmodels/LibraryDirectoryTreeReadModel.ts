@@ -1,6 +1,6 @@
-import { log } from "../../../utils.js";
-import LibraryTraversedEvent, { LIBRARY_TRAVERSED_EVENT } from "../../../domain/events/LibraryTraversedEvent.js";
-import broker from "../../../infrastructure/Broker.js";
+import { log } from "../../utils.js";
+import LibraryTraversedEvent, { LIBRARY_TRAVERSED_EVENT } from "../../domain/events/LibraryTraversedEvent.js";
+import broker from "../../infrastructure/BrokerSingleton.js";
 
 /**
  * @class LibraryDirectoryTreeReadModel

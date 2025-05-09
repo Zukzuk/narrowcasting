@@ -1,10 +1,10 @@
-import ImageRetrievalFailedEvent, { IMAGE_RETRIEVAL_FAILED_EVENT } from "../../../domain/events/ImageRetrievalFailedEvent.js";
-import RandomImageSelectionFailedEvent, { RANDOM_IMAGE_SELECTION_FAILED_EVENT } from "../../../domain/events/RandomImageSelectionFailedEvent.js";
-import CrawlFailedEvent, { CRAWL_FAILED_EVENT } from "../../../domain/events/CrawlFailedEvent.js";
-import LibraryTraversalFailedEvent, { LIBRARY_TRAVERSAL_FAILED_EVENT } from "../../../domain/events/LibraryTraversalFailedEvent.js";
-import { log } from "../../../utils.js";
+import ImageRetrievalFailedEvent, { IMAGE_RETRIEVAL_FAILED_EVENT } from "../../domain/events/ImageRetrievalFailedEvent.js";
+import RandomImageSelectionFailedEvent, { RANDOM_IMAGE_SELECTION_FAILED_EVENT } from "../../domain/events/RandomImageSelectionFailedEvent.js";
+import CrawlFailedEvent, { CRAWL_FAILED_EVENT } from "../../domain/events/CrawlFailedEvent.js";
+import LibraryTraversalFailedEvent, { LIBRARY_TRAVERSAL_FAILED_EVENT } from "../../domain/events/LibraryTraversalFailedEvent.js";
+import { log } from "../../utils.js";
 
-import broker from "../../../infrastructure/Broker.js";
+import broker from "../../infrastructure/BrokerSingleton.js";
 
 /**
  * This class is responsible for handling the read model of the Error domain.

@@ -1,10 +1,10 @@
-import CrawlEndpointCommand from './CrawlEndpointCommand.js';
+import CrawlComicsCommand from './CrawlComicsCommand.js';
 import TraverseLibraryCommand from './TraverseLibraryCommand.js';
 import SelectRandomImageCommand from './SelectRandomImageCommand.js';
 import CreateRandomizedListCommand from './CreateRandomizedListCommand.js';
 import RetrieveImageCommand from './RetrieveImageCommand.js';
 export type TCommand =
-    | CrawlEndpointCommand
+    | CrawlComicsCommand
     | TraverseLibraryCommand
     | CreateRandomizedListCommand
     | SelectRandomImageCommand

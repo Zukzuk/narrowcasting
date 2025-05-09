@@ -1,19 +1,19 @@
 import { log } from '../../utils.js';
-import AppApi from './apis/AppApi.js';
-import ComicsApi from './apis/ComicsApi.js';
-import MediaApi from './apis/MediaApi.js';
-import GamesApi from './apis/GamesApi.js';
-import VersionReadModel from './readmodels/VersionReadModel.js';
-import ErrorReadModel from './readmodels/ErrorReadModel.js';
-import ComicsCrawlReadModel from './readmodels/ComicsCrawlReadModel.js';
-import LibraryDirectoryTreeReadModel from './readmodels/LibraryDirectoryTreeReadModel.js';
-import ImageReadModel from './readmodels/ImageReadModel.js';
+import AppApi from '../apis/AppApi.js';
+import ComicsApi from '../apis/ComicsApi.js';
+import MediaApi from '../apis/MediaApi.js';
+import GamesApi from '../apis/GamesApi.js';
+import VersionReadModel from '../readmodels/VersionReadModel.js';
+import ErrorReadModel from '../readmodels/ErrorReadModel.js';
+import ComicsCrawlReadModel from '../readmodels/ComicsCrawlReadModel.js';
+import LibraryDirectoryTreeReadModel from '../readmodels/LibraryDirectoryTreeReadModel.js';
+import ImageReadModel from '../readmodels/ImageReadModel.js';
 import TraverseLibraryCommand from '../../domain/commands/TraverseLibraryCommand.js';
 import CreateRandomizedListCommand from '../../domain/commands/CreateRandomizedListCommand.js';
-import CrawlEndpointCommand from '../../domain/commands/CrawlEndpointCommand.js';
+import CrawlEndpointCommand from '../../domain/commands/CrawlComicsCommand.js';
 import { KOMGA_TAVERSAL_ORIGIN } from '../../config.js';
 
-import broker from '../../infrastructure/Broker.js'; // Singleton instance
+import broker from '../../infrastructure/BrokerSingleton.js'; // Singleton instance
 
 /**
  * Singleton class that orchestrates the BFF narrowcasting.

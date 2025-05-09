@@ -2,10 +2,8 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import { fileURLToPath } from 'url';
 import { APP_VERSION_TAG } from './config.js';
 import path from 'path';
-
-// Get the file path of the current module
+// __dirname emulation in ESM
 const __filename = fileURLToPath(import.meta.url);
-// Get the directory of the current module
 const __dirname = path.dirname(__filename);
 
 const options = {

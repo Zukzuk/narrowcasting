@@ -1,11 +1,11 @@
 import express from 'express';
-import { handleError, log } from '../../../utils.js';
-import SelectRandomImageCommand from '../../../domain/commands/SelectRandomImageCommand.js';
+import { handleError, log } from '../../utils.js';
+import SelectRandomImageCommand from '../../domain/commands/SelectRandomImageCommand.js';
 import VersionReadModel from '../readmodels/VersionReadModel.js';
 import ErrorReadModel from '../readmodels/ErrorReadModel.js';
 import ImageReadModel from '../readmodels/ImageReadModel.js';
 
-import broker from '../../../infrastructure/Broker.js';
+import broker from '../../infrastructure/BrokerSingleton.js';
 const router = express.Router();
 
 /**

@@ -10,9 +10,9 @@ export default class CrawlFailedEvent {
 
     constructor(
         public error: any,
-        public url: string,
         public endpoint: string,
         public mediaType: TMediaType,
+        public url?: string,
         public timestamp?: string,
-    ) {}
+    ) { }
 }

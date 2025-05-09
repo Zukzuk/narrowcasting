@@ -1,4 +1,4 @@
-import { APP_VERSION_TAG } from '../../../config.js';
+import { APP_VERSION_TAG } from '../../config.js';
 
 /**
  * @class VersionReadModel

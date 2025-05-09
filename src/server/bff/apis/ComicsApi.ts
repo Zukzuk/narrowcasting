@@ -1,11 +1,11 @@
 import express from 'express';
-import { handleError, log } from '../../../utils.js';
+import { handleError, log } from '../../utils.js';
 import ComicsCrawlReadModel from '../readmodels/ComicsCrawlReadModel.js';
 import LibraryDirectoryTreeReadModel from '../readmodels/LibraryDirectoryTreeReadModel.js';
-import TraverseLibraryCommand from '../../../domain/commands/TraverseLibraryCommand.js';
-import CrawlEndpointCommand from '../../../domain/commands/CrawlEndpointCommand.js';
+import TraverseLibraryCommand from '../../domain/commands/TraverseLibraryCommand.js';
+import CrawlEndpointCommand from '../../domain/commands/CrawlComicsCommand.js';
 
-import broker from '../../../infrastructure/Broker.js';
+import broker from '../../infrastructure/BrokerSingleton.js';
 const router = express.Router();
 
 /**

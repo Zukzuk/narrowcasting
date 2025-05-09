@@ -1,6 +1,7 @@
 
 import CrawlCompletedEvent from './CrawlCompletedEvent.js';
 import CrawlFailedEvent from './CrawlFailedEvent.js';
+import HandlerFailedEvent from './HandlerFailedEvent.js';
 import ImageRetrievedEvent from './ImageRetrievedEvent.js';
 import ImageRetrievalFailedEvent from './ImageRetrievalFailedEvent.js';
 import InvalidRandomListEvent from './InvalidRandomListEvent.js';
@@ -14,6 +15,7 @@ import LibraryTraversalFailedEvent from './LibraryTraversalFailedEvent.js';
 export type TEvent =
     | CrawlCompletedEvent
     | CrawlFailedEvent
+    | HandlerFailedEvent
     | LibraryTraversedEvent
     | LibraryTraversalFailedEvent
     | ImageRetrievedEvent

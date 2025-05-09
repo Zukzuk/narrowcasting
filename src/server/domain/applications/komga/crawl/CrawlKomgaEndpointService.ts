@@ -1,25 +1,22 @@
 import axios, { AxiosBasicCredentials } from 'axios';
 import { UrlError } from '../../../../utils.js';
+import { KOMGA_API, KOMGA_AUTH, APP_CRAWL_PAGE_SIZE } from '../../../../config.js';
 
 /**
  * Service for crawling comics from Komga.
  * 
- * @class CrawlComicsEndpointService
+ * @class CrawlKomgaEndpointService
  */
-export default class CrawlComicsEndpointService {
+export default class CrawlKomgaEndpointService {
 
-    constructor(
-        private KOMGA_API: string, 
-        private KOMGA_AUTH: AxiosBasicCredentials, 
-        private APP_CRAWL_PAGE_SIZE: number
-    ) {}
+    constructor() { }
 
     /**
      * Crawl a Komga endpoint.
      * 
      * @param {string} endpoint
      * @returns {Promise<any[]>}
-     * @memberof CrawlComicsEndpointService
+     * @memberof CrawlKomgaEndpointService
      */
     async crawl(endpoint: string): Promise<any[]> {
         // Initialize to 1 as a default, will be updated after the first fetch
@@ -40,12 +37,12 @@ export default class CrawlComicsEndpointService {
      * @param {number} page
      * @param {string} endpoint
      * @returns {Promise<{ content: any[], totalPages: number }>}
-     * @memberof CrawlComicsEndpointService
+     * @memberof CrawlKomgaEndpointService
      */
     async #fetchPage(page: number, endpoint: string): Promise<{ content: any[], totalPages: number }> {
-        const url = `${this.KOMGA_API}/${endpoint}?size=${this.APP_CRAWL_PAGE_SIZE}&page=${page}`;
+        const url = `${KOMGA_API}/${endpoint}?size=${APP_CRAWL_PAGE_SIZE}&page=${page}`;
         try {
-            const { data } = await axios.get(url, { auth: this.KOMGA_AUTH });
+            const { data } = await axios.get(url, { auth: KOMGA_AUTH });
             return data;
         } catch (error: any) {
             throw new UrlError(error.message, url);

@@ -8,15 +8,15 @@ type BrokerTypes = TCommand | TEvent;
 /**
  * The broker is a simple event emitter that allows for the pub/sub pattern.
  * 
- * @class Broker
+ * @class BrokerSingleton
  */
-class Broker extends EventEmitter {
+class BrokerSingleton extends EventEmitter {
 
     /**
      * Publish a command or event to the broker.
      * 
      * @param {BrokerTypes} unit - The command or event to publish.
-     * @memberof Broker
+     * @memberof BrokerSingleton
      */
     pub(unit: BrokerTypes) {
         if (unit) {
@@ -30,7 +30,7 @@ class Broker extends EventEmitter {
      * 
      * @param {K | K[]} type - The type of command or event to subscribe to.
      * @param {(unit: Extract<BrokerTypes, { type: K }>) => void} listener - The callback function to execute when the command or event is published.
-     * @memberof Broker
+     * @memberof BrokerSingleton
      */
     sub<K extends BrokerTypes['type']>(
         type: K | K[],
@@ -44,4 +44,4 @@ class Broker extends EventEmitter {
     }
 }
 
-export default new Broker(); // Singleton instance through ES6 module caching
+export default new BrokerSingleton(); // Singleton instance through ES6 module caching
