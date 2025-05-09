@@ -1,9 +1,9 @@
-import CrawlComicsCommand from '../../commands/CrawlComicsCommand.js';
-import CrawlComicsEndpointService from './services/CrawlComicsEndpointService.js';
-import CrawlCompletedEvent from '../../events/CrawlCompletedEvent.js';
-import CrawlFailedEvent from '../../events/CrawlFailedEvent.js';
-import { log, UrlError } from '../../../utils.js';
-import { TMediaType } from '../../types/index.js';
+import CrawlComicsCommand from '../../../commands/CrawlComicsCommand.js';
+import CrawlKomgaEndpointService from './CrawlKomgaEndpointService.js';
+import CrawlCompletedEvent from '../../../events/CrawlCompletedEvent.js';
+import CrawlFailedEvent from '../../../events/CrawlFailedEvent.js';
+import { log, UrlError } from '../../../../utils.js';
+import { TMediaType } from '../../../types/index.js';
 
 export default class CrawledKomgaAggregateRoot {
     private mediaType: TMediaType = 'comics';
@@ -11,10 +11,10 @@ export default class CrawledKomgaAggregateRoot {
     private uncommittedData: any = null;
     private raisedEvents: Array<CrawlCompletedEvent | CrawlFailedEvent> = [];
 
-    private crawlComicsEndpointService: CrawlComicsEndpointService;
+    private crawlKomgaEndpointService: CrawlKomgaEndpointService;
 
     constructor() {
-        this.crawlComicsEndpointService = new CrawlComicsEndpointService();
+        this.crawlKomgaEndpointService = new CrawlKomgaEndpointService();
     }
 
     set(data: Record<string, string>): void {
@@ -33,7 +33,7 @@ export default class CrawledKomgaAggregateRoot {
         const endpoint = command.payload.endpoint;
 
         try {
-            this.uncommittedData = await this.crawlComicsEndpointService.crawl(endpoint);
+            this.uncommittedData = await this.crawlKomgaEndpointService.crawl(endpoint);
         } catch (error: any) {
             error = error as UrlError;
             const event = new CrawlFailedEvent(error.message || error, endpoint, this.mediaType, error.url);

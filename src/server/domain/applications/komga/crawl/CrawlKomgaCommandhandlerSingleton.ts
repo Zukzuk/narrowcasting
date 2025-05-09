@@ -1,9 +1,9 @@
-import { log } from '../../../utils.js';
-import CrawlComicsCommand, { CRAWL_COMICS_COMMAND } from '../../commands/CrawlComicsCommand.js';
+import { log } from '../../../../utils.js';
+import CrawlComicsCommand, { CRAWL_COMICS_COMMAND } from '../../../commands/CrawlComicsCommand.js';
 import CrawledKomgaRepository from './CrawledKomgaRepository.js';
-import HandlerFailedEvent from '../../events/HandlerFailedEvent.js';
+import HandlerFailedEvent from '../../../events/HandlerFailedEvent.js';
 
-import broker from '../../../infrastructure/BrokerSingleton.js'; // Singleton instance
+import broker from '../../../../infrastructure/BrokerSingleton.js'; // Singleton instance
 
 /**
  * Singleton class that handles the CrawlComicsCommand for Komga.
