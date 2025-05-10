@@ -78,40 +78,40 @@ A ```Broker``` decouples the ```BFF``` and the domain components, ensuring flexi
 
 ## Structure
 
-- **deploy/**: Production-specific variables and compose files.
-- **dist/**: Automatically created on build for runtime files.
-- **scripts/**: Scripts and Dockerfiles for CI/CD.
-- **src/**: Application source code.
-   - **public/**: Frontend source code.
-   - **server/**: Server source code.
-- **.dev.env**: Environment variables for development.
-- **docker-compose.dev.yml**: Development compose file.
+- `deploy/`: Production-specific variables and compose files.
+- `dist/`: Automatically created on build for runtime files.
+- `mounts/`: Dummy mount folder for dev purposes.
+- `scripts/`: Scripts and Dockerfiles for CI/CD.
+- `src/`: Application source code.
+   - `public/`: Frontend source code.
+   - `server/`: Server source code.
+- `types/`: Local TS types.
+- `.dev.env`: Environment variables for development.
+- `docker-compose.dev.yml`: Development compose file.
+- `package.json`: Package file.
 
 ### Server structure
-  - `application/`: Backend application logic.
-  - `domain/`: Domain-specific logic.
-    - `[ADAPTERS]/`
-      - `services/`
-    - `[DOMAINS]/`
-      - `services/`
-    - `core/`
-      - `annotations/`
-      - `commands/`
-      - `events/`
-      - `types/`
-    - `shared/`
-      - `services/`
-  - `infrastructure/`: Infrastructure-related code.
-    - `broker/`
-    - `repositories/`
-  - `interfaces/`: Interface definitions.
-    - `apis/`
-    - `readmodels/`
-  - `config.js`: Configuration file for the server.
-  - `helpers.js`: Helper functions for the code-base.
-  - `index.js`: Server init and bootstrap.
-  - `swagger.js`: Swagger implementation.
-  - `utils.js`: Utility functions for the server.
+- `domain/`: Domain-specific logic.
+   - `annotations/`
+   - `commands/`
+   - `events/`
+   - `types/`
+   - `applications/`
+      - `services/`: Generic services
+      - `[APPLICATION-NAME]/`: Application domains
+
+- `bff/`: Backend for frontend implementations.
+   - `apis/`: 
+   - `readmodels/`:
+   - `[BFF-NAME]/`: Bff scaffolding components
+
+- `infrastructure/`: Infrastructure-related components.
+
+- `config.js`: Configuration file for the server.
+- `index.js`: Server init and bootstrap.
+- `staticserve.js`: Statically served directories.
+- `swagger.js`: Swagger implementation.
+- `utils.js`: Utility functions for the server.
 
 ### Client structure
 TBD
