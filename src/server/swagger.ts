@@ -16,9 +16,10 @@ const options = {
         },
     },
     apis: [
-        `${__dirname}/bff/narrowcasting/apis/AppApi.js`,
-        `${__dirname}/bff/narrowcasting/apis/ComicsApi.js`,
-        `${__dirname}/bff/narrowcasting/apis/MediaApi.js`,
+        `${__dirname}/bff/apis/AppApi.js`,
+        `${__dirname}/bff/apis/ComicsApi.js`,
+        `${__dirname}/bff/apis/GamesApi.js`,
+        `${__dirname}/bff/apis/MediaApi.js`,
     ],
 };
 
