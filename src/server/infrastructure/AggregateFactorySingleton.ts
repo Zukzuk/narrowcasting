@@ -1,5 +1,4 @@
 import { APP_CACHE_DURATION } from '../config.js';
-import RetrieveComicsImageAggregateRoot from '../domain/applications/komga/retrieve-image/RetrieveComicsImageAggregateRoot.js';
 import RetrieveMediaCoverAggregateRoot from '../domain/applications/plex/RetrieveMediaCoverAggregateRoot.js';
 import RetrieveGamesCoverAggregateRoot from '../domain/applications/playnite/RetrieveGamesCoverAggregateRoot.js';
 import CreateRandomizedListAggregateRoot from '../domain/applications/narrowcasting/CreateRandomizedListAggregateRoot.js';
@@ -24,10 +23,6 @@ class AggregateFactorySingleton {
 
     createSelectFromRandomizedList(): SelectFromRandomizedListAggregateRoot {
         return new SelectFromRandomizedListAggregateRoot(this.imageIndexRepository);
-    }
-
-    createRetrieveComicsImage(): RetrieveComicsImageAggregateRoot {
-        return new RetrieveComicsImageAggregateRoot();
     }
 
     createRetrieveMediaCover(): RetrieveMediaCoverAggregateRoot {

@@ -62,7 +62,7 @@ export async function doServerLogging() {
 }
 
 export function handleError(error: any, res: any, message: string) {
-    console.error(message, error.message || error);
+    console.error(message, error);
     res.status(500).json({ error: message });
 }
 

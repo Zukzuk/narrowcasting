@@ -1,5 +1,5 @@
 import aggregateFactory from './AggregateFactorySingleton.js';
-import { mediaTypesKomga, mediaTypesPlaynite, mediaTypesPlex } from '../domain/types/index.js';
+import { mediaTypesPlaynite, mediaTypesPlex } from '../domain/types/index.js';
 import { TCommand } from '../domain/commands/Commands.js';
 import { SELECT_RANDOM_IMAGE_COMMAND } from '../domain/commands/SelectRandomImageCommand.js';
 import { CREATE_RANDOMIZED_LIST_COMMAND } from '../domain/commands/CreateRandomizedListCommand.js';
@@ -24,10 +24,8 @@ class CommandHandlerSingleton {
             [SELECT_RANDOM_IMAGE_COMMAND]: () => aggregateFactory.createSelectFromRandomizedList(),
             [RETRIEVE_IMAGE_COMMAND]: (command: RetrieveImageCommand) => {
                 const { mediaType } = command.payload;
-                if (mediaTypesKomga.some(type => type === mediaType)) return aggregateFactory.createRetrieveComicsImage();
-                else if (mediaTypesPlaynite.some(type => type === mediaType)) return aggregateFactory.createRetrieveGamesCover();
+                if (mediaTypesPlaynite.some(type => type === mediaType)) return aggregateFactory.createRetrieveGamesCover();
                 else if (mediaTypesPlex.some(type => type === mediaType)) return aggregateFactory.createRetrieveMediaCover();
-                else throw new Error(`Unsupported media type: ${mediaType}`);
             },
             [TRAVERSE_LIBRARY_COMMAND]: () => aggregateFactory.createTraverseLibrary(),
         };
@@ -61,14 +59,16 @@ class CommandHandlerSingleton {
 
         try {
             const handler = this.eventHandlers[command.type](command);
-            let events = await handler.consume(command);
-            if (!Array.isArray(events)) events = [events];
-            for (const event of events) {
-                log('CommandHandler.#handle', 'publish', event.type);
-                broker.pub(event);
+            if (handler) {
+                let events = await handler.consume(command);
+                if (!Array.isArray(events)) events = [events];
+                for (const event of events) {
+                    log('CommandHandler.#handle', 'publish', event.type);
+                    broker.pub(event);
+                }
             }
         } catch (error: any) {
-            log('CommandHandler.#handle', 'publish', error.event.type);
+            log('CommandHandler.#handle', 'publish', error);
             broker.pub(error.event);
             delete error.event;
             // Optionally rethrow or handle the error

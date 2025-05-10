@@ -10,8 +10,8 @@ export default class ImageRetrievalFailedEvent {
 
     constructor(
         public error: any,
-        public url: string,
         public mediaType: TMediaType,
+        public url?: string,
         public timestamp?: string,
-    ) {}
+    ) { }
 }

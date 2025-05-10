@@ -1,6 +1,6 @@
-import axios, { AxiosBasicCredentials } from 'axios';
-import { UrlError } from '../../../../utils.js';
-import { KOMGA_API, KOMGA_AUTH, APP_CRAWL_PAGE_SIZE } from '../../../../config.js';
+import axios from 'axios';
+import { UrlError } from '../../../utils.js';
+import { KOMGA_API, KOMGA_AUTH, APP_CRAWL_PAGE_SIZE } from '../../../config.js';
 
 /**
  * Service for crawling comics from Komga.

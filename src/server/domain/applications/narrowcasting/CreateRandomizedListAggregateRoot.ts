@@ -1,8 +1,8 @@
 import { log, shuffleArray } from '../../../utils.js';
-import { KOMGA_API, KOMGA_AUTH, PLAYNITE_BACKUP_IMAGE_FOLDER, PLAYNITE_BACKUP_ORIGIN, PLEX_API, PLEX_API_KEY } from '../../../config.js';
+import { PLAYNITE_BACKUP_IMAGE_FOLDER, PLAYNITE_BACKUP_ORIGIN, PLEX_API, PLEX_API_KEY } from '../../../config.js';
 import { mediaTypesKomga, mediaTypesPlex, mediaTypesPlaynite, TMediaType } from '../../types/index.js';
 import MediaImageService from '../plex/services/MediaImageService.js';
-import ComicsImageService from '../komga/retrieve-image/ComicsImageService.js';
+import ComicsImageService from '../komga/retrieve-image.service.js';
 import GamesImageService from '../playnite/services/GamesImageService.js';
 import CreateRandomizedListCommand from '../../commands/CreateRandomizedListCommand.js';
 import RandomizedListCreatedEvent from '../../events/RandomizedListCreatedEvent.js';
@@ -23,7 +23,7 @@ export default class CreateRandomizedListAggregateRoot {
 
     constructor(private imageIndexRepository: ImageIndexRepository) {
         this.mediaImageService = new MediaImageService(PLEX_API, PLEX_API_KEY);
-        this.comicsImageService = new ComicsImageService(KOMGA_API, KOMGA_AUTH);
+        this.comicsImageService = new ComicsImageService();
         this.gamesImageService = new GamesImageService(PLAYNITE_BACKUP_ORIGIN, PLAYNITE_BACKUP_IMAGE_FOLDER);
     }
 
