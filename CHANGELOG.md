@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.14.3](https://github.com/Zukzuk/narrowcasting/compare/v4.14.2...v4.14.3) (2025-05-10)
+
+
+### Bug Fixes
+
+* added retrieve-image in new cqrs format ([58bc093](https://github.com/Zukzuk/narrowcasting/commit/58bc093da900d3d1fdc08b6c195a37caaeca6554))
+
 ### [4.14.2](https://github.com/Zukzuk/narrowcasting/compare/v4.14.1...v4.14.2) (2025-05-09)
 
 
