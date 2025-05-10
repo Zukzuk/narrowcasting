@@ -2,7 +2,7 @@ import { log, shuffleArray } from '../../../utils.js';
 import { PLAYNITE_BACKUP_IMAGE_FOLDER, PLAYNITE_BACKUP_ORIGIN, PLEX_API, PLEX_API_KEY } from '../../../config.js';
 import { mediaTypesKomga, mediaTypesPlex, mediaTypesPlaynite, TMediaType } from '../../types/index.js';
 import MediaImageService from '../plex/services/MediaImageService.js';
-import ComicsImageService from '../komga/retrieve-image.service.js';
+import ComicsImageService from '../komga/retrieve-image/retrieve-image.service.js';
 import GamesImageService from '../playnite/services/GamesImageService.js';
 import CreateRandomizedListCommand from '../../commands/CreateRandomizedListCommand.js';
 import RandomizedListCreatedEvent from '../../events/RandomizedListCreatedEvent.js';

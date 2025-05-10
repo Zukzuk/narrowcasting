@@ -1,10 +1,10 @@
-import { log } from '../../../utils.js';
-import { mediaTypesKomga } from '../../../domain/types/index.js';
-import RetrieveImageCommand, { RETRIEVE_IMAGE_COMMAND } from '../../commands/RetrieveImageCommand.js';
-import RetrieveImageKomgaRepository from './retrieve-image.repository.js';
-import HandlerFailedEvent from '../../events/HandlerFailedEvent.js';
+import { log } from '../../../../utils.js';
+import { mediaTypesKomga } from '../../../types/index.js';
+import RetrieveImageCommand, { RETRIEVE_IMAGE_COMMAND } from '../../../commands/RetrieveImageCommand.js';
+import RetrieveImageKomgaRepository from './repository.js';
+import HandlerFailedEvent from '../../../events/HandlerFailedEvent.js';
 
-import broker from '../../../infrastructure/BrokerSingleton.js'; // Singleton instance
+import broker from '../../../../infrastructure/BrokerSingleton.js'; // Singleton instance
 
 /**
  * Singleton class that handles the RetrieveImageCommand for Komga.

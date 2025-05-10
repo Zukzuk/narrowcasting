@@ -1,12 +1,12 @@
-import { KOMGA_ORIGIN } from '../../../config.js';
-import RetrieveImageCommand from '../../commands/RetrieveImageCommand.js';
-import ImageRetrievedEvent from '../../events/ImageRetrievedEvent.js';
-import ImageRetrievalFailedEvent from '../../events/ImageRetrievalFailedEvent.js';
-import RetryImageRetrievalEvent from '../../events/RetryImageRetrievalEvent.js';
+import { KOMGA_ORIGIN } from '../../../../config.js';
+import RetrieveImageCommand from '../../../commands/RetrieveImageCommand.js';
+import ImageRetrievedEvent from '../../../events/ImageRetrievedEvent.js';
+import ImageRetrievalFailedEvent from '../../../events/ImageRetrievalFailedEvent.js';
+import RetryImageRetrievalEvent from '../../../events/RetryImageRetrievalEvent.js';
 import RetrieveImageService from './retrieve-image.service.js';
-import ImageOptimizeService from '../services/ImageOptimizeService.js';
-import { TMediaType } from '../../../domain/types/index.js';
-import { UrlError } from '../../../utils.js';
+import ImageOptimizeService from '../../services/ImageOptimizeService.js';
+import { TMediaType } from '../../../types/index.js';
+import { UrlError } from '../../../../utils.js';
 
 export type TImageData = {
     image: Buffer;

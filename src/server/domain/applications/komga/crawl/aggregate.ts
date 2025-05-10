@@ -1,9 +1,9 @@
-import CrawlComicsCommand from '../../commands/CrawlComicsCommand.js';
-import CrawlCompletedEvent from '../../events/CrawlCompletedEvent.js';
-import CrawlFailedEvent from '../../events/CrawlFailedEvent.js';
-import CrawlKomgaEndpointService from './crawl.endpoint.service.js';
-import { log, UrlError } from '../../../utils.js';
-import { TMediaType } from '../../types/index.js';
+import CrawlComicsCommand from '../../../commands/CrawlComicsCommand.js';
+import CrawlCompletedEvent from '../../../events/CrawlCompletedEvent.js';
+import CrawlFailedEvent from '../../../events/CrawlFailedEvent.js';
+import CrawlKomgaEndpointService from './crawl-endpoint.service.js';
+import { log, UrlError } from '../../../../utils.js';
+import { TMediaType } from '../../../types/index.js';
 
 export default class CrawlKomgaAggregateRoot {
     private mediaType: TMediaType = 'comics';

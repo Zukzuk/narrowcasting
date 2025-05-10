@@ -1,6 +1,6 @@
-import RetrieveImageCommand from '../../commands/RetrieveImageCommand.js';
-import RetrieveImageKomgaAggregateRoot, { TImageData } from './retrieve-image.aggregate.js';
-import { log, UrlError } from '../../../utils.js';
+import RetrieveImageCommand from '../../../commands/RetrieveImageCommand.js';
+import RetrieveImageKomgaAggregateRoot, { TImageData } from './aggregate.js';
+import { log, UrlError } from '../../../../utils.js';
 
 /**
  * This repository is used to store the retrieved images from Komga.

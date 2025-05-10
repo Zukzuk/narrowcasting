@@ -1,6 +1,6 @@
-import CrawlComicsCommand from '../../commands/CrawlComicsCommand.js';
-import CrawlKomgaAggregateRoot from './crawl.aggregate.js';
-import { log } from '../../../utils.js';
+import CrawlComicsCommand from '../../../commands/CrawlComicsCommand.js';
+import CrawlKomgaAggregateRoot from './aggregate.js';
+import { log } from '../../../../utils.js';
 
 type TCrawlEndpoints = {
     series: Record<string, string>;

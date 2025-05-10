@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { UrlError } from '../../../utils.js';
-import { KOMGA_API, KOMGA_AUTH } from '../../../config.js';
+import { UrlError } from '../../../../utils.js';
+import { KOMGA_API, KOMGA_AUTH } from '../../../../config.js';
 
 /**
  * Service for fetching comic images from Komga.
