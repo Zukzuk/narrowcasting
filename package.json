@@ -18,7 +18,7 @@
         "docs": "typedoc --skipErrorChecking ",
         "build": "mkdirp dist/public && cpx \"src/public/**/*\" dist/public && npm run docs && tsc",
         "commit": "cz",
-        "push": "standard-version && git push --follow-tags origin main && cross-env APP_RUN=false npm run dev",
+        "push": "node scripts/git-push.js",
         "release": "node scripts/docker-release.js",
         "internalscript:install:onlydev": "npm i --only=dev",
         "internalscript:npx:tsc": "npx tsc --watch --preserveWatchOutput --watchFile fixedpollinginterval",
