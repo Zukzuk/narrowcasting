@@ -20,11 +20,11 @@ export default class ComicsCrawlReadModel {
 
     constructor() {
         // subscribe to events
-        log('ComicsCrawlReadModel.constructor', 'subscribe', `
+        log('ComicsCrawlReadModel.constructor()', 'subscribe', `
             \t${CRAWL_COMPLETED_EVENT}
         `);
         broker.sub(CRAWL_COMPLETED_EVENT, event => {
-            log('ComicsCrawlReadModel', 'listen', `${event.type}: '${event.endpoint}' in '${event.mediaType}'`);
+            log('Broker.sub()', 'listen', `${event.type}: '${event.endpoint}' in '${event.mediaType}'`);
             this.#denormalize(event);
         });
     }
@@ -36,13 +36,12 @@ export default class ComicsCrawlReadModel {
      * 
      * @param {IComicsCrawlQuery} { userId, endpoint, search }
      * @returns {Record<string, any>}
-     * @memberof ComicsCrawlReadModel
      */
     query({ userId, endpoint, search }: IComicsCrawlQuery): Record<string, any> {
         const payload = this.cache[endpoint] || {};
         if (!search) return payload;
 
-        log('ComicsCrawlReadModel.query', 'read', `${ endpoint } with search '${ search }'`, userId);
+        log('ComicsCrawlReadModel.query()', 'read', `${ endpoint } with search '${ search }'`, userId);
 
         // Create a case-insensitive fuzzy matching pattern allowing for variations
         const pattern = new RegExp(search.split(" ").join(".*"), "i");
@@ -60,7 +59,6 @@ export default class ComicsCrawlReadModel {
      * 
      * @private 
      * @param {CrawlCompletedEvent} event
-     * @memberof ComicsCrawlReadModel
      */
     #denormalize(event: CrawlCompletedEvent) {
         this.cache[event.endpoint] = event.payload;

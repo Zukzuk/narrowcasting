@@ -16,7 +16,6 @@ export default class CrawlKomgaEndpointService {
      * 
      * @param {string} endpoint
      * @returns {Promise<any[]>}
-     * @memberof CrawlKomgaEndpointService
      */
     async crawl(endpoint: string): Promise<any[]> {
         // Initialize to 1 as a default, will be updated after the first fetch
@@ -37,7 +36,6 @@ export default class CrawlKomgaEndpointService {
      * @param {number} page
      * @param {string} endpoint
      * @returns {Promise<{ content: any[], totalPages: number }>}
-     * @memberof CrawlKomgaEndpointService
      */
     async #fetchPage(page: number, endpoint: string): Promise<{ content: any[], totalPages: number }> {
         const url = `${KOMGA_API}/${endpoint}?size=${APP_CRAWL_PAGE_SIZE}&page=${page}`;

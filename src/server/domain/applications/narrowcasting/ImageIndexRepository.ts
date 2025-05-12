@@ -1,7 +1,7 @@
 import { log } from "../../../utils.js";
 import { mediaTypes, TMediaType } from "../../types/index.js";
-import { IPlexMediaContainer } from "../plex/services/MediaImageService.js";
-import { IPlayniteGamesContainer } from "../playnite/services/GamesImageService.js";
+import { IPlexMediaContainer } from "../plex/retrieve-image/retrieve-cover.service.js";
+import { IPlayniteGamesContainer } from "../playnite/retrieve-image/retrieve-cover.service.js";
 
 type TCacheData = IPlayniteGamesContainer[] | IPlexMediaContainer[];
 
@@ -37,7 +37,6 @@ export default class ImageIndexRepository {
    * @param {TMediaType} mediaType
    * @param {{ data?: TCacheData; total?: number }}
    * @returns {IImageSet}
-   * @memberof ImageIndexRepository
    */
   save(
     userId: string,
@@ -58,7 +57,7 @@ export default class ImageIndexRepository {
       data: data ?? [],
     };
 
-    log('ImageIndexRepository.save', 'write', `'${mediaType}' data with length ${userCache[mediaType].total}`, userId);
+    log('ImageIndexRepository.save()', 'write', `'${mediaType}' data with length ${userCache[mediaType].total}`, userId);
 
     return userCache[mediaType];
   }
@@ -66,7 +65,7 @@ export default class ImageIndexRepository {
   saveWeighted(userId: string, weightedCache: IWeightedCache[]): IWeightedCache[] {
     this.weightedCache[userId] = weightedCache;
 
-    log('ImageIndexRepository.saveWeighted', 'write', `weighted list with length ${weightedCache.length}`, userId);
+    log('ImageIndexRepository.saveWeighted()', 'write', `weighted list with length ${weightedCache.length}`, userId);
 
     return weightedCache;
   }
@@ -76,12 +75,11 @@ export default class ImageIndexRepository {
    * 
    * @param {string} userId
    * @returns {Record<string, IImageSet>}
-   * @memberof ImageIndexRepository
    */
   retrieve(userId: string): Record<string, IImageSet> {
     const userCache = this.#getUserCache(userId);
 
-    log('ImageIndexRepository.retrieve', 'read', 'full userCache', userId);
+    log('ImageIndexRepository.retrieve()', 'read', 'full userCache', userId);
 
     return userCache;
   }
@@ -93,7 +91,6 @@ export default class ImageIndexRepository {
    * @param {TMediaType} mediaType
    * @param {number} index
    * @returns {(IPlexMediaContainer | IPlayniteGamesContainer)}
-   * @memberof ImageIndexRepository
    */
   retrieveData(
     userId: string,
@@ -104,7 +101,7 @@ export default class ImageIndexRepository {
 
     const payload = userCache[mediaType].data[index];
 
-    log('ImageIndexRepository.retrieveData', 'read', `'${mediaType}' data with index '${index}'`, userId);
+    log('ImageIndexRepository.retrieveData()', 'read', `'${mediaType}' data with index '${index}'`, userId);
 
     return payload;
   }
@@ -114,12 +111,11 @@ export default class ImageIndexRepository {
    * 
    * @param {string} userId
    * @returns {Record<string, IImageSet>}
-   * @memberof ImageIndexRepository
    */
   retrieveWeighted(userId: string): IWeightedCache[] {
     const userCache = this.#getUserWeightedCache(userId);
 
-    log('ImageIndexRepository.retrieveWeighted', 'read', 'full userWeightedCache', userId);
+    log('ImageIndexRepository.retrieveWeighted()', 'read', 'full userWeightedCache', userId);
 
     return userCache;
   }
@@ -129,13 +125,12 @@ export default class ImageIndexRepository {
    * 
    * @param {string} mediaType
    * @returns {number}
-   * @memberof ImageIndexRepository
    */
   getWeightedItem(userId: string): IWeightedCache {
     const userWeightedCache = this.#getUserWeightedCache(userId);
     const item = userWeightedCache.shift() as IWeightedCache;
 
-    log('ImageIndexRepository.getWeightedItem', 'shift', `{mediaType:${item.mediaType}, index:${item.index}}, ${userWeightedCache.length} remaining.`, userId);
+    log('ImageIndexRepository.getWeightedItem()', 'shift', `{mediaType:${item.mediaType}, index:${item.index}}, ${userWeightedCache.length} remaining.`, userId);
 
     return item;
   }
@@ -145,7 +140,6 @@ export default class ImageIndexRepository {
    * 
    * @param {string} userId
    * @returns {boolean}
-   * @memberof ImageIndexRepository
    */
   hasValidCaches(userId: string): boolean {
     const userCache = this.#getUserCache(userId);
@@ -154,7 +148,7 @@ export default class ImageIndexRepository {
       return !!(userCache[mediaType]?.remaining) || (userCache[mediaType]?.expiration < Date.now());
     });
 
-    log('ImageIndexRepository.hasValidCache', 'read', result.toString(), userId);
+    log('ImageIndexRepository.hasValidCache()', 'read', result.toString(), userId);
 
     return result;
   }
@@ -164,14 +158,13 @@ export default class ImageIndexRepository {
    * 
    * @param {string} userId
    * @returns {boolean}
-   * @memberof ImageIndexRepository
    */
   hasValidWeightedCache(userId: string): boolean {
     const userWeightedCache = this.#getUserWeightedCache(userId);
 
     const result = userWeightedCache.length > 0;
 
-    log('ImageIndexRepository.hasValidWeightedCache', 'read', result.toString(), userId);
+    log('ImageIndexRepository.hasValidWeightedCache()', 'read', result.toString(), userId);
 
     return result;
   }
@@ -181,7 +174,6 @@ export default class ImageIndexRepository {
    * 
    * @param {string} userId
    * @returns {TMediaType[]}
-   * @memberof ImageIndexRepository
    */
   getInvalidCacheHits(userId: string): TMediaType[] {
     const userCache = this.#getUserCache(userId);
@@ -190,7 +182,7 @@ export default class ImageIndexRepository {
       return !(userCache[mediaType]?.remaining) || !(userCache[mediaType]?.expiration > Date.now());
     });
 
-    log('ImageIndexRepository.getInvalidCacheHits', 'read', result.toString(), userId);
+    log('ImageIndexRepository.getInvalidCacheHits()', 'read', result.toString(), userId);
 
     return result;
   }
@@ -201,7 +193,6 @@ export default class ImageIndexRepository {
    * @private
    * @param {string} userId
    * @returns {Record<string, IImageSet>}
-   * @memberof ImageIndexRepository
    */
   #getUserCache(userId: string): Record<string, IImageSet> {
     if (!this.cache[userId]) {
@@ -216,7 +207,6 @@ export default class ImageIndexRepository {
    * @private
    * @param {string} userId
    * @returns {IWeightedCache[]}
-   * @memberof ImageIndexRepository
    */
   #getUserWeightedCache(userId: string): IWeightedCache[] {
     if (!this.weightedCache[userId]) {

@@ -1,9 +1,8 @@
 import { log, shuffleArray } from '../../../utils.js';
-import { PLAYNITE_BACKUP_IMAGE_FOLDER, PLAYNITE_BACKUP_ORIGIN, PLEX_API, PLEX_API_KEY } from '../../../config.js';
 import { mediaTypesKomga, mediaTypesPlex, mediaTypesPlaynite, TMediaType } from '../../types/index.js';
-import MediaImageService from '../plex/services/MediaImageService.js';
-import ComicsImageService from '../komga/retrieve-image/retrieve-image.service.js';
-import GamesImageService from '../playnite/services/GamesImageService.js';
+import MediaCoverService from '../plex/retrieve-image/retrieve-cover.service.js';
+import ComicsImageService from '../komga/retrieve-image/retrieve-page.service.js';
+import GamesImageService from '../playnite/retrieve-image/retrieve-cover.service.js';
 import CreateRandomizedListCommand from '../../commands/CreateRandomizedListCommand.js';
 import RandomizedListCreatedEvent from '../../events/RandomizedListCreatedEvent.js';
 import RandomizedListCreationFailedEvent from '../../events/RandomizedListCreationFailedEvent.js';
@@ -17,14 +16,14 @@ import ImageIndexRepository, { IWeightedCache } from './ImageIndexRepository.js'
  */
 export default class CreateRandomizedListAggregateRoot {
 
-    private mediaImageService: MediaImageService;
+    private mediaCoverService: MediaCoverService;
     private comicsImageService: ComicsImageService;
     private gamesImageService: GamesImageService;
 
     constructor(private imageIndexRepository: ImageIndexRepository) {
-        this.mediaImageService = new MediaImageService(PLEX_API, PLEX_API_KEY);
+        this.mediaCoverService = new MediaCoverService();
         this.comicsImageService = new ComicsImageService();
-        this.gamesImageService = new GamesImageService(PLAYNITE_BACKUP_ORIGIN, PLAYNITE_BACKUP_IMAGE_FOLDER);
+        this.gamesImageService = new GamesImageService();
     }
 
     /**
@@ -32,7 +31,6 @@ export default class CreateRandomizedListAggregateRoot {
      * 
      * @param {CreateRandomizedListCommand} command
      * @returns {Promise<RandomizedListCreatedEvent | RandomizedListCreationFailedEvent>}
-     * @memberof CreateRandomizedListAggregateRoot
      */
     async consume(command: CreateRandomizedListCommand): Promise<RandomizedListCreatedEvent | RandomizedListCreationFailedEvent> {
 
@@ -46,9 +44,11 @@ export default class CreateRandomizedListAggregateRoot {
             // Check if weighted cache is filled, else create a weighted cache
             const hasValidWeightedCache = this.imageIndexRepository.hasValidWeightedCache(userId);
             if (!hasValidWeightedCache) this.#createWeightedCache(userId);
+            const weightedCache = this.imageIndexRepository.retrieveWeighted(userId);
+            const payload = { userId, page, interval, startTime: Date.now() };
 
             // Return a business event
-            return new RandomizedListCreatedEvent({ userId, page, interval, startTime: Date.now() });
+            return new RandomizedListCreatedEvent(payload, weightedCache);
         } catch (error: any) {
             // Return failure event
             const event = new RandomizedListCreationFailedEvent(error.message, error.url);
@@ -79,11 +79,11 @@ export default class CreateRandomizedListAggregateRoot {
 
         // Fetch and save data for Plex
         if (mediaTypesPlex.some(type => invalidCaches.includes(type))) {
-            const sections = await this.mediaImageService.fetchSections();
+            const sections = await this.mediaCoverService.fetchSections();
             await Promise.all(sections.map(async section => {
                 const key = section.key;
                 const mediaType = section.title.toLowerCase().replace(/ /g, '-') as TMediaType;
-                const data = await this.mediaImageService.fetchMediaData(mediaType, key);
+                const data = await this.mediaCoverService.fetchMediaData(mediaType, key);
                 this.imageIndexRepository.save(userId, mediaType, { data });
             }));
         }

@@ -19,7 +19,7 @@ export default class ErrorReadModel {
     constructor() {
         this.errors = [];
         // subscribe to events
-        log('ErrorReadModel.constructor', 'subscribe', `
+        log('ErrorReadModel.constructor()', 'subscribe', `
             \t${CRAWL_FAILED_EVENT}
             \t${HANDLER_FAILED_EVENT}
             \t${IMAGE_RETRIEVAL_FAILED_EVENT}
@@ -33,7 +33,7 @@ export default class ErrorReadModel {
             RANDOM_IMAGE_SELECTION_FAILED_EVENT,
             LIBRARY_TRAVERSAL_FAILED_EVENT
         ], event => {
-            log('ErrorReadModel', 'listen', `${event.type}: ${event.error?.message}`);
+            log('Broker.sub()', 'listen', `${event.type}: ${event.error?.message}`);
             this.#denormalize(event);
         });
     }
@@ -42,18 +42,15 @@ export default class ErrorReadModel {
      * This method queries the read model for the Error domain.
      * 
      * @returns {any[]}
-     * @memberof ErrorReadModel
      */
     query(): any[] {
-        log('ErrorReadModel.query', 'read', `${this.errors.length} errors`);
+        log('ErrorReadModel.query()', 'read', `${this.errors.length} errors`);
 
         return this.errors;
     }
     
     /**
      * This method clears the read model for the Error domain.
-     * 
-     * @memberof ErrorReadModel
      */
     clear() {
         this.errors = [];
@@ -70,7 +67,6 @@ export default class ErrorReadModel {
      *      | RandomImageSelectionFailedEvent
      *      | LibraryTraversalFailedEvent
      * } event
-     * @memberof ErrorReadModel
      */
     #denormalize(
         event: 

@@ -35,13 +35,13 @@ async function getGatewayAddress() {
 export function doAxiosLogging(logReq = true, logResp = true) {
     if (logReq) {
         axios.interceptors.request.use(request => {
-            log('Axios', 'request', request!.url!);
+            log('Axios.intercept()', 'request', request!.url!);
             return request;
         });
     }
     if (logResp) {
         axios.interceptors.response.use(response => {
-            log('Axios', 'response', response!.toString());
+            log('Axios.intercept()', 'response', response!.toString());
             return response;
         });
     }
@@ -88,5 +88,5 @@ export function shuffleArray<T>(array: T[]): T[] {
 
 export function log(method:string, action: string, message: string, userId?: string ) {
     // if (APP_SHOW_LOGGING) console.log(`${userId ? userId+': ' : ''}${method}: ${action} -> ${message}`);
-    if (APP_SHOW_LOGGING) console.log(`${method}: ${action} -> ${message}`);
+    // if (APP_SHOW_LOGGING) console.log(`${method}: ${action} -> ${message}`);
 }

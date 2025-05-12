@@ -1,28 +1,28 @@
 import { log } from '../../../../utils.js';
-import { EKomgaMediaType } from './aggregate.js';
-import RetrieveImageKomgaRepository from './repository.js';
+import { EPlayniteMediaType } from './aggregate.js';
+import RetrieveImagePlayniteRepository from './repository.js';
 import RetrieveImageCommand, { RETRIEVE_IMAGE_COMMAND } from '../../../commands/RetrieveImageCommand.js';
 import HandlerFailedEvent from '../../../events/HandlerFailedEvent.js';
 
 import broker from '../../../../infrastructure/BrokerSingleton.js'; // Singleton instance
 
 /**
- * Singleton class that handles the RetrieveImageCommand for Komga.
+ * Singleton class that handles the RetrieveImageCommand for Playnite.
  * 
- * @class RetrieveImageKomgaCommandhandlerSingleton
+ * @class RetrieveImagePlayniteCommandhandlerSingleton
  */
-class RetrieveImageKomgaCommandhandlerSingleton {
+class RetrieveImagePlayniteCommandhandlerSingleton {
 
-    constructor(private repository: RetrieveImageKomgaRepository) { }
+    constructor(private repository: RetrieveImagePlayniteRepository) { }
 
     bootstrap() {
-        log('RetrieveImageKomgaCommandhandler.bootstrap()', 'subscribe', `
+        log('RetrieveImagePlayniteCommandhandler.bootstrap()', 'subscribe', `
             \t${RETRIEVE_IMAGE_COMMAND}
         `);
-        broker.sub(RETRIEVE_IMAGE_COMMAND, command => { 
+        broker.sub(RETRIEVE_IMAGE_COMMAND, command => {
             const { mediaType } = command.payload;
-            console.log('RetrieveImageKomgaCommandhandler.sub()', 'listen', `'${mediaType}'`);
-            if (Object.values(EKomgaMediaType).includes(mediaType as EKomgaMediaType)) this.#handle(command);
+            console.log('RetrieveImagePlayniteCommandhandler.sub()', 'listen', `'${mediaType}'`);
+            if (Object.values(EPlayniteMediaType).includes(mediaType as EPlayniteMediaType)) this.#handle(command);
         });
     }
 
@@ -41,25 +41,25 @@ class RetrieveImageKomgaCommandhandlerSingleton {
             await retrieveImage.execute();
 
             // Check for uncommitted data and write it to the repository, updating the aggregate.
-            if (retrieveImage.hasUncommittedData())  retrieveImage = await this.repository.commit(command);
+            if (retrieveImage.hasUncommittedData()) retrieveImage = await this.repository.commit(command);
 
             // Grab the events raised by the aggregate.
             const events = retrieveImage.getRaisedEvents();
 
             // Publish the events to the broker.
             for (const event of events) {
-                console.log('RetrieveImageKomgaCommandhandler.#handle()', 'publish', event.type);
+                console.log('RetrieveImagePlayniteCommandhandler.#handle()', 'publish', event.type);
                 broker.pub(event);
             }
         } catch (error: any) {
             const event = new HandlerFailedEvent(error);
-            log('RetrieveImageKomgaCommandhandler.#handle()', 'publish', event.type);
+            log('RetrieveImagePlayniteCommandhandler.#handle()', 'publish', event.type);
             broker.pub(event);
             // Optionally rethrow or handle the error
         }
     }
 }
 
-export default new RetrieveImageKomgaCommandhandlerSingleton(
-    new RetrieveImageKomgaRepository(),
+export default new RetrieveImagePlayniteCommandhandlerSingleton(
+    new RetrieveImagePlayniteRepository(),
 ); // Singleton instance through ES6 module caching

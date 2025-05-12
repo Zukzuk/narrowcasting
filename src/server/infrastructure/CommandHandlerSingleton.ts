@@ -22,11 +22,6 @@ class CommandHandlerSingleton {
         this.eventHandlers = {
             [CREATE_RANDOMIZED_LIST_COMMAND]: () => aggregateFactory.createCreateRandomizedList(),
             [SELECT_RANDOM_IMAGE_COMMAND]: () => aggregateFactory.createSelectFromRandomizedList(),
-            [RETRIEVE_IMAGE_COMMAND]: (command: RetrieveImageCommand) => {
-                const { mediaType } = command.payload;
-                if (mediaTypesPlaynite.some(type => type === mediaType)) return aggregateFactory.createRetrieveGamesCover();
-                else if (mediaTypesPlex.some(type => type === mediaType)) return aggregateFactory.createRetrieveMediaCover();
-            },
             [TRAVERSE_LIBRARY_COMMAND]: () => aggregateFactory.createTraverseLibrary(),
         };
     }
@@ -35,15 +30,13 @@ class CommandHandlerSingleton {
      * Bootstraps the application backend command handler.
      */
     bootstrap() {
-        log('CommandHandler.bootstrap', 'subscribe', `
+        log('CommandHandler.bootstrap()', 'subscribe', `
             \t${CREATE_RANDOMIZED_LIST_COMMAND}
             \t${SELECT_RANDOM_IMAGE_COMMAND}
-            \t${RETRIEVE_IMAGE_COMMAND}
             \t${TRAVERSE_LIBRARY_COMMAND}
         `);
         broker.sub(CREATE_RANDOMIZED_LIST_COMMAND, command => this.#handle(command));
         broker.sub(SELECT_RANDOM_IMAGE_COMMAND, command => this.#handle(command));
-        broker.sub(RETRIEVE_IMAGE_COMMAND, command => this.#handle(command));
         broker.sub(TRAVERSE_LIBRARY_COMMAND, command => this.#handle(command));
     }
 
@@ -63,12 +56,12 @@ class CommandHandlerSingleton {
                 let events = await handler.consume(command);
                 if (!Array.isArray(events)) events = [events];
                 for (const event of events) {
-                    log('CommandHandler.#handle', 'publish', event.type);
+                    log('CommandHandler.#handle()', 'publish', event.type);
                     broker.pub(event);
                 }
             }
         } catch (error: any) {
-            log('CommandHandler.#handle', 'publish', error);
+            log('CommandHandler.#handle()', 'publish', error);
             broker.pub(error.event);
             delete error.event;
             // Optionally rethrow or handle the error

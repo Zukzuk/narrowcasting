@@ -15,7 +15,9 @@ class CrawlKomgaCommandhandlerSingleton {
     constructor(private repository: CrawlKomgaRepository) {}
 
     bootstrap() {
-        log('CrawlKomgaCommandhandler.bootstrap()', 'subscribe', `${CRAWL_COMICS_COMMAND}`);
+        log('CrawlKomgaCommandhandler.bootstrap()', 'subscribe', `
+            \t${CRAWL_COMICS_COMMAND}
+        `);
         broker.sub(CRAWL_COMICS_COMMAND, command => this.#handle(command));
     }
 
@@ -31,7 +33,7 @@ class CrawlKomgaCommandhandlerSingleton {
             let crawl = await this.repository.get(command);
 
             // Check if data is stale or invalid, and if so, crawl the comics (again).
-            if (crawl.isEmpty() || crawl.isStale()) await crawl.execute(command);
+            if (crawl.isEmpty() || crawl.isStale()) await crawl.execute();
 
             // Check for uncommitted data and write it to the repository, updating the aggregate.
             if (crawl.hasUncommittedData()) crawl = await this.repository.commit(command);

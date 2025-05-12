@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { UrlError } from '../../../../utils.js';
 import { TMediaType } from '../../../types/index.js';
+import { PLEX_API, PLEX_API_KEY } from '../../../../config.js';
 
 export interface IPlexMediaSections {
     key: string,
@@ -22,26 +23,22 @@ export interface IPlexMediaContainer {
 /**
  * Service to fetch media cover images from a Plex server.
  * 
- * @class MediaImageService
+ * @class RetrieveCoverService
  */
-export default class MediaImageService {
+export default class RetrieveCoverService {
 
-    constructor(
-        private PLEX_API: string,
-        private PLEX_API_KEY: string,
-    ) { }
+    constructor() { }
 
     /**
      * Fetches the sections from the Plex server.
      * 
      * @returns {Promise<IPlexMediaSections[]>}
-     * @memberof MediaImageService
      */
     fetchSections = async (): Promise<IPlexMediaSections[]> => {
-        const url = `${this.PLEX_API}/library/sections`;
+        const url = `${PLEX_API}/library/sections`;
         try {
             const response = await axios.get(url, {
-                params: { 'X-Plex-Token': this.PLEX_API_KEY },
+                params: { 'X-Plex-Token': PLEX_API_KEY },
                 headers: { Accept: 'application/json' },
             });
             if (!response.data) throw new Error("No sections found.");
@@ -57,13 +54,12 @@ export default class MediaImageService {
      * @param {TMediaType} mediaType
      * @param {string} sectionKey
      * @returns {Promise<IPlexMediaContainer[]>}
-     * @memberof MediaImageService
      */
     fetchMediaData = async (mediaType: TMediaType, sectionKey: string): Promise<IPlexMediaContainer[]> => {
-        const url = `${this.PLEX_API}/library/sections/${sectionKey}/${mediaType === 'audiobooks' ? 'albums' : 'all'}`;
+        const url = `${PLEX_API}/library/sections/${sectionKey}/${mediaType === 'audiobooks' ? 'albums' : 'all'}`;
         try {
             const response = await axios.get(url, {
-                params: { 'X-Plex-Token': this.PLEX_API_KEY },
+                params: { 'X-Plex-Token': PLEX_API_KEY },
                 headers: { Accept: 'application/json' },
             });
             if (!response.data) throw new Error("No media found.");
@@ -78,13 +74,12 @@ export default class MediaImageService {
      * 
      * @param {string} thumb
      * @returns {Promise<Buffer>}
-     * @memberof MediaImageService
      */
     fetchImage = async (thumb: string): Promise<Buffer> => {
-        const url = `${this.PLEX_API}${thumb}`;
+        const url = `${PLEX_API}${thumb}`;
         try {
             const image = await axios.get(url, {
-                params: { 'X-Plex-Token': this.PLEX_API_KEY },
+                params: { 'X-Plex-Token': PLEX_API_KEY },
                 responseType: 'arraybuffer',
             });
             const contentType = image.headers['content-type'];

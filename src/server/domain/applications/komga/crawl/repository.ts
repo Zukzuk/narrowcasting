@@ -26,12 +26,12 @@ export default class CrawlKomgaRepository {
      */
     async get(command: CrawlComicsCommand): Promise<CrawlKomgaAggregateRoot> {
         const { endpoint } = command.payload;
-        const userCache = this.#getUserCache(command);
-        this.crawl = new CrawlKomgaAggregateRoot();
-        this.crawl.set(userCache[endpoint]);
 
-        if (userCache) log('CrawlKomgaRepository.retrieve()', 'read', `${Object.keys(userCache).length} items crawled on '${endpoint}'`);
+        const _cache = this.#read(command);
+        this.crawl = new CrawlKomgaAggregateRoot(command);
+        this.crawl.set(_cache);
 
+        if (_cache) log('CrawlKomgaRepository.get()', 'read', `${Object.keys(_cache).length} items crawled on '${endpoint}'`);
         return this.crawl;
     }
 
@@ -39,7 +39,6 @@ export default class CrawlKomgaRepository {
      * Commit the data to the cache and update the aggregate.
      * 
      * @param {CrawlComicsCommand} command
-     * @param {CrawledKomgaAggregateRoot} crawl
      * @returns {Promise<CrawledKomgaAggregateRoot>}
      */
     async commit(command: CrawlComicsCommand): Promise<CrawlKomgaAggregateRoot> {
@@ -49,17 +48,16 @@ export default class CrawlKomgaRepository {
             // Save the uncommitted data to the cache.
             const uncommittedData = this.crawl.getUncommittedData();
             if (uncommittedData) {
-                this.#setUserCache(command, uncommittedData);
+                this.#update(command, uncommittedData);
                 // Update the aggregate.
-                const userCache = this.#getUserCache(command);
-                await this.crawl.update(command, userCache[endpoint]);
-                log('CrawlKomgaRepository.commmit()', 'write', `${Object.keys(userCache).length} items for '${endpoint}'`);
+                const _cache = this.#read(command);
+                await this.crawl.update(_cache);
+                log('CrawlKomgaRepository.commmit()', 'write', `${Object.keys(_cache).length} items for '${endpoint}'`);
             }
-
             return this.crawl;
         } catch (error: any) {
             // Update the aggregate with the error.
-            this.crawl.update(command, undefined, error as Error);
+            this.crawl.update(undefined, error as Error);
             return this.crawl;
         }
     }
@@ -71,32 +69,24 @@ export default class CrawlKomgaRepository {
      * @param {CrawlComicsCommand} command
      * @returns {TCrawlEndpoints}
      */
-    #getUserCache(command: CrawlComicsCommand): TCrawlEndpoints {
-        const { userId } = command.payload;
-
-        if (!this.cache[userId]) {
-            this.cache[userId] = {
-                series: {},
-                collections: {},
-            };
-        }
-
-        return this.cache[userId];
+    #read(command: CrawlComicsCommand): Record<string, string> {
+        const { userId, endpoint } = command.payload;            
+        return this.cache[userId][endpoint];
     }
 
     /**
-     * Get the user's cache.
+     * Update the user's cache.
      * 
      * @private
      * @param {RetrieveImageCommand} command
-     * @param {TImageData | null} uncommittedData
+     * @param {any | null} uncommittedData
      */
-    #setUserCache(command: CrawlComicsCommand, uncommittedData: any): void {
+    #update(command: CrawlComicsCommand, uncommittedData: any): void {
         const { userId, endpoint } = command.payload;
-        if (this.cache[userId]) {
-            uncommittedData.forEach((item: any) => {
-                this.cache[userId][endpoint][item.id] = item.name;
-            });
-        }
+        uncommittedData.forEach((item: any) => {
+            if (!this.cache[userId]) this.cache[userId] = { series: {}, collections: {} };
+            if (!this.cache[userId][endpoint]) this.cache[userId][endpoint] = {};
+            this.cache[userId][endpoint][item.id] = item.name;
+        });
     }
 }

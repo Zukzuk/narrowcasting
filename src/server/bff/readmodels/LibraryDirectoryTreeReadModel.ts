@@ -11,11 +11,11 @@ export default class LibraryDirectoryTreeReadModel {
 
     constructor() {
         // subscribe to events
-        log('LibraryDirectoryTreeReadModel.constructor', 'subscribe', `
+        log('LibraryDirectoryTreeReadModel.constructor()', 'subscribe', `
             \t${LIBRARY_TRAVERSED_EVENT}
         `);
         broker.sub(LIBRARY_TRAVERSED_EVENT, event => {
-            log('LibraryDirectoryTreeReadModel', 'listen', `${event.type}: directory tree recieved`);
+            log('Broker.sub()', 'listen', `${event.type}: directory tree recieved`);
             this.#denormalize(event);
         });
     }
@@ -24,12 +24,11 @@ export default class LibraryDirectoryTreeReadModel {
 
     /**
      * @returns {Record<string, any>}
-     * @memberof LibraryDirectoryTreeReadModel
      */
     query({ userId }: { userId: string }): Record<string, any> {
         const payload = this.cache || {};
 
-        log('LibraryDirectoryTreeReadModel.query', 'read', `directory tree`, userId);
+        log('LibraryDirectoryTreeReadModel.query()', 'read', `directory tree`, userId);
 
         return payload;
     }
@@ -38,7 +37,6 @@ export default class LibraryDirectoryTreeReadModel {
      * This method denormalizes the LibraryDirectoryTree domain events.
      * 
      * @private 
-     * @memberof LibraryDirectoryTreeReadModel
      */
     #denormalize(event: LibraryTraversedEvent) {
         this.cache = event.payload;

@@ -16,11 +16,10 @@ class BrokerSingleton extends EventEmitter {
      * Publish a command or event to the broker.
      * 
      * @param {BrokerTypes} unit - The command or event to publish.
-     * @memberof BrokerSingleton
      */
     pub(unit: BrokerTypes) {
         if (unit) {
-            // log('Broker', 'emit', unit.type);
+            // console.log('Broker', 'emit', unit.type);
             super.emit(unit.type, unit);
         }
     }
@@ -30,7 +29,6 @@ class BrokerSingleton extends EventEmitter {
      * 
      * @param {K | K[]} type - The type of command or event to subscribe to.
      * @param {(unit: Extract<BrokerTypes, { type: K }>) => void} listener - The callback function to execute when the command or event is published.
-     * @memberof BrokerSingleton
      */
     sub<K extends BrokerTypes['type']>(
         type: K | K[],
@@ -38,7 +36,7 @@ class BrokerSingleton extends EventEmitter {
     ) {
         if (!Array.isArray(type)) type = [type];
         type.forEach(t => {
-            // log('Broker', 'subscribe', t);
+            // console.log('Broker', 'subscribe', t);
             this.on(t, listener);
         });
     }

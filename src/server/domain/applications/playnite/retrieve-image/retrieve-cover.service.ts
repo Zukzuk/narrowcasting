@@ -3,6 +3,7 @@ import path from 'path';
 import sharp from 'sharp';
 import unzipper from 'unzipper';
 import { UrlError } from '../../../../utils.js';
+import { PLAYNITE_BACKUP_ORIGIN } from '../../../../config.js';
 
 export interface IPlayniteGamesContainer {
     name: string;
@@ -12,14 +13,11 @@ export interface IPlayniteGamesContainer {
 /**
  * Service to fetch game cover images from a Playnite backup folder.
  * 
- * @class GamesImageService
+ * @class RetrieveCoverService
  */
-export default class GamesImageService {
+export default class RetrieveCoverService {
 
-    constructor(
-        private PLAYNITE_BACKUP_ORIGIN: string,
-        private PLAYNITE_BACKUP_IMAGE_FOLDER: string,
-    ) { }
+    constructor() { }
 
     // TODO: !! Should read from .zip file instead of the extracted folder
     unzip = async (): Promise<void> => {
@@ -48,10 +46,9 @@ export default class GamesImageService {
      * Fetches the games data from the Playnite backup folder.
      * 
      * @returns {IPlayniteGamesContainer[]}
-     * @memberof GamesImageService
      */
     fetchGamesData = (): IPlayniteGamesContainer[] => {
-        const resolvedPath = path.resolve(this.PLAYNITE_BACKUP_ORIGIN);
+        const resolvedPath = path.resolve(PLAYNITE_BACKUP_ORIGIN);
 
         try {
             const subfolders: IPlayniteGamesContainer[] = [];
@@ -77,7 +74,6 @@ export default class GamesImageService {
      * 
      * @param {string} folderPath
      * @returns {Promise<Buffer>}
-     * @memberof GamesImageService
      */
     fetchImage = async (folderPath: string): Promise<Buffer> => {
         const resolvedPath = path.resolve(folderPath);

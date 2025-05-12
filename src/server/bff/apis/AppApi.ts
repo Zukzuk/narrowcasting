@@ -4,6 +4,7 @@ import SelectRandomImageCommand from '../../domain/commands/SelectRandomImageCom
 import VersionReadModel from '../readmodels/VersionReadModel.js';
 import ErrorReadModel from '../readmodels/ErrorReadModel.js';
 import ImageReadModel from '../readmodels/ImageReadModel.js';
+import RandomizedListReadModel from '../readmodels/RandomizedListReadModel.js';
 
 import broker from '../../infrastructure/BrokerSingleton.js';
 const router = express.Router();
@@ -17,6 +18,7 @@ const router = express.Router();
  * @param {VersionReadModel} models.versionReadModel - The VersionReadModel instance
  * @param {ErrorReadModel} models.errorReadModel - The ErrorReadModel instance
  * @param {ImageReadModel} models.imageReadModel - The ImageReadModel instance
+ * @param {RandomizedListReadModel} models.randomizedListReadModel - The RandomizedListReadModel instance
  * @returns {Object} - The router object
  */
 export default function AppApi(
@@ -26,12 +28,14 @@ export default function AppApi(
         versionReadModel: VersionReadModel,
         errorReadModel: ErrorReadModel,
         imageReadModel: ImageReadModel,
+        randomizedListReadModel: RandomizedListReadModel,
     }
 ) {
     const {
         versionReadModel,
         errorReadModel,
         imageReadModel,
+        randomizedListReadModel,
     } = models;
 
     /////////// COMMANDS /////////////
@@ -74,7 +78,7 @@ export default function AppApi(
 
         try {
             const payload = { userId: req.session.userId || APP_SESSION_SECRET, page, interval, startTime: Date.now() };
-            log('AppApi.post', 'publish', SelectRandomImageCommand.type);
+            log('AppApi.post()', 'publish', SelectRandomImageCommand.type);
             broker.pub(new SelectRandomImageCommand(payload));
             res.status(202).type('text').send('ok');
         } catch (error: any) {
@@ -122,7 +126,7 @@ export default function AppApi(
     router.get('/query/login', (req, res) => {
 
         // TODO: Should add authorization to the app
-        
+
         // Once a user has authenticated/identified themselves,
         // we assign a userId to their session:
         req.session.userId = USER_SESSION_SECRET;
@@ -151,7 +155,7 @@ export default function AppApi(
      */
     router.get('/query/version', async (req: any, res: any) => {
         try {
-            log('AppApi.get', 'query', 'versionReadModel');
+            log('AppApi.get()', 'query', 'versionReadModel');
             const response = await versionReadModel.query();
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.type('text').send(response); // Send as plain text
@@ -182,7 +186,7 @@ export default function AppApi(
      */
     router.get('/query/errors', async (req: any, res: any) => {
         try {
-            log('AppApi.get', 'query', 'errorReadModel');
+            log('AppApi.get()', 'query', 'errorReadModel');
             const response = await errorReadModel.query();
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.type('text').send(JSON.stringify(response, null, 2)); // Send as plain text
@@ -211,7 +215,7 @@ export default function AppApi(
      */
     router.get('/query/library/images', async (req: any, res: any) => {
         try {
-            log('AppApi.get', 'query', 'latest from imageReadModel');
+            log('AppApi.get()', 'query', 'latest from imageReadModel');
             const response = await imageReadModel.query({ userId: req.session.userId || APP_SESSION_SECRET, mediaType: 'latest' });
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.set('X-Custom-Image-URL', response.url);
@@ -220,6 +224,35 @@ export default function AppApi(
 
         } catch (error: any) {
             handleError(error, res, "Error requesting image");
+        }
+    });
+
+    /**
+     * @openapi
+     * /api/query/library/randomizedlist:
+     *   get:
+     *     tags: 
+     *       - query/library
+     *     summary: Request library randomized list
+     *     description: Initiates a fetch of library randomized image list
+     *     responses:
+     *       200:
+     *         description: Successfully fetched data
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *       500:
+     *         description: Internal Server Error or no valid content found
+     */
+    router.get('/query/library/randomizedlist', async (req: any, res: any) => {
+        try {
+            log('ComicsApi.get()', 'query', 'randomized list from randomListReadModel');
+            const response = await randomizedListReadModel.query({ userId: req.session.userId || APP_SESSION_SECRET });
+            if (!response) return res.status(500).json({ error: "No valid content found" });
+            res.json(response);
+        } catch (error: any) {
+            handleError(error, res, "Error requesting comics directory tree");
         }
     });
 

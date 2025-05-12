@@ -24,7 +24,6 @@ export default class TraverseLibraryAggregateRoot {
      * 
      * @param {TraverseLibraryCommand} command
      * @returns {(Promise<LibraryTraversedEvent | LibraryTraversalFailedEvent>)}
-     * @memberof TraverseLibraryAggregateRoot
      */
     async consume(command: TraverseLibraryCommand): Promise<LibraryTraversedEvent | LibraryTraversalFailedEvent> {
         

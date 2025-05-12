@@ -14,7 +14,6 @@ export default class ImageOptimizeService {
      * @param {Buffer} image The image to optimize
      * @param {number} [quality=80] The quality of the image
      * @returns {Promise<{ optimizedImage: Buffer, contentType: string }>}
-     * @memberof ImageOptimizeService
      */
     async webp(image: Buffer, quality: number = 80): Promise<{ optimizedImage: Buffer, contentType: string }> {
         // Use sharp to resize and optimize the image for 4K

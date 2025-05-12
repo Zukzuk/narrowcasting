@@ -79,7 +79,7 @@ export default function ComicsApi(
 
         try {
             const payload = { userId: req.session.userId || APP_SESSION_SECRET, library: startDir };
-            log('ComicsApi.post', 'publish', TraverseLibraryCommand.type);
+            log('ComicsApi.post()', 'publish', TraverseLibraryCommand.type);
             broker.pub(new TraverseLibraryCommand(payload));
             res.status(202).type('text').send('ok');
         } catch (error: any) {
@@ -119,7 +119,7 @@ export default function ComicsApi(
 
         try {
             const payload = { userId: req.session.userId || APP_SESSION_SECRET, endpoint };
-            log('ComicsApi.post', 'publish', CrawlEndpointCommand.type);
+            log('ComicsApi.post()', 'publish', CrawlEndpointCommand.type);
             broker.pub(new CrawlEndpointCommand(payload));
             
             // broker.pub(new CrawlEndpointCommand({ userId: APP_SESSION_SECRET, endpoint: 'series' }));
@@ -160,7 +160,7 @@ export default function ComicsApi(
     router.get('/query/comics/series', async (req: any, res: any) => {
         const { search } = req.query;
         try {
-            log('ComicsApi.get', 'query', 'series from comicsCrawlReadModel');
+            log('ComicsApi.get()', 'query', 'series from comicsCrawlReadModel');
             const response = await comicsCrawlReadModel.query({ userId: req.session.userId || APP_SESSION_SECRET, endpoint: 'series', search });
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.json(response);
@@ -196,7 +196,7 @@ export default function ComicsApi(
     router.get('/query/comics/collections', async (req: any, res: any) => {
         const { search } = req.query;
         try {
-            log('ComicsApi.get', 'query', 'collections from comicsCrawlReadModel');
+            log('ComicsApi.get()', 'query', 'collections from comicsCrawlReadModel');
             const response = await comicsCrawlReadModel.query({ userId: req.session.userId || APP_SESSION_SECRET, endpoint: 'collections', search });
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.json(response);
@@ -225,7 +225,7 @@ export default function ComicsApi(
      */
     router.get('/query/comics/dirtree', async (req: any, res: any) => {
         try {
-            log('ComicsApi.get', 'query', 'directory tree from comicsDirectoryTreeReadModel');
+            log('ComicsApi.get()', 'query', 'directory tree from comicsDirectoryTreeReadModel');
             const response = await libraryDirectoryTreeReadModel.query({ userId: req.session.userId || APP_SESSION_SECRET });
             if (!response) return res.status(500).json({ error: "No valid content found" });
             res.json(response);

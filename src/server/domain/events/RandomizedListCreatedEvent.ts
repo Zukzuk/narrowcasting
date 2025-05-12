@@ -1,4 +1,5 @@
 import { WithTimestamp } from "../annotations/index.js";
+import { IWeightedCache } from "../applications/narrowcasting/ImageIndexRepository.js";
 import { ISelectRandomImagePayload } from "../commands/SelectRandomImageCommand.js";
 
 export const RANDOMIZED_LIST_CREATED_EVENT = 'RANDOMIZED_LIST_CREATED_EVENT' as const;
@@ -10,6 +11,7 @@ export default class RandomizedListCreatedEvent {
 
     constructor(
         public payload: ISelectRandomImagePayload,
+        public weightedList: IWeightedCache[],
         public timestamp?: string
     ) {}
 }

@@ -1,49 +1,47 @@
-import { KOMGA_ORIGIN } from '../../../../config.js';
 import RetrieveImageCommand from '../../../commands/RetrieveImageCommand.js';
 import ImageRetrievedEvent from '../../../events/ImageRetrievedEvent.js';
 import ImageRetrievalFailedEvent from '../../../events/ImageRetrievalFailedEvent.js';
 import RetryImageRetrievalEvent from '../../../events/RetryImageRetrievalEvent.js';
-import RetrievePageService from './retrieve-page.service.js';
+import RetrieveCoverService, { IPlayniteGamesContainer } from './retrieve-cover.service.js';
 import ImageOptimizeService from '../../services/ImageOptimizeService.js';
 import { UrlError } from '../../../../utils.js';
 
-export enum EKomgaMediaType {
-    Comics = "comics",
+export enum EPlayniteMediaType {
+    Games = "games",
 }
 
-export type TKomgaImageData = {
+export type TPlayniteImageData = {
     image: Buffer;
     contentType: string;
     url: string;
     index: number;
-    page: number;
 }
 
 /**
- * Aggregate root for retrieving comic images from Komga.
+ * Aggregate root for retrieving comic images from Playnite.
  * 
- * @class RetrieveKomgaImageAggregateRoot
+ * @class RetrievePlayniteImageAggregateRoot
  */
-export default class RetrieveKomgaImageAggregateRoot {
+export default class RetrievePlayniteImageAggregateRoot {
     private command: RetrieveImageCommand;
-    private data: TKomgaImageData | null = null;
-    private uncommittedData: TKomgaImageData | null = null;
+    private data: TPlayniteImageData | null = null;
+    private uncommittedData: TPlayniteImageData | null = null;
     private raisedEvents: Array<ImageRetrievedEvent | RetryImageRetrievalEvent | ImageRetrievalFailedEvent> = [];
 
-    private retrievePageService: RetrievePageService;
+    private retrieveCoverService: RetrieveCoverService;
     private imageOptimizeService: ImageOptimizeService;
 
     constructor(command: RetrieveImageCommand) {
         this.command = command;
-        this.retrievePageService = new RetrievePageService();
+        this.retrieveCoverService = new RetrieveCoverService();
         this.imageOptimizeService = new ImageOptimizeService();
     }
 
-    set(data: TKomgaImageData | null): void {
+    set(data: TPlayniteImageData | null): void {
         this.data = data;
     }
 
-    get(): TKomgaImageData | null {
+    get(): TPlayniteImageData | null {
         return this.data;
     }
 
@@ -51,7 +49,7 @@ export default class RetrieveKomgaImageAggregateRoot {
         return this.uncommittedData !== null && !!Object.keys(this.uncommittedData).length;
     }
 
-    getUncommittedData(): TKomgaImageData | null {
+    getUncommittedData(): TPlayniteImageData | null {
         return this.uncommittedData;
     }
 
@@ -59,19 +57,16 @@ export default class RetrieveKomgaImageAggregateRoot {
         return this.raisedEvents;
     }
 
-
     async execute(): Promise<void> {
-        const { userId, index, page, interval, startTime } = this.command.payload;
-        console.log(`Retrieving image for user ${userId} from Komga: ${page}`);
-
+        const { userId, mediaType, index, page, interval, startTime } = this.command.payload;
+        const { folderPath } = this.command.metaData as IPlayniteGamesContainer;
+        console.log(`Retrieving image for user ${userId} from Playnite: ${folderPath}`);
 
         try {
-            // Get random comic
-            const bookId = await this.retrievePageService.fetchBookId(index);
             // Create URI
-            const url = `${KOMGA_ORIGIN}/book/${bookId}`
+            const url = folderPath;
             // Fetch image
-            const image = await this.retrievePageService.fetchImage(bookId, page);
+            const image = await this.retrieveCoverService.fetchImage(folderPath);
             // Optimize image
             const { optimizedImage, contentType } = await this.imageOptimizeService.webp(image as Buffer, 90);
             // Set uncommitted data
@@ -80,7 +75,6 @@ export default class RetrieveKomgaImageAggregateRoot {
                 contentType,
                 url,
                 index,
-                page,
             }
         } catch (error: any) {
             console.error(`Error retrieving image: ${error.message}`);
@@ -97,14 +91,14 @@ export default class RetrieveKomgaImageAggregateRoot {
                 console.warn(`No retry attempted, not enough time remaining in interval (${remainingTime}ms).`);
                 error = error as UrlError;
                 const { message, url } = error;
-                const { mediaType } = this.command.payload;
+
                 const event = new ImageRetrievalFailedEvent(message, mediaType, url);
                 this.raisedEvents.push(event);
             }
         }
     }
 
-    async update(payload?: TKomgaImageData | null, error?: Error): Promise<void> {
+    async update(payload?: TPlayniteImageData | null, error?: Error): Promise<void> {
         const { userId, mediaType } = this.command.payload;
         if (error) {
             const { message } = error;

@@ -19,6 +19,7 @@ export default class RandomImageSelectedEvent {
 
     constructor(
         public payload: IRandomImageSelectedPayload,
+        public metaData?: any,
         public timestamp?: string
     ) {}
 }

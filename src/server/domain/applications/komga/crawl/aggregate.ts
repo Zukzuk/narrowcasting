@@ -2,18 +2,20 @@ import CrawlComicsCommand from '../../../commands/CrawlComicsCommand.js';
 import CrawlCompletedEvent from '../../../events/CrawlCompletedEvent.js';
 import CrawlFailedEvent from '../../../events/CrawlFailedEvent.js';
 import CrawlKomgaEndpointService from './crawl-endpoint.service.js';
+import { EKomgaMediaType } from '../retrieve-image/aggregate.js';
 import { log, UrlError } from '../../../../utils.js';
-import { TMediaType } from '../../../types/index.js';
 
 export default class CrawlKomgaAggregateRoot {
-    private mediaType: TMediaType = 'comics';
+    private command: CrawlComicsCommand;
+    private mediaType: EKomgaMediaType = EKomgaMediaType.Comics;
     private data: Record<string, string> | null = null;
     private uncommittedData: any | null = null;
     private raisedEvents: Array<CrawlCompletedEvent | CrawlFailedEvent> = [];
 
     private service: CrawlKomgaEndpointService;
 
-    constructor() {
+    constructor(command: CrawlComicsCommand) {
+        this.command = command;
         this.service = new CrawlKomgaEndpointService();
     }
 
@@ -45,8 +47,8 @@ export default class CrawlKomgaAggregateRoot {
         return this.raisedEvents;
     }
 
-    async execute(command: CrawlComicsCommand): Promise<void> {
-        const { endpoint } = command.payload;
+    async execute(): Promise<void> {
+        const { endpoint } = this.command.payload;
 
         try {
             this.uncommittedData = await this.service.crawl(endpoint);
@@ -59,8 +61,8 @@ export default class CrawlKomgaAggregateRoot {
         }
     }
 
-    async update(command: CrawlComicsCommand, payload?: Record<string, string>, error?: Error): Promise<void> {
-        const { endpoint } = command.payload;
+    async update(payload?: Record<string, string>, error?: Error): Promise<void> {
+        const { endpoint } = this.command.payload;
 
         if (error) {
             const event = new CrawlFailedEvent(error, endpoint, this.mediaType);

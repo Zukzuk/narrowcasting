@@ -13,7 +13,6 @@ export default class VersionReadModel {
 
     /**
      * @returns {string}
-     * @memberof VersionReadModel
      */
     query() {
         return this.version || '0.0.0';

@@ -1,16 +1,15 @@
 import RetrieveImageCommand from '../../../commands/RetrieveImageCommand.js';
-import RetrieveImageKomgaAggregateRoot, { TKomgaImageData } from './aggregate.js';
-import { EKomgaMediaType } from './aggregate.js';
+import RetrieveImagePlexAggregateRoot, { TPlexImageData } from './aggregate.js';
 import { log } from '../../../../utils.js';
 
 /**
- * This repository is used to store the retrieved images from Komga.
+ * This repository is used to store the retrieved images from Plex.
  * 
- * @class RetrieveImageKomgaRepository
+ * @class RetrieveImagePlexRepository
  */
-export default class RetrieveImageKomgaRepository {
-    private cache: { [userId: string]: TKomgaImageData } = {};
-    private retrieveImage: RetrieveImageKomgaAggregateRoot = undefined as any;
+export default class RetrieveImagePlexRepository {
+    private cache: { [userId: string]: TPlexImageData } = {};
+    private retrieveImage: RetrieveImagePlexAggregateRoot = undefined as any;
 
     constructor() {}
 
@@ -18,14 +17,14 @@ export default class RetrieveImageKomgaRepository {
      * Retrieve data from the cache and return the aggregate.
      * 
      * @param {RetrieveImageCommand} command
-     * @returns {Promise<RetrieveImageKomgaAggregateRoot>}
+     * @returns {Promise<RetrieveImagePlexAggregateRoot>}
      */
-    async get(command: RetrieveImageCommand): Promise<RetrieveImageKomgaAggregateRoot> {
+    async get(command: RetrieveImageCommand): Promise<RetrieveImagePlexAggregateRoot> {
         const _cache = this.#read(command);
-        this.retrieveImage = new RetrieveImageKomgaAggregateRoot(command);
+        this.retrieveImage = new RetrieveImagePlexAggregateRoot(command);
         this.retrieveImage.set(_cache);
 
-        if (_cache) log('RetrieveImageKomgaRepository.get()', 'read', `${_cache.url}`);
+        if (_cache) log('RetrieveImagePlexRepository.get()', 'read', `${_cache.url}`);
         return this.retrieveImage;
     }
 
@@ -33,9 +32,9 @@ export default class RetrieveImageKomgaRepository {
      * Commit the data to the cache and update the aggregate.
      * 
      * @param {RetrieveImageCommand} command
-     * @returns {Promise<RetrieveImageKomgaAggregateRoot>}
+     * @returns {Promise<RetrieveImagePlexAggregateRoot>}
      */
-    async commit(command: RetrieveImageCommand): Promise<RetrieveImageKomgaAggregateRoot> {
+    async commit(command: RetrieveImageCommand): Promise<RetrieveImagePlexAggregateRoot> {
         try {
             // Save the uncommitted data to the cache.
             const uncommittedData = this.retrieveImage.getUncommittedData();
@@ -44,7 +43,7 @@ export default class RetrieveImageKomgaRepository {
                 // Update the aggregate.
                 const _cache = this.#read(command);
                 await this.retrieveImage.update(_cache);
-                log('RetrieveImageKomgaRepository.commmit()', 'write', `${_cache.url}`);
+                log('RetrieveImagePlexRepository.commmit()', 'write', `${_cache.url}`);
             }
             return this.retrieveImage;
         } catch (error: any) {
@@ -59,9 +58,9 @@ export default class RetrieveImageKomgaRepository {
      * 
      * @private
      * @param {RetrieveImageCommand} command
-     * @returns {TKomgaImageData}
+     * @returns {TImageData}
      */
-    #read(command: RetrieveImageCommand): TKomgaImageData {
+    #read(command: RetrieveImageCommand): TPlexImageData {
         const { userId } = command.payload;
         return this.cache[userId];
     }
@@ -71,9 +70,9 @@ export default class RetrieveImageKomgaRepository {
      * 
      * @private
      * @param {RetrieveImageCommand} command
-     * @param {TKomgaImageData} uncommittedData
+     * @param {TPlexImageData} uncommittedData
      */
-    #update(command: RetrieveImageCommand, uncommittedData: TKomgaImageData): void {
+    #update(command: RetrieveImageCommand, uncommittedData: TPlexImageData): void {
         const { userId } = command.payload;
         this.cache[userId] = uncommittedData;
     }

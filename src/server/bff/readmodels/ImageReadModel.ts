@@ -25,11 +25,11 @@ export default class ImageReadModel {
 
     constructor() {
         // subscribe to events
-        log('ImageReadModel.constructor', 'subscribe', `
+        log('ImageReadModel.constructor()', 'subscribe', `
             \t${IMAGE_RETRIEVED_EVENT}
         `);
         broker.sub(IMAGE_RETRIEVED_EVENT, event => {
-            log('ImageReadModel', 'listen', `${event.type}: ${event.payload.mediaType}`);
+            log('Broker.sub()', 'listen', `${event.type}: ${event.payload.mediaType}`);
             this.#denormalize(event.payload);
         });
     }
@@ -39,7 +39,6 @@ export default class ImageReadModel {
      * 
      * @param {IImageQuery} { userId, mediaType }
      * @returns {IImageRetrievedPayload | null}
-     * @memberof ImageReadModel
      */
     query({ userId, mediaType }: IImageQuery): IImageRetrievedPayload | null {
         const userCache = this.#getUserCache(userId);
@@ -47,7 +46,7 @@ export default class ImageReadModel {
         if (!userCache[mediaType]) return null;
         const payload = userCache[mediaType][this.#last(userCache, mediaType)];
 
-        log('ImageReadModel.query', 'read', mediaType, userId);
+        log('ImageReadModel.query()', 'read', mediaType, userId);
 
         return payload;
     }
@@ -57,7 +56,6 @@ export default class ImageReadModel {
      * 
      * @private
      * @param {IImageQuery} { userId, mediaType }
-     * @memberof ImageReadModel
      */
     #denormalize(payload: IImageRetrievedPayload) {
         const userCache = this.#getUserCache(payload.userId);
@@ -79,7 +77,6 @@ export default class ImageReadModel {
      * @param {ICacheData} userCache
      * @param {(TMediaType | 'latest')} mediaType
      * @returns {number}
-     * @memberof ImageReadModel
      */
     #last(userCache: ICacheData, mediaType: TMediaType | 'latest'): number {
         return userCache[mediaType].length - 1;
@@ -91,7 +88,6 @@ export default class ImageReadModel {
      * @private
      * @param {string} userId
      * @returns {ICacheData}
-     * @memberof ImageReadModel
      */
     #getUserCache(userId: string): ICacheData {
         if (!this.cache[userId]) {

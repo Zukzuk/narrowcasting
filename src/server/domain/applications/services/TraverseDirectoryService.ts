@@ -26,7 +26,6 @@ export default class TraverseDirectoryService {
      * 
      * @param {string} dirPath
      * @returns {Promise<DirectoryNode>}
-     * @memberof TraverseDirectoryService
      */
     async toJson(dirPath: string): Promise<DirectoryNode> {
         const stats = await fs.stat(dirPath);

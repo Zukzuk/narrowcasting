@@ -9,6 +9,7 @@ import ComicsCrawlReadModel from '../readmodels/ComicsCrawlReadModel.js';
 import LibraryDirectoryTreeReadModel from '../readmodels/LibraryDirectoryTreeReadModel.js';
 import ImageReadModel from '../readmodels/ImageReadModel.js';
 import TraverseLibraryCommand from '../../domain/commands/TraverseLibraryCommand.js';
+import RandomizedListReadModel from '../readmodels/RandomizedListReadModel.js';
 import CreateRandomizedListCommand from '../../domain/commands/CreateRandomizedListCommand.js';
 import CrawlEndpointCommand from '../../domain/commands/CrawlComicsCommand.js';
 import { KOMGA_TAVERSAL_ORIGIN } from '../../config.js';
@@ -26,6 +27,7 @@ class NarrowcastingSingleton {
         private comicsCrawlReadModel: ComicsCrawlReadModel,
         private libraryDirectoryTreeReadModel: LibraryDirectoryTreeReadModel,
         private imageReadModel: ImageReadModel,
+        private randomizedListReadModel: RandomizedListReadModel,
     ) { }
 
     /**
@@ -56,6 +58,7 @@ class NarrowcastingSingleton {
                 versionReadModel: this.versionReadModel,
                 errorReadModel: this.errorReadModel,
                 imageReadModel: this.imageReadModel,
+                randomizedListReadModel: this.randomizedListReadModel,
             }
         ));
         server.use(APP_API_PATH, ComicsApi(
@@ -81,7 +84,7 @@ class NarrowcastingSingleton {
     }: {
         APP_SESSION_SECRET: string,
     },) {
-        log('Narrowcasting.prewarm', 'publish', `
+        log('Narrowcasting.prewarm()', 'publish', `
             \t${CreateRandomizedListCommand.type}
             \t${TraverseLibraryCommand.type} of library: ${KOMGA_TAVERSAL_ORIGIN}
             \t${CrawlEndpointCommand.type} of endpoint: 'series'
@@ -100,4 +103,5 @@ export default new NarrowcastingSingleton(
     new ComicsCrawlReadModel(),
     new LibraryDirectoryTreeReadModel(),
     new ImageReadModel(),
+    new RandomizedListReadModel(),
 ); // Singleton instance through ES6 module caching

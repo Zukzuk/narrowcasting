@@ -1,4 +1,4 @@
-import { WithTimestamp } from "../annotations/index.js";   
+import { WithTimestamp } from "../annotations/index.js";
 import { IRandomImageSelectedPayload } from "../events/RandomImageSelectedEvent.js";
 
 export const RETRIEVE_IMAGE_COMMAND = 'RETRIEVE_IMAGE_COMMAND' as const;
@@ -10,6 +10,7 @@ export default class RandomImageCommand {
 
     constructor(
         public payload: IRandomImageSelectedPayload,
+        public metaData?: any,
         public timestamp?: string,
-    ) {}
+    ) { }
 }

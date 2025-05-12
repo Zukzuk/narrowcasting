@@ -1,6 +1,4 @@
 import { APP_CACHE_DURATION } from '../config.js';
-import RetrieveMediaCoverAggregateRoot from '../domain/applications/plex/RetrieveMediaCoverAggregateRoot.js';
-import RetrieveGamesCoverAggregateRoot from '../domain/applications/playnite/RetrieveGamesCoverAggregateRoot.js';
 import CreateRandomizedListAggregateRoot from '../domain/applications/narrowcasting/CreateRandomizedListAggregateRoot.js';
 import SelectFromRandomizedListAggregateRoot from '../domain/applications/narrowcasting/SelectFromImageListAggregateRoot.js';
 import ImageIndexRepository from '../domain/applications/narrowcasting/ImageIndexRepository.js';
@@ -23,14 +21,6 @@ class AggregateFactorySingleton {
 
     createSelectFromRandomizedList(): SelectFromRandomizedListAggregateRoot {
         return new SelectFromRandomizedListAggregateRoot(this.imageIndexRepository);
-    }
-
-    createRetrieveMediaCover(): RetrieveMediaCoverAggregateRoot {
-        return new RetrieveMediaCoverAggregateRoot(this.imageIndexRepository);
-    }
-   
-    createRetrieveGamesCover(): RetrieveGamesCoverAggregateRoot {
-        return new RetrieveGamesCoverAggregateRoot(this.imageIndexRepository);
     }
     
     createTraverseLibrary(): TraverseLibraryAggregateRoot {

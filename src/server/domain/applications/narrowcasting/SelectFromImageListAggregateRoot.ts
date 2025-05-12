@@ -1,8 +1,11 @@
+import { mediaTypesPlex } from '../../types/index.js';
 import { log } from '../../../utils.js';
 import SelectRandomImageCommand from '../../commands/SelectRandomImageCommand.js';
 import InvalidRandomListEvent from '../../events/InvalidRandomListEvent.js';
 import RandomImageSelectedEvent from '../../events/RandomImageSelectedEvent.js';
 import RandomImageSelectionFailedEvent from '../../events/RandomImageSelectionFailedEvent.js';
+import { IPlayniteGamesContainer } from '../playnite/retrieve-image/retrieve-cover.service.js';
+import { IPlexMediaContainer } from '../plex/retrieve-image/retrieve-cover.service.js';
 import ImageIndexRepository from './ImageIndexRepository.js';
 
 /**
@@ -20,7 +23,6 @@ export default class SelectFromImageListAggregateRoot {
      * 
      * @param {SelectRandomImageCommand} command
      * @returns {Promise<RandomImageSelectedEvent | RandomImageSelectionFailedEvent>}
-     * @memberof SelectFromRandomizedListAggregateRoot
      */
     async consume(command: SelectRandomImageCommand): Promise<InvalidRandomListEvent | RandomImageSelectedEvent | RandomImageSelectionFailedEvent> {
 
@@ -30,7 +32,7 @@ export default class SelectFromImageListAggregateRoot {
             // Check if library index caches are filled, else fetch data for each media type
             const hasValidCaches = this.imageIndexRepository.hasValidCaches(userId);
             const hasValidWeightedCache = this.imageIndexRepository.hasValidWeightedCache(userId);
-            
+
             if (!hasValidCaches || !hasValidWeightedCache) {
                 // Return a business event
                 return new InvalidRandomListEvent({ userId, page, interval, startTime });
@@ -38,9 +40,14 @@ export default class SelectFromImageListAggregateRoot {
 
             // Retrieve the weighted index using the repository method
             const { mediaType, index } = this.imageIndexRepository.getWeightedItem(userId);
-
+            let metaData: IPlexMediaContainer | IPlayniteGamesContainer | undefined;
+            if (mediaTypesPlex.some(type => type === mediaType)) {
+                metaData = this.imageIndexRepository.retrieveData(userId, mediaType, index) as IPlexMediaContainer;
+            } else if (mediaTypesPlex.some(type => type === mediaType)) {
+                metaData = this.imageIndexRepository.retrieveData(userId, mediaType, index) as IPlayniteGamesContainer;
+            }
             // Return a business event
-            return new RandomImageSelectedEvent({ userId, index, mediaType, page, interval, startTime });
+            return new RandomImageSelectedEvent({ userId, index, mediaType, page, interval, startTime }, metaData);
         } catch (error: any) {
             // Return failure event
             const event = new RandomImageSelectionFailedEvent(error.message, error.url);

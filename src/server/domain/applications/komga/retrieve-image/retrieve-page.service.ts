@@ -5,9 +5,9 @@ import { KOMGA_API, KOMGA_AUTH } from '../../../../config.js';
 /**
  * Service for fetching comic images from Komga.
  * 
- * @class RetrieveImageService
+ * @class RetrievePageService
  */
-export default class RetrieveImageService {
+export default class RetrievePageService {
 
     constructor() {}
 
