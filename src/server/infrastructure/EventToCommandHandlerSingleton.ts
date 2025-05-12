@@ -21,7 +21,7 @@ class EventToCommandHandlerSingleton {
         this.eventToCommandHandler = {
             [INVALID_RANDOMIZED_LIST_EVENT]: (event: InvalidRandomListEvent) => new CreateRandomizedListCommand(event.payload),
             [RANDOMIZED_LIST_CREATED_EVENT]: (event: RandomizedListCreatedEvent) => new SelectRandomImageCommand(event.payload),
-            [RANDOM_IMAGE_SELECTED_EVENT]: (event: RandomImageSelectedEvent) => new RetrieveImageCommand(event.payload),
+            [RANDOM_IMAGE_SELECTED_EVENT]: (event: RandomImageSelectedEvent) => new RetrieveImageCommand(event.payload, event.metaData),
             [RETRY_IMAGE_RETRIEVAL_EVENT]: (event: RetryImageRetrievalEvent) => new SelectRandomImageCommand(event.payload),
         };
     }

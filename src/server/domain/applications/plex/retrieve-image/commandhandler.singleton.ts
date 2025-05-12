@@ -21,7 +21,7 @@ class RetrieveImagePlexCommandhandlerSingleton {
         `);
         broker.sub(RETRIEVE_IMAGE_COMMAND, command => {
             const { mediaType } = command.payload;
-            console.log('RetrieveImagePlexCommandhandler.sub()', 'listen', `'${mediaType}'`);
+            log('RetrieveImagePlexCommandhandler.sub()', 'listen', `'${mediaType}'`);
             if (Object.values(EPlexMediaType).includes(mediaType as EPlexMediaType)) this.#handle(command);
         });
     }
@@ -48,7 +48,7 @@ class RetrieveImagePlexCommandhandlerSingleton {
 
             // Publish the events to the broker.
             for (const event of events) {
-                console.log('RetrieveImagePlexCommandhandler.#handle()', 'publish', event.type);
+                log('RetrieveImagePlexCommandhandler.#handle()', 'publish', event.type);
                 broker.pub(event);
             }
         } catch (error: any) {

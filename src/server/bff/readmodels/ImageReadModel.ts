@@ -29,7 +29,7 @@ export default class ImageReadModel {
             \t${IMAGE_RETRIEVED_EVENT}
         `);
         broker.sub(IMAGE_RETRIEVED_EVENT, event => {
-            log('Broker.sub()', 'listen', `${event.type}: ${event.payload.mediaType}`);
+            log('ImageReadModel.sub()', 'listen', `${event.type}: ${event.payload.mediaType}`);
             this.#denormalize(event.payload);
         });
     }

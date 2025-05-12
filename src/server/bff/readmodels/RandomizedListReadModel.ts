@@ -15,7 +15,7 @@ export default class RandomizedListReadModel {
             \t${RANDOMIZED_LIST_CREATED_EVENT}
         `);
         broker.sub(RANDOMIZED_LIST_CREATED_EVENT, event => {
-            log('Broker.sub()', 'listen', `${event.type}: randomized list recieved`);
+            log('RandomizedListReadModel.sub()', 'listen', `${event.type}: randomized list recieved`);
             this.#denormalize(event);
         });
     }

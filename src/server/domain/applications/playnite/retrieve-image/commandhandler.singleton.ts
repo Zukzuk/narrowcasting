@@ -21,7 +21,7 @@ class RetrieveImagePlayniteCommandhandlerSingleton {
         `);
         broker.sub(RETRIEVE_IMAGE_COMMAND, command => {
             const { mediaType } = command.payload;
-            console.log('RetrieveImagePlayniteCommandhandler.sub()', 'listen', `'${mediaType}'`);
+            log('RetrieveImagePlayniteCommandhandler.sub()', 'listen', `'${mediaType}'`);
             if (Object.values(EPlayniteMediaType).includes(mediaType as EPlayniteMediaType)) this.#handle(command);
         });
     }
@@ -48,7 +48,7 @@ class RetrieveImagePlayniteCommandhandlerSingleton {
 
             // Publish the events to the broker.
             for (const event of events) {
-                console.log('RetrieveImagePlayniteCommandhandler.#handle()', 'publish', event.type);
+                log('RetrieveImagePlayniteCommandhandler.#handle()', 'publish', event.type);
                 broker.pub(event);
             }
         } catch (error: any) {

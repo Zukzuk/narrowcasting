@@ -1,3 +1,5 @@
+import { IPlayniteGamesContainer } from "../applications/playnite/retrieve-image/retrieve-cover.service.js";
+import { IPlexMediaContainer } from "../applications/plex/retrieve-image/retrieve-cover.service.js";
 import { WithTimestamp } from "../annotations/index.js";
 import { TMediaType } from "../types/index.js";
 
@@ -19,7 +21,7 @@ export default class RandomImageSelectedEvent {
 
     constructor(
         public payload: IRandomImageSelectedPayload,
-        public metaData?: any,
+        public metaData?: IPlexMediaContainer | IPlayniteGamesContainer | undefined,
         public timestamp?: string
     ) {}
 }

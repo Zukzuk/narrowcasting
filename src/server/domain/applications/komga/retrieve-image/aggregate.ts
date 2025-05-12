@@ -62,8 +62,6 @@ export default class RetrieveKomgaImageAggregateRoot {
 
     async execute(): Promise<void> {
         const { userId, index, page, interval, startTime } = this.command.payload;
-        console.log(`Retrieving image for user ${userId} from Komga: ${page}`);
-
 
         try {
             // Get random comic

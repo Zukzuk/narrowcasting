@@ -21,7 +21,7 @@ class RetrieveImageKomgaCommandhandlerSingleton {
         `);
         broker.sub(RETRIEVE_IMAGE_COMMAND, command => { 
             const { mediaType } = command.payload;
-            console.log('RetrieveImageKomgaCommandhandler.sub()', 'listen', `'${mediaType}'`);
+            log('RetrieveImageKomgaCommandhandler.sub()', 'listen', `'${mediaType}'`);
             if (Object.values(EKomgaMediaType).includes(mediaType as EKomgaMediaType)) this.#handle(command);
         });
     }
@@ -48,7 +48,7 @@ class RetrieveImageKomgaCommandhandlerSingleton {
 
             // Publish the events to the broker.
             for (const event of events) {
-                console.log('RetrieveImageKomgaCommandhandler.#handle()', 'publish', event.type);
+                log('RetrieveImageKomgaCommandhandler.#handle()', 'publish', event.type);
                 broker.pub(event);
             }
         } catch (error: any) {

@@ -33,7 +33,7 @@ export default class ErrorReadModel {
             RANDOM_IMAGE_SELECTION_FAILED_EVENT,
             LIBRARY_TRAVERSAL_FAILED_EVENT
         ], event => {
-            log('Broker.sub()', 'listen', `${event.type}: ${event.error?.message}`);
+            log('ErrorReadModel.sub()', 'listen', `${event.type}: ${event.error?.message}`);
             this.#denormalize(event);
         });
     }

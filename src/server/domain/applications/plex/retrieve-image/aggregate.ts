@@ -65,7 +65,6 @@ export default class RetrievePlexImageAggregateRoot {
     async execute(): Promise<void> {
         const { userId, mediaType, index, page, interval, startTime } = this.command.payload;
         const { ratingKey, thumb } = this.command.metaData as IPlexMediaContainer;
-        console.log(`Retrieving image for user ${userId} from Plex: ${ratingKey}, ${thumb}`);
 
         try {
             // Create URI

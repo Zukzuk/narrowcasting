@@ -88,5 +88,5 @@ export function shuffleArray<T>(array: T[]): T[] {
 
 export function log(method:string, action: string, message: string, userId?: string ) {
     // if (APP_SHOW_LOGGING) console.log(`${userId ? userId+': ' : ''}${method}: ${action} -> ${message}`);
-    // if (APP_SHOW_LOGGING) console.log(`${method}: ${action} -> ${message}`);
+    if (APP_SHOW_LOGGING) console.log(`${method}: ${action} -> ${message}`);
 }

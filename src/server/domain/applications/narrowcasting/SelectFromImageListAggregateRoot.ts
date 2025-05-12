@@ -1,4 +1,4 @@
-import { mediaTypesPlex } from '../../types/index.js';
+import { mediaTypesPlex, mediaTypesPlaynite } from '../../types/index.js';
 import { log } from '../../../utils.js';
 import SelectRandomImageCommand from '../../commands/SelectRandomImageCommand.js';
 import InvalidRandomListEvent from '../../events/InvalidRandomListEvent.js';
@@ -43,7 +43,7 @@ export default class SelectFromImageListAggregateRoot {
             let metaData: IPlexMediaContainer | IPlayniteGamesContainer | undefined;
             if (mediaTypesPlex.some(type => type === mediaType)) {
                 metaData = this.imageIndexRepository.retrieveData(userId, mediaType, index) as IPlexMediaContainer;
-            } else if (mediaTypesPlex.some(type => type === mediaType)) {
+            } else if (mediaTypesPlaynite.some(type => type === mediaType)) {
                 metaData = this.imageIndexRepository.retrieveData(userId, mediaType, index) as IPlayniteGamesContainer;
             }
             // Return a business event

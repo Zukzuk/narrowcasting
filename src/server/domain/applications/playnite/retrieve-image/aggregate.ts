@@ -60,7 +60,6 @@ export default class RetrievePlayniteImageAggregateRoot {
     async execute(): Promise<void> {
         const { userId, mediaType, index, page, interval, startTime } = this.command.payload;
         const { folderPath } = this.command.metaData as IPlayniteGamesContainer;
-        console.log(`Retrieving image for user ${userId} from Playnite: ${folderPath}`);
 
         try {
             // Create URI
