@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.15.0](https://github.com/Zukzuk/narrowcasting/compare/v4.14.8...v4.15.0) (2025-05-12)
+
+
+### Features
+
+* added all apps to cqrs pattern ([ea527a0](https://github.com/Zukzuk/narrowcasting/commit/ea527a09d49f954a6fecb758981cb64cc2376324))
+
 ### [4.14.8](https://github.com/Zukzuk/narrowcasting/compare/v4.14.7...v4.14.8) (2025-05-10)
 
 ### [4.14.7](https://github.com/Zukzuk/narrowcasting/compare/v4.14.6...v4.14.7) (2025-05-10)
