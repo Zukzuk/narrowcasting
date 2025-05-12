@@ -1,6 +1,6 @@
 {
     "name": "narrowcasting-app",
-    "version": "4.15.0",
+    "version": "4.15.1",
     "description": "Narrowcast images from your favorite media",
     "type": "module",
     "main": "dist/server/index.js",

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.15.1](https://github.com/Zukzuk/narrowcasting/compare/v4.15.0...v4.15.1) (2025-05-12)
+
+
+### Bug Fixes
+
+* fixed issue wherre metaData was empty for certain applications ([c0663e2](https://github.com/Zukzuk/narrowcasting/commit/c0663e28168ea17b0756cd14f2240e5a81a38fec))
+
 ## [4.15.0](https://github.com/Zukzuk/narrowcasting/compare/v4.14.8...v4.15.0) (2025-05-12)
 
 
