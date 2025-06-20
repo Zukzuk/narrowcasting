@@ -12,6 +12,7 @@ dotenv.config({ path: path.resolve(__dirname, '../deploy/public.env') });
 
 function main() {
   const { version: APP_VERSION_TAG } = data;
+  
   if (!APP_VERSION_TAG) {
     console.error("Error: No version found in package.json. Please specify a version.");
     process.exit(1);
