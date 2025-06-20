@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.16.1](https://github.com/Zukzuk/narrowcasting/compare/v4.16.0...v4.16.1) (2025-06-20)
+
+
+### Bug Fixes
+
+* added new fix ([35341d6](https://github.com/Zukzuk/narrowcasting/commit/35341d6ac9dac5ab3d0e0c0bb302c6d0f7b3f2fa))
+* fixed a bug where the image was not correctly loaded from the playnite .zip ([f588391](https://github.com/Zukzuk/narrowcasting/commit/f5883911aaccf97a46a80a310a63fc91c591edde))
+
 ## [4.16.0](https://github.com/Zukzuk/narrowcasting/compare/v4.15.1...v4.16.0) (2025-06-20)
 
 
