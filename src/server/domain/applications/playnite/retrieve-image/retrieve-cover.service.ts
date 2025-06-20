@@ -66,63 +66,65 @@ export default class RetrieveCoverService {
     };
 
     /**
-   * Fetches the largest portrait image from the given folder INSIDE the specified ZIP.
-   *
-   * @param internalDir   Name of the folder inside the ZIP (e.g. "3b462f0b-9f72-4f52-9cb1-50aeb43d794c")
-   * @returns             Promise<Buffer> of the largest portrait image
-   */
+     * Fetches the largest portrait image from the given folder INSIDE the specified ZIP.
+     *
+     * @param internalDir   Name of the folder inside the ZIP (e.g. "3b462f0b-9f72-4f52-9cb1-50aeb43d794c")
+     * @returns             Promise<Buffer> of the largest portrait image
+     */
     fetchImage = async (internalDir: string): Promise<Buffer> => {
         const latestZipPath = await this.#getLatestZipPath();
+        const normalize = (str: string) => str.replace(/\\/g, "/");
+        internalDir = normalize(internalDir).replace(/\/+$/, "");
 
         try {
             const directory = await unzipper.Open.file(latestZipPath);
-
-            // 1) collect your image entries
             const imageEntries = directory.files.filter((entry) => {
                 if (entry.type !== "File") return false;
-                const p = entry.path.replace(/\\/g, "/");
-                if (!p.startsWith(`${internalDir}/`)) return false;
+
+                const p = normalize(entry.path);
+                // split into ["PlayniteBackup-…", "libraryfiles", "<ID>", "file.jpg"]
                 const parts = p.split("/");
-                return parts.length === 3 && /\.(jpe?g|png|webp)$/i.test(parts[2]);
+
+                // find the "libraryfiles" segment
+                const libIdx = parts.indexOf("libraryfiles");
+                if (libIdx < 0) return false;
+
+                // ensure the next segment is your game ID
+                if (parts[libIdx + 1] !== internalDir.split("/")[1]) return false;
+
+                // ensure exactly one filename under that folder (no deeper nesting)
+                // parts = [..., "libraryfiles", "<ID>", "filename.jpg"]
+                if (parts.length !== libIdx + 3) return false;
+
+                // finally, check it’s an image
+                return /\.(jpe?g|png|webp)$/i.test(parts[libIdx + 2]);
             });
 
             let largestBuffer: Buffer | null = null;
             let largestSize = 0;
 
-            // 2) process each entry safely
             for (const entry of imageEntries) {
                 try {
                     const buf = await entry.buffer();
                     const meta = await sharp(buf).metadata();
-
-                    if (
-                        meta.width! > 0 &&
-                        meta.height! > meta.width! &&
-                        buf.length > largestSize
-                    ) {
+                    if (meta.width! < meta.height! && buf.length > largestSize) {
                         largestBuffer = buf;
                         largestSize = buf.length;
                     }
                 } catch (fileErr: any) {
-                    console.warn(
-                        `Skipping ${entry.path} due to error parsing image: ${fileErr.message}`
-                    );
-                    // continue to the next entry
+                    console.warn(`Skipping ${entry.path}: ${fileErr.message}`);
                 }
             }
 
             if (!largestBuffer) {
                 throw new Error(
-                    `No portrait images found in "${internalDir}/" of ${latestZipPath}`
+                    `No portrait images found in "${internalDir}" of ${latestZipPath}`
                 );
             }
 
             return largestBuffer;
         } catch (err: any) {
-            throw new UrlError(
-                `Failed fetchImageFromZip: ${err.message}`,
-                latestZipPath
-            );
+            throw new UrlError(`Failed fetchImageFromZip: ${err.message}`, latestZipPath);
         }
     };
 

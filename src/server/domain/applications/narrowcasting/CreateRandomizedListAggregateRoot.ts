@@ -118,6 +118,7 @@ export default class CreateRandomizedListAggregateRoot {
 
         // Flatten the sets into a single weighted list
         const weightedCache: IWeightedCache[] = weightedSets.flat();
+        // const filteredCache = weightedCache.filter(entry => entry.mediaType !== "comics");
 
         // Save the weighted list to cache
         this.imageIndexRepository.saveWeighted(userId, weightedCache);
