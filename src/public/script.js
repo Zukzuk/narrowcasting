@@ -51,9 +51,9 @@ async function displayNextImage(page, interval) {
         adjustAspectRatio(inactiveImage);
         const value = calculateLoaderColor(inactiveImage);
         resetLoaderAnimation(value, interval);
+        toggleVisibility(activeImage, inactiveImage);
+        currentImage = currentImage === 1 ? 2 : 1;
     };
-    toggleVisibility(activeImage, inactiveImage);
-    currentImage = currentImage === 1 ? 2 : 1;
 }
 
 ///////////////////////////////////////////////////////
