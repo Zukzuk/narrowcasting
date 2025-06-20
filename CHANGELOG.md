@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.16.3](https://github.com/Zukzuk/narrowcasting/compare/v4.16.2...v4.16.3) (2025-06-20)
+
+
+### Bug Fixes
+
+* fixed dir traversing script ([4021025](https://github.com/Zukzuk/narrowcasting/commit/4021025c45980bdf6aa164c4bf80a555ad6aeaae))
+
 ### [4.16.2](https://github.com/Zukzuk/narrowcasting/compare/v4.16.1...v4.16.2) (2025-06-20)
 
 
