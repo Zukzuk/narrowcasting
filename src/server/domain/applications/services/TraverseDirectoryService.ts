@@ -13,27 +13,27 @@ export interface DirectoryNode {
 
 /** Thrown when the given path isn’t a directory. */
 class NotADirectoryError extends Error {
-  constructor(dirPath: string) {
-    super(`Path is not a directory: ${dirPath}`);
-    this.name = 'NotADirectoryError';
-  }
+    constructor(dirPath: string) {
+        super(`Path is not a directory: ${dirPath}`);
+        this.name = 'NotADirectoryError';
+    }
 }
 
 /** Thrown when a directory (or its subtree) contains no matching files/folders. */
 class EmptyDirectoryError extends Error {
-  constructor(dirPath: string) {
-    super(`Directory is empty (no .cbr/.cbz files or subdirs): ${dirPath}`);
-    this.name = 'EmptyDirectoryError';
-  }
+    constructor(dirPath: string) {
+        super(`Directory is empty (no .cbr/.cbz files or subdirs): ${dirPath}`);
+        this.name = 'EmptyDirectoryError';
+    }
 }
 
 /** Wraps any unexpected errors during traversal to add context. */
 class TraverseError extends Error {
-  constructor(dirPath: string, original: Error) {
-    super(`Error traversing "${dirPath}": ${original.message}`);
-    this.name = 'TraverseError';
-    this.stack = original.stack;
-  }
+    constructor(dirPath: string, original: Error) {
+        super(`Error traversing "${dirPath}": ${original.message}`);
+        this.name = 'TraverseError';
+        this.stack = original.stack;
+    }
 }
 
 // Define system folders or files to exclude
@@ -69,9 +69,9 @@ export default class TraverseDirectoryService {
             throw new NotADirectoryError(dirPath);
         }
 
-        let dir: Dir;
+        let dirHandle: Dir;
         try {
-            dir = await fs.opendir(dirPath);
+            dirHandle = await fs.opendir(dirPath);
         } catch (err: any) {
             throw new TraverseError(dirPath, err);
         }
@@ -79,42 +79,45 @@ export default class TraverseDirectoryService {
         const directories: DirectoryNode[] = [];
         const files: FileNode[] = [];
 
-        for await (const entry of dir) {
-            const name = entry.name;
-            // Skip system folders or files
-            if (SYSTEM_FOLDERS.includes(name)) continue;
+        try {
+            let entry;
+            // Manual read loop to ensure single close
+            // `for-await-of` auto-closes on break/error, which can lead to double-close errors
+            while ((entry = await dirHandle.read()) !== null) {
+                const name = entry.name;
+                if (SYSTEM_FOLDERS.includes(name)) continue;
 
-            const fullPath = path.join(dirPath, name);
+                const fullPath = path.join(dirPath, name);
 
-            try {
-                if (entry.isDirectory()) {
-                    const nested = await this.toJson(fullPath, options);
-                    if (nested) {
-                        directories.push(nested);
-                    }
-                } else if (entry.isFile()) {
-                    // Only accept .cbr/.cbz
-                    if (/\.(cbr|cbz)$/i.test(name)) {
+                try {
+                    if (entry.isDirectory()) {
+                        const nested = await this.toJson(fullPath, options);
+                        if (nested) {
+                            directories.push(nested);
+                        }
+                    } else if (entry.isFile() && /\.(cbr|cbz)$/i.test(name)) {
                         files.push({ file: name });
                     }
+                } catch (err: any) {
+                    if (err instanceof EmptyDirectoryError && options.ignoreEmpty) {
+                        continue;
+                    }
+                    throw err;
                 }
-            } catch (err: any) {
-                // If a child-dir is empty and user doesn’t want to throw, skip silently
-                if (err instanceof EmptyDirectoryError && options.ignoreEmpty) {
-                    continue;
-                }
-                // Bubble up other errors with context
-                throw err;
+            }
+        } finally {
+            // Always close exactly once
+            try {
+                await dirHandle.close();
+            } catch {
+                // Ignore if already closed
             }
         }
-
-        await dir.close();
 
         if (directories.length === 0 && files.length === 0) {
             throw new EmptyDirectoryError(dirPath);
         }
 
-        // Sort alphabetically by dir or file name
         directories.sort((a, b) => a.dir.localeCompare(b.dir));
         files.sort((a, b) => a.file.localeCompare(b.file));
 
