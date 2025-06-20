@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.16.0](https://github.com/Zukzuk/narrowcasting/compare/v4.15.1...v4.16.0) (2025-06-20)
+
+
+### Features
+
+* added fortnite backip.zip crawling ([e44900a](https://github.com/Zukzuk/narrowcasting/commit/e44900af39ee43427c47eea030df7b49760bd79a))
+
 ### [4.15.1](https://github.com/Zukzuk/narrowcasting/compare/v4.15.0...v4.15.1) (2025-05-12)
 
 
