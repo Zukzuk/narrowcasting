@@ -28,7 +28,7 @@ class OrchestratorSingleton {
         retrieveImagePlayniteCommandHandler.bootstrap();
         eventToCommandHandler.bootstrap();
         bffNarrowcasting.bootstrap(server, { APP_API_PATH, APP_SESSION_SECRET, USER_SESSION_SECRET });
-        // bffNarrowcasting.prewarm({ APP_SESSION_SECRET });
+        bffNarrowcasting.prewarm({ APP_SESSION_SECRET });
     }
 }
 

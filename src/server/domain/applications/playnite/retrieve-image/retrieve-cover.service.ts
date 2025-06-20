@@ -19,100 +19,140 @@ export default class RetrieveCoverService {
 
     constructor() { }
 
-    // TODO: !! Should read from .zip file instead of the extracted folder
-    unzip = async (): Promise<void> => {
-        fs.createReadStream('mounts/playnite/PlayniteBackup-2024-12-22-15-37-36.zip')
-            .pipe(unzipper.Parse())
-            .on('entry', function (entry) {
-                const fileName = entry.path;
-                const type = entry.type; // 'Directory' or 'File'
-
-                if (fileName === 'libraryfiles/0a0a55c3-363b-48c3-9e40-52cfbcdf480e/08dd0301-8e8b-4d1d-9dca-24da8ddfb27e.jpg') {
-                    entry.pipe(fs.createWriteStream('output/test.jpg'));
-                } else {
-                    entry.autodrain();
-                }
-            })
-            .promise()
-            .then(() => {
-                console.log('Specific file extracted');
-            })
-            .catch(err => {
-                console.error('Extraction failed:', err);
-            });
-    }
+    // For single, on-demand file extraction under tight memory budgets ➔ use streaming (.Parse()).
+    // For random access, quick lookups, or when you’ll extract multiple files in arbitrary order ➔ use Open.file().
 
     /**
-     * Fetches the games data from the Playnite backup folder.
+     * Fetches the games data by opening the latest PlayniteBackup-YYYY-MM-DD.zip
+     * and listing its first‐level directories.
      * 
      * @returns {IPlayniteGamesContainer[]}
      */
-    fetchGamesData = (): IPlayniteGamesContainer[] => {
-        const resolvedPath = path.resolve(PLAYNITE_BACKUP_ORIGIN);
+    fetchGamesData = async (): Promise<IPlayniteGamesContainer[]> => {
+        const latestZipPath = await this.#getLatestZipPath();
 
         try {
-            const subfolders: IPlayniteGamesContainer[] = [];
-            const items = fs.readdirSync(resolvedPath, { withFileTypes: true });
+            const directory = await unzipper.Open.file(latestZipPath);
 
-            for (const item of items) {
-                if (item.isDirectory()) {
-                    subfolders.push({
-                        name: item.name,
-                        folderPath: path.join(resolvedPath, item.name),
-                    });
+            // Collect all libraryfiles/<GameId> from file entries
+            const gameIdSet = new Set<string>();
+            for (const entry of directory.files) {
+                if (entry.type !== "File") continue;
+
+                // split on either slash or backslash
+                const parts = entry.path.split(/[\\/]+/);
+                // parts[0] === 'libraryfiles'
+                // parts[1] === '<GameId>'
+                if (parts[0] === "libraryfiles" && parts.length >= 3) {
+                    gameIdSet.add(parts[1]);
                 }
             }
 
-            return subfolders;
-        } catch (error: any) {
-            throw new UrlError(`Failed fetchGamesData: ${error.message}`, resolvedPath);
+            // Build containers array
+            const containers: IPlayniteGamesContainer[] = Array.from(gameIdSet).map(
+                (gameId) => ({
+                    name: gameId,
+                    folderPath: `libraryfiles/${gameId}/`,  // normalized to forward-slashes
+                })
+            );
+
+            return containers;
+        } catch (err: any) {
+            throw new UrlError(
+                `Failed to read ZIP ${latestZipPath}: ${err.message}`,
+                latestZipPath
+            );
         }
     };
 
     /**
-     * Fetches the largest portrait image from a given folder.
-     * 
-     * @param {string} folderPath
-     * @returns {Promise<Buffer>}
-     */
-    fetchImage = async (folderPath: string): Promise<Buffer> => {
-        const resolvedPath = path.resolve(folderPath);
-
-        // Filter for image files
-        const imageFiles = fs
-            .readdirSync(resolvedPath)
-            .filter((file) => /\.(jpg|jpeg|png|webp)$/i.test(file))
-            .map((file) => path.join(resolvedPath, file));
-
-        let largestImageBuffer: Buffer | null = null;
-        let largestImageSize = 0;
-
-        for (const filePath of imageFiles) {
-            try {
-                // Read the file into a buffer
-                const imageBuffer = fs.readFileSync(filePath);
-                const { width, height } = await sharp(imageBuffer).metadata();
-
-                // Check if it's a portrait image
-                if (width && height && height > width) {
-                    // Check if it's the largest so far
-                    if (imageBuffer.length > largestImageSize) {
-                        largestImageBuffer = imageBuffer;
-                        largestImageSize = imageBuffer.length;
-                    }
-                }
-            } catch (error) {
-                console.error(`Error processing image file ${filePath}:`, error);
-            }
-        }
+   * Fetches the largest portrait image from the given folder INSIDE the specified ZIP.
+   *
+   * @param internalDir   Name of the folder inside the ZIP (e.g. "3b462f0b-9f72-4f52-9cb1-50aeb43d794c")
+   * @returns             Promise<Buffer> of the largest portrait image
+   */
+    fetchImage = async (internalDir: string): Promise<Buffer> => {
+        const latestZipPath = await this.#getLatestZipPath();
 
         try {
-            // Ensure we have a valid buffer to return
-            if (!largestImageBuffer) throw new Error("No valid portrait image found.");
-            return largestImageBuffer;
-        } catch (error: any) {
-            throw new UrlError(`Failed fetchImage: ${error.message}`, resolvedPath);
+            const directory = await unzipper.Open.file(latestZipPath);
+
+            // 1) collect your image entries
+            const imageEntries = directory.files.filter((entry) => {
+                if (entry.type !== "File") return false;
+                const p = entry.path.replace(/\\/g, "/");
+                if (!p.startsWith(`${internalDir}/`)) return false;
+                const parts = p.split("/");
+                return parts.length === 3 && /\.(jpe?g|png|webp)$/i.test(parts[2]);
+            });
+
+            let largestBuffer: Buffer | null = null;
+            let largestSize = 0;
+
+            // 2) process each entry safely
+            for (const entry of imageEntries) {
+                try {
+                    const buf = await entry.buffer();
+                    const meta = await sharp(buf).metadata();
+
+                    if (
+                        meta.width! > 0 &&
+                        meta.height! > meta.width! &&
+                        buf.length > largestSize
+                    ) {
+                        largestBuffer = buf;
+                        largestSize = buf.length;
+                    }
+                } catch (fileErr: any) {
+                    console.warn(
+                        `Skipping ${entry.path} due to error parsing image: ${fileErr.message}`
+                    );
+                    // continue to the next entry
+                }
+            }
+
+            if (!largestBuffer) {
+                throw new Error(
+                    `No portrait images found in "${internalDir}/" of ${latestZipPath}`
+                );
+            }
+
+            return largestBuffer;
+        } catch (err: any) {
+            throw new UrlError(
+                `Failed fetchImageFromZip: ${err.message}`,
+                latestZipPath
+            );
         }
     };
 
+    #getLatestZipPath = async (): Promise<string> => {
+        const resolvedPath = path.resolve(PLAYNITE_BACKUP_ORIGIN);
+        const allFiles = fs.readdirSync(resolvedPath);
+
+        // map only the PlayniteBackup-*.zip files, pulling out the timestamp
+        const backups = allFiles
+            .map((file) => {
+                const m = file.match(
+                    /^PlayniteBackup-(\d{4}-\d{2}-\d{2}(?:-\d{2}-\d{2}-\d{2}))\.zip$/
+                );
+                if (!m) return null;
+                return { file, timestamp: m[1] }; // e.g. "2025-06-15-21-25-14"
+            })
+            .filter((x): x is { file: string; timestamp: string } => !!x)
+            .sort((a, b) =>
+                // lexicographic compare works for ISO‐style timestamps
+                a.timestamp.localeCompare(b.timestamp)
+            );
+
+        if (backups.length === 0) {
+            throw new UrlError(
+                `No Playnite backups found in ${resolvedPath}`,
+                resolvedPath
+            );
+        }
+
+        const latest = backups[backups.length - 1].file;
+        return path.join(resolvedPath, latest);
+    };
 }

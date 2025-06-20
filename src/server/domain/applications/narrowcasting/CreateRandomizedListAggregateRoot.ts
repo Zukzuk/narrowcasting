@@ -51,7 +51,7 @@ export default class CreateRandomizedListAggregateRoot {
             return new RandomizedListCreatedEvent(payload, weightedCache);
         } catch (error: any) {
             // Return failure event
-            const event = new RandomizedListCreationFailedEvent(error.message, error.url);
+            const event = new RandomizedListCreationFailedEvent(error.message || error, error.url);
             error.event = event;
             return event;
         }
