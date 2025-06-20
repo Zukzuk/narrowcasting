@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.16.4](https://github.com/Zukzuk/narrowcasting/compare/v4.16.3...v4.16.4) (2025-06-20)
+
+
+### Bug Fixes
+
+* fixed alpha transiton timing ([36f9695](https://github.com/Zukzuk/narrowcasting/commit/36f96955b6f70a5179c533f74644f1ea53195088))
+
 ### [4.16.3](https://github.com/Zukzuk/narrowcasting/compare/v4.16.2...v4.16.3) (2025-06-20)
 
 
