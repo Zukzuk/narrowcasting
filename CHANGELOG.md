@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.17.0](https://github.com/Zukzuk/narrowcasting/compare/v4.16.4...v4.17.0) (2025-07-22)
+
+
+### Features
+
+* added season covers for plex series ([48006c7](https://github.com/Zukzuk/narrowcasting/commit/48006c73214b68271625f8ba86e647bd83d72f36))
+
 ### [4.16.4](https://github.com/Zukzuk/narrowcasting/compare/v4.16.3...v4.16.4) (2025-06-20)
 
 
