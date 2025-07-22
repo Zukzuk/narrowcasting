@@ -49,7 +49,28 @@ export default class RetrieveCoverService {
     }
 
     /**
+     * Fetches the seasons for a given show.
+     * 
+     * @param {string} showRatingKey
+     * @returns {Promise<IPlexMediaContainer[]>}
+     */
+    fetchSeasons = async (showRatingKey: string): Promise<IPlexMediaContainer[]> => {
+        const url = `${PLEX_API}/library/metadata/${showRatingKey}/children`;
+        try {
+            const response = await axios.get(url, {
+                params: { 'X-Plex-Token': PLEX_API_KEY },
+                headers: { Accept: 'application/json' },
+            });
+            if (!response.data) throw new Error("No seasons found.");
+            return response.data.MediaContainer.Metadata;
+        } catch (error: any) {
+            throw new UrlError(`Failed fetchSeasons: ${error.message}`, url);
+        }
+    }
+
+    /**
      * Fetches the media data from a given section.
+     * For 'series' and 'animated-series', also includes seasons.
      * 
      * @param {TMediaType} mediaType
      * @param {string} sectionKey
@@ -63,7 +84,25 @@ export default class RetrieveCoverService {
                 headers: { Accept: 'application/json' },
             });
             if (!response.data) throw new Error("No media found.");
-            return response.data.MediaContainer.Metadata;
+
+            const metadata: IPlexMediaContainer[] = response.data.MediaContainer.Metadata;
+
+            // If series or animated-series, fetch seasons and append to result
+            if (mediaType === 'series' || mediaType === 'animated-series') {
+                const seasonDataArrays = await Promise.all(metadata.map(async show => {
+                    try {
+                        const seasons = await this.fetchSeasons(show.ratingKey);
+                        return seasons;
+                    } catch (err) {
+                        console.warn(`Warning: could not fetch seasons for ${show.title}: ${err}`);
+                        return [];
+                    }
+                }));
+                const seasons = seasonDataArrays.flat();
+                metadata.push(...seasons); // Add seasons into the media array
+            }
+
+            return metadata;
         } catch (error: any) {
             throw new UrlError(`Failed fetchSectionMedia: ${error.message}`, url);
         }
